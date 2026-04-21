@@ -2,10 +2,13 @@ import "dotenv/config";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, Role, Category } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
+
+const SALT_ROUNDS = 12;
 
 async function main() {
   console.log("🌱 Seeding Indian users & oil products...");
@@ -16,12 +19,17 @@ async function main() {
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();
 
+  const adminPassword = await bcrypt.hash("Admin@123", SALT_ROUNDS);
+  const sellerPassword = await bcrypt.hash("Seller@123", SALT_ROUNDS);
+  const userPassword = await bcrypt.hash("User@1234", SALT_ROUNDS);
+
   // 👤 Users
   const admin = await prisma.user.create({
     data: {
       email: "admin@oilmart.in",
       name: "Admin",
-      password: 'dummy123', role: Role.ADMIN,
+      password: adminPassword,
+      role: Role.ADMIN,
     },
   });
 
@@ -29,7 +37,8 @@ async function main() {
     data: {
       email: "seller1@oilmart.in",
       name: "Ravi Oils",
-      password: 'dummy123', role: Role.SELLER,
+      password: sellerPassword,
+      role: Role.SELLER,
     },
   });
 
@@ -37,7 +46,8 @@ async function main() {
     data: {
       email: "seller2@oilmart.in",
       name: "Annapurna Traders",
-      password: 'dummy123', role: Role.SELLER,
+      password: sellerPassword,
+      role: Role.SELLER,
     },
   });
 
@@ -45,7 +55,8 @@ async function main() {
     data: {
       email: "user@oilmart.in",
       name: "Rahul Sharma",
-      password: 'dummy123', role: Role.USER,
+      password: userPassword,
+      role: Role.USER,
     },
   });
 
@@ -90,12 +101,14 @@ async function main() {
 
   console.log(`✅ Created ${createdProducts.length} products`);
 
-  // 🧾 Sample Order
+  // 🧾 Sample Orders
   await prisma.order.create({
     data: {
       userId: user.id,
       status: "PAID",
       totalAmount: 320,
+      shippingAddress: "12 MG Road, Koramangala, Bengaluru, Karnataka 560034",
+      phone: "9876543210",
       items: {
         create: [
           {
@@ -108,7 +121,37 @@ async function main() {
     },
   });
 
-  console.log("✅ Sample order created");
+  await prisma.order.create({
+    data: {
+      userId: user.id,
+      status: "SHIPPED",
+      totalAmount: 400,
+      shippingAddress: "45 Nehru Street, T. Nagar, Chennai, Tamil Nadu 600017",
+      phone: "9123456780",
+      items: {
+        create: [
+          {
+            productId: createdProducts[1].id,
+            quantity: 2,
+            price: 180,
+          },
+          {
+            productId: createdProducts[2].id,
+            quantity: 0,
+            price: 220,
+          },
+        ],
+      },
+    },
+  });
+
+  console.log("✅ Sample orders created");
+  console.log("");
+  console.log("Test credentials:");
+  console.log("  admin@oilmart.in   / Admin@123");
+  console.log("  seller1@oilmart.in / Seller@123");
+  console.log("  seller2@oilmart.in / Seller@123");
+  console.log("  user@oilmart.in    / User@1234");
 }
 
 main()

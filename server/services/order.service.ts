@@ -41,7 +41,7 @@ export const orderService = {
    * 5. Atomically decrements stock
    */
   async createOrder(userId: string, input: CreateOrderInput): Promise<{ id: string }> {
-    const { items } = input;
+    const { items, shippingAddress, phone } = input;
 
     if (items.length === 0) {
       throw new Error("Order must contain at least one item.");
@@ -51,7 +51,6 @@ export const orderService = {
 
     const result = await db.$transaction(async (tx) => {
       // Step 1: SELECT FOR UPDATE — row-level lock prevents concurrent stock depletion
-      // Using $queryRaw because Prisma does not expose FOR UPDATE via the query builder
       const lockedProducts = await tx.$queryRaw<
         Array<{ id: string; name: string; price: Prisma.Decimal; stock: number }>
       >`
@@ -92,6 +91,8 @@ export const orderService = {
       const order = await orderRepository.createWithItems(tx, {
         userId,
         totalAmount,
+        shippingAddress,
+        phone,
         items: orderItems,
       });
 
@@ -114,16 +115,22 @@ export const orderService = {
   async getOrders(
     page = 1,
     limit = DEFAULT_PAGE_LIMIT,
-    userId?: string
+    userId?: string,
+    sellerId?: string
   ): Promise<PaginatedResult<OrderSummary>> {
     return orderRepository.findMany({
       page: Math.max(1, page),
       limit: Math.min(limit, 50),
       userId,
+      sellerId,
     });
   },
 
   async getOrderById(id: string): Promise<OrderSummary | null> {
     return orderRepository.findById(id);
+  },
+
+  async updateStatus(id: string, status: string) {
+    return orderRepository.updateStatus(id, status);
   },
 };

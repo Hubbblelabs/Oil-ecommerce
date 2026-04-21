@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { OrderCard } from "@/components/shop/OrderCard";
 import { PaginationControls } from "@/components/shop/PaginationControls";
 import { orderService } from "@/server/services/order.service";
+import { requireAuth } from "@/server/auth";
 
 export const metadata: Metadata = {
   title: "Your Orders",
@@ -12,12 +13,13 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: Promise<{ page?: string; email?: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
 export default async function OrdersPage({ searchParams }: PageProps) {
-  const { page: pageStr, email } = await searchParams;
+  const { page: pageStr } = await searchParams;
   const page = Math.max(1, Number(pageStr ?? "1"));
+  const user = await requireAuth();
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -27,14 +29,11 @@ export default async function OrdersPage({ searchParams }: PageProps) {
         </div>
         <div>
           <h1 className="text-3xl font-extrabold">Your Orders</h1>
-          {email && (
-            <p className="text-sm text-muted-foreground">Showing orders for {email}</p>
-          )}
         </div>
       </div>
 
       <Suspense fallback={<OrdersListSkeleton />}>
-        <OrdersList page={page} email={email} />
+        <OrdersList page={page} userId={user.id} />
       </Suspense>
     </div>
   );
@@ -42,12 +41,12 @@ export default async function OrdersPage({ searchParams }: PageProps) {
 
 async function OrdersList({
   page,
-  email,
+  userId,
 }: {
   page: number;
-  email?: string;
+  userId: string;
 }) {
-  const result = await orderService.getOrders(page, 10, email);
+  const result = await orderService.getOrders(page, 10, userId);
 
   if (result.data.length === 0) {
     return (

@@ -14,13 +14,11 @@ export const metadata: Metadata = {
 
 // Shared categories — single source of truth
 const CATEGORIES = [
-  "All",
-  "Olive Oil",
-  "Coconut Oil",
-  "Avocado Oil",
-  "Sesame Oil",
-  "Argan Oil",
-  "Essential Oil",
+  { value: "All", label: "All" },
+  { value: "COOKING", label: "Cooking" },
+  { value: "PREMIUM", label: "Premium" },
+  { value: "ORGANIC", label: "Organic" },
+  { value: "INDUSTRIAL", label: "Industrial" },
 ] as const;
 
 const PAGE_SIZE = 12;
@@ -63,20 +61,20 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       >
         {CATEGORIES.map((cat) => {
           const isActive =
-            cat === "All" ? !activeCategory : activeCategory === cat;
-          const href = cat === "All" ? "/?page=1" : `/?category=${encodeURIComponent(cat)}&page=1`;
+            cat.value === "All" ? !activeCategory : activeCategory === cat.value;
+          const href = cat.value === "All" ? "/?page=1" : `/?category=${encodeURIComponent(cat.value)}&page=1`;
           return (
             <a
-              key={cat}
+              key={cat.value}
               href={href}
-              id={`category-filter-${cat.toLowerCase().replace(/\s+/g, "-")}`}
+              id={`category-filter-${cat.value.toLowerCase().replace(/\s+/g, "-")}`}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
                 isActive
                   ? "bg-amber-500 text-white shadow-sm"
                   : "bg-muted text-muted-foreground hover:bg-amber-100 hover:text-amber-800 dark:hover:bg-amber-900/30 dark:hover:text-amber-300"
               }`}
             >
-              {cat}
+              {cat.label}
             </a>
           );
         })}

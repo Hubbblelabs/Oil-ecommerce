@@ -12,6 +12,8 @@ const orderSelect = {
   status: true,
   totalAmount: true,
   userId: true,
+  shippingAddress: true,
+  phone: true,
   createdAt: true,
   items: {
     select: {
@@ -35,6 +37,8 @@ function toOrderSummary(
     status: raw.status,
     totalAmount: raw.totalAmount,
     userId: raw.userId,
+    shippingAddress: raw.shippingAddress,
+    phone: raw.phone,
     createdAt: raw.createdAt,
     items: raw.items.map((item) => ({
       id: item.id,
@@ -48,13 +52,16 @@ function toOrderSummary(
 
 export const orderRepository = {
   async findMany(
-    options: PaginationOptions & { userId?: string }
+    options: PaginationOptions & { userId?: string; sellerId?: string }
   ): Promise<PaginatedResult<OrderSummary>> {
-    const { page, limit, userId } = options;
+    const { page, limit, userId, sellerId } = options;
     const skip = (page - 1) * limit;
 
     const where: Prisma.OrderWhereInput = {
       ...(userId ? { userId } : {}),
+      ...(sellerId
+        ? { items: { some: { product: { sellerId } } } }
+        : {}),
     };
 
     const [rawOrders, total] = await db.$transaction([
@@ -91,6 +98,8 @@ export const orderRepository = {
     data: {
       userId: string;
       totalAmount: Prisma.Decimal;
+      shippingAddress: string;
+      phone: string;
       items: Array<{ productId: string; quantity: number; price: Prisma.Decimal }>;
     }
   ) {
@@ -98,6 +107,8 @@ export const orderRepository = {
       data: {
         userId: data.userId,
         totalAmount: data.totalAmount,
+        shippingAddress: data.shippingAddress,
+        phone: data.phone,
         items: {
           create: data.items.map((item) => ({
             productId: item.productId,
@@ -107,6 +118,14 @@ export const orderRepository = {
         },
       },
       select: { id: true, status: true, totalAmount: true, createdAt: true },
+    });
+  },
+
+  async updateStatus(id: string, status: string) {
+    return db.order.update({
+      where: { id },
+      data: { status: status as any },
+      select: { id: true, status: true },
     });
   },
 };

@@ -22,7 +22,8 @@ export function CheckoutForm() {
   const { items, totalAmount, itemCount, clearCart } = useCart();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [email, setEmail] = useState("");
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   if (items.length === 0) {
@@ -41,8 +42,14 @@ export function CheckoutForm() {
     e.preventDefault();
     setErrorMsg(null);
 
-    if (!email || !email.includes("@")) {
-      setErrorMsg("Please enter a valid email address.");
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+      setErrorMsg("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
+
+    if (shippingAddress.trim().length < 10) {
+      setErrorMsg("Please enter a complete shipping address (at least 10 characters).");
       return;
     }
 
@@ -52,7 +59,8 @@ export function CheckoutForm() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            guestEmail: email,
+            shippingAddress: shippingAddress.trim(),
+            phone: phone.trim(),
             items: items.map((i) => ({
               productId: i.productId,
               quantity: i.quantity,
@@ -63,11 +71,14 @@ export function CheckoutForm() {
         const data = (await res.json()) as OrderSuccess | OrderError;
 
         if (!res.ok) {
+          if (res.status === 401) {
+            router.push("/login?redirect=/checkout");
+            return;
+          }
           setErrorMsg((data as OrderError).error ?? "Something went wrong. Please try again.");
           return;
         }
 
-        // Clear cart and redirect to orders
         clearCart();
         router.push(`/orders/${(data as OrderSuccess).id}?placed=true`);
       } catch {
@@ -78,26 +89,54 @@ export function CheckoutForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8" id="checkout-form">
-      {/* Contact */}
+      {/* Shipping details */}
       <section className="rounded-2xl border border-border/60 bg-card/80 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 text-lg font-bold">Contact Information</h2>
-        <div className="space-y-2">
-          <Label htmlFor="checkout-email">Email address</Label>
-          <Input
-            id="checkout-email"
-            type="email"
-            name="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isPending}
-            className="max-w-sm"
-            aria-describedby="email-hint"
-          />
-          <p id="email-hint" className="text-xs text-muted-foreground">
-            Your order confirmation will be sent to this address.
-          </p>
+        <h2 className="mb-4 text-lg font-bold">Shipping Information</h2>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="checkout-address">Shipping Address *</Label>
+            <textarea
+              id="checkout-address"
+              name="address"
+              placeholder="House/Flat No., Street, City, State, PIN Code"
+              value={shippingAddress}
+              onChange={(e) => setShippingAddress(e.target.value)}
+              required
+              minLength={10}
+              disabled={isPending}
+              rows={3}
+              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
+              aria-describedby="address-hint"
+            />
+            <p id="address-hint" className="text-xs text-muted-foreground">
+              Include flat/house number, street, city, state and PIN code.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="checkout-phone">Mobile Number *</Label>
+            <div className="flex items-center gap-2">
+              <span className="rounded-lg border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+                +91
+              </span>
+              <Input
+                id="checkout-phone"
+                type="tel"
+                name="phone"
+                placeholder="9876543210"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                required
+                pattern="[6-9][0-9]{9}"
+                maxLength={10}
+                disabled={isPending}
+                aria-describedby="phone-hint"
+              />
+            </div>
+            <p id="phone-hint" className="text-xs text-muted-foreground">
+              10-digit Indian mobile number for delivery coordination.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -111,15 +150,15 @@ export function CheckoutForm() {
                 {item.name} × {item.quantity}
               </span>
               <span className="font-medium">
-                ${(parseFloat(item.price) * item.quantity).toFixed(2)}
+                ₹{(parseFloat(item.price) * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}
         </div>
         <Separator className="my-4" />
         <div className="flex justify-between text-base font-bold">
-          <span>Total</span>
-          <span className="text-amber-600">${totalAmount}</span>
+          <span>Estimated Total</span>
+          <span className="text-amber-600">₹{totalAmount}</span>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
           Final total is verified server-side before your order is confirmed.
@@ -150,7 +189,7 @@ export function CheckoutForm() {
         {isPending ? (
           <>
             <Loader2 className="h-5 w-5 animate-spin" />
-            Placing Order…
+            Placing Order...
           </>
         ) : (
           <>
@@ -162,3 +201,4 @@ export function CheckoutForm() {
     </form>
   );
 }
+
