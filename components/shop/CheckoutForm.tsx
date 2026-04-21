@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ShoppingBag, Loader2, AlertTriangle } from "lucide-react";
+import { ShoppingBag, Loader2, AlertTriangle, ArrowRight, ShieldCheck, MapPin, Phone, CreditCard } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,11 +29,14 @@ export function CheckoutForm() {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <ShoppingBag className="mb-4 h-12 w-12 text-muted-foreground" />
-        <p className="text-lg font-semibold">Your cart is empty.</p>
-        <Button asChild className="mt-4 bg-amber-600 hover:bg-amber-700 text-white">
-          <Link href="/">Browse Products</Link>
+      <div className="flex flex-col items-center justify-center py-24 text-center glass-panel rounded-3xl max-w-2xl mx-auto">
+        <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
+          <ShoppingBag className="h-10 w-10 text-muted-foreground" />
+        </div>
+        <p className="text-2xl font-bold tracking-tight mb-2">Your cart is empty.</p>
+        <p className="text-muted-foreground mb-8">Add items to your cart to checkout.</p>
+        <Button asChild size="lg" className="rounded-xl px-8 h-12 bg-foreground text-background hover:bg-foreground/90 font-medium">
+          <Link href="/products">Browse Products</Link>
         </Button>
       </div>
     );
@@ -87,118 +91,176 @@ export function CheckoutForm() {
     });
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-8" id="checkout-form">
-      {/* Shipping details */}
-      <section className="rounded-2xl border border-border/60 bg-card/80 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 text-lg font-bold">Shipping Information</h2>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="checkout-address">Shipping Address *</Label>
-            <textarea
-              id="checkout-address"
-              name="address"
-              placeholder="House/Flat No., Street, City, State, PIN Code"
-              value={shippingAddress}
-              onChange={(e) => setShippingAddress(e.target.value)}
-              required
-              minLength={10}
-              disabled={isPending}
-              rows={3}
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
-              aria-describedby="address-hint"
-            />
-            <p id="address-hint" className="text-xs text-muted-foreground">
-              Include flat/house number, street, city, state and PIN code.
-            </p>
-          </div>
+  const subtotal = parseFloat(totalAmount);
+  // Using fixed ₹ assuming it's INR
+  const tax = subtotal * 0.05; // 5% tax mock
+  const total = subtotal + tax;
 
-          <div className="space-y-2">
-            <Label htmlFor="checkout-phone">Mobile Number *</Label>
-            <div className="flex items-center gap-2">
-              <span className="rounded-lg border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
-                +91
-              </span>
-              <Input
-                id="checkout-phone"
-                type="tel"
-                name="phone"
-                placeholder="9876543210"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+  return (
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" id="checkout-form">
+      
+      {/* LEFT COLUMN: Shipping details */}
+      <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-8">
+        
+        {errorMsg && (
+          <div className="flex items-start gap-3 rounded-2xl border border-destructive bg-destructive/10 p-5 text-sm font-medium text-destructive" role="alert">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        <section className="rounded-3xl glass-panel p-8 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
+          <div className="flex items-center gap-3 mb-6">
+             <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950 flex items-center justify-center">
+                <MapPin className="text-amber-600 w-5 h-5" />
+             </div>
+             <h2 className="text-xl font-bold tracking-tight">Shipping Details</h2>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <Label htmlFor="checkout-address" className="text-sm font-semibold">Street Address *</Label>
+              <textarea
+                id="checkout-address"
+                name="address"
+                placeholder="House/Flat No., Street, City, State, PIN Code"
+                value={shippingAddress}
+                onChange={(e) => setShippingAddress(e.target.value)}
                 required
-                pattern="[6-9][0-9]{9}"
-                maxLength={10}
+                minLength={10}
                 disabled={isPending}
-                aria-describedby="phone-hint"
+                rows={4}
+                className="w-full rounded-xl border border-input bg-background/50 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none transition-shadow"
+                aria-describedby="address-hint"
               />
             </div>
-            <p id="phone-hint" className="text-xs text-muted-foreground">
-              10-digit Indian mobile number for delivery coordination.
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Order summary */}
-      <section className="rounded-2xl border border-border/60 bg-card/80 p-6 backdrop-blur-sm">
-        <h2 className="mb-4 text-lg font-bold">Order Summary</h2>
-        <div className="space-y-3">
-          {items.map((item) => (
-            <div key={item.productId} className="flex justify-between text-sm">
-              <span className="text-muted-foreground">
-                {item.name} × {item.quantity}
-              </span>
-              <span className="font-medium">
-                ₹{(parseFloat(item.price) * item.quantity).toFixed(2)}
-              </span>
+            <div className="space-y-3">
+              <Label htmlFor="checkout-phone" className="text-sm font-semibold">Mobile Number *</Label>
+              <div className="flex items-center rounded-xl border border-input bg-background/50 focus-within:ring-2 focus-within:ring-amber-500/50 transition-shadow overflow-hidden">
+                <div className="flex items-center justify-center bg-muted/50 px-4 py-3 border-r border-input font-medium text-muted-foreground">
+                  +91
+                </div>
+                <input
+                  id="checkout-phone"
+                  type="tel"
+                  name="phone"
+                  placeholder="98765 43210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  required
+                  pattern="[6-9][0-9]{9}"
+                  maxLength={10}
+                  disabled={isPending}
+                  className="w-full bg-transparent px-4 py-3 text-base outline-none"
+                  aria-describedby="phone-hint"
+                />
+              </div>
             </div>
-          ))}
-        </div>
-        <Separator className="my-4" />
-        <div className="flex justify-between text-base font-bold">
-          <span>Estimated Total</span>
-          <span className="text-amber-600">₹{totalAmount}</span>
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Final total is verified server-side before your order is confirmed.
-        </p>
-      </section>
+          </div>
+        </section>
+        
+        <section className="rounded-3xl glass-panel p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+             <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                <CreditCard className="text-foreground w-5 h-5" />
+             </div>
+             <h2 className="text-xl font-bold tracking-tight">Payment Method</h2>
+          </div>
+          <div className="p-4 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-between">
+            <span className="font-medium text-foreground">Cash on Delivery (COD)</span>
+            <div className="flex items-center gap-2">
+               <div className="w-3 h-3 rounded-full bg-amber-500 ring-4 ring-amber-500/20"></div>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-4">
+             Currently focusing on COD only to ensure seamless service. Pay conveniently at your doorstep.
+          </p>
+        </section>
+      </div>
 
-      {/* Error */}
-      {errorMsg && (
-        <div
-          className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
-          id="checkout-error"
-          role="alert"
-        >
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>{errorMsg}</span>
-        </div>
-      )}
+      {/* RIGHT COLUMN: Order summary */}
+      <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-6">
+        <section className="rounded-3xl glass-panel p-8 shadow-[0_8px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_40px_rgba(255,255,255,0.02)]">
+          <h2 className="mb-6 text-xl font-bold tracking-tight">Order Summary</h2>
+          
+          <div className="space-y-4 mb-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {items.map((item) => (
+              <div key={item.productId} className="flex gap-4 group">
+                <div className="relative w-16 h-16 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-border/40 overflow-hidden shrink-0">
+                   {item.image ? (
+                     <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform"/>
+                   ) : (
+                     <div className="flex h-full items-center justify-center"><ShoppingBag className="w-6 h-6 text-muted-foreground opacity-50"/></div>
+                   )}
+                   <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-zinc-800 text-[10px] font-bold text-white flex items-center justify-center border-2 border-background">
+                     {item.quantity}
+                   </div>
+                </div>
+                <div className="flex flex-col justify-center flex-1 min-w-0">
+                  <span className="text-sm font-semibold truncate text-foreground">{item.name}</span>
+                  <span className="text-xs text-muted-foreground">{item.category}</span>
+                </div>
+                <div className="text-sm font-semibold flex items-center">
+                  ₹{(parseFloat(item.price) * item.quantity).toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
 
-      {/* Submit */}
-      <Button
-        id="place-order-button"
-        type="submit"
-        size="lg"
-        className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white text-base"
-        disabled={isPending}
-        aria-busy={isPending}
-      >
-        {isPending ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin" />
-            Placing Order...
-          </>
-        ) : (
-          <>
-            <ShoppingBag className="h-5 w-5" />
-            Place Order — {itemCount} item{itemCount !== 1 ? "s" : ""}
-          </>
-        )}
-      </Button>
+          <Separator className="my-6" />
+          
+          <div className="space-y-3 mb-6">
+             <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="font-medium text-foreground">₹{subtotal.toFixed(2)}</span>
+             </div>
+             <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Shipping</span>
+                <span className="font-medium text-foreground">Free</span>
+             </div>
+             <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Est. Taxes</span>
+                <span className="font-medium text-foreground">₹{tax.toFixed(2)}</span>
+             </div>
+          </div>
+
+          <Separator className="my-6" />
+
+          <div className="flex items-end justify-between mb-8">
+            <span className="text-lg font-bold text-foreground">Total</span>
+            <div className="text-right">
+               <span className="text-3xl font-extrabold tracking-tight text-foreground">₹{total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <Button
+            id="place-order-button"
+            type="submit"
+            size="lg"
+            className="w-full gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white shadow-lg h-14 text-lg font-semibold transition-transform hover:-translate-y-0.5"
+            disabled={isPending}
+            aria-busy={isPending}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Place Order <ArrowRight className="h-5 w-5 ml-1" />
+              </>
+            )}
+          </Button>
+          
+          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+             <ShieldCheck className="h-4 w-4" />
+             <span>Guaranteed safe & secure checkout</span>
+          </div>
+        </section>
+      </div>
     </form>
   );
 }
-

@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Droplets } from "lucide-react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { ShoppingCart, Droplets, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/components/providers/CartProvider";
@@ -16,7 +15,8 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
     addItem({
       productId: product.id,
       name: product.name,
@@ -29,70 +29,85 @@ export function ProductCard({ product }: ProductCardProps) {
   const isOutOfStock = product.stock === 0;
 
   return (
-    <Card className="group flex flex-col overflow-hidden border-amber-100/20 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/10 hover:-translate-y-0.5">
-      {/* Product image */}
-      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10">
-        <Link href={`/products/${product.id}`} id={`product-link-${product.id}`}>
+    <Link href={`/products/${product.id}`} className="group block focus-ring rounded-2xl" id={`product-link-${product.id}`}>
+      <div className="relative flex flex-col h-full bg-card rounded-2xl transition-all duration-500 ease-out hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)] border border-border/40 hover:border-border/80 overflow-hidden group-hover:-translate-y-1">
+        
+        {/* Image Area */}
+        <div className="relative aspect-[4/5] overflow-hidden bg-zinc-100 dark:bg-zinc-900 border-b border-border/40">
           {product.image ? (
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="flex h-full items-center justify-center">
-              <Droplets className="h-16 w-16 text-amber-400/60" />
+            <div className="flex h-full items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10">
+              <Droplets className="h-12 w-12 text-amber-500/40" />
             </div>
           )}
-        </Link>
+          
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
 
-        {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <Badge variant="destructive" className="text-sm font-semibold">
-              Out of Stock
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
+            <Badge
+              className="bg-background/80 backdrop-blur-md text-foreground border-border/50 hover:bg-background/90 font-medium px-2.5 py-0.5 rounded-md"
+              id={`product-category-${product.id}`}
+              variant="outline"
+            >
+              {product.category}
             </Badge>
           </div>
-        )}
 
-        <Badge
-          className="absolute left-2 top-2 bg-amber-500/90 text-white backdrop-blur-sm"
-          id={`product-category-${product.id}`}
-        >
-          {product.category}
-        </Badge>
-      </div>
+          {isOutOfStock && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-[2px]">
+              <Badge variant="destructive" className="font-semibold text-xs rounded-full px-3 py-1 shadow-sm uppercase tracking-wider">
+                Sold Out
+              </Badge>
+            </div>
+          )}
 
-      <CardContent className="flex flex-1 flex-col gap-2 p-4">
-        <Link
-          href={`/products/${product.id}`}
-          className="line-clamp-2 font-semibold leading-snug text-foreground hover:text-amber-600 transition-colors"
-          id={`product-name-link-${product.id}`}
-        >
-          {product.name}
-        </Link>
-        <span className="text-sm text-muted-foreground">{product.category}</span>
-
-        <div className="mt-auto flex items-baseline gap-1">
-          <span className="text-2xl font-bold text-amber-600">
-            ${product.price.toString()}
-          </span>
+          {/* Quick Add Overlay */}
+          {!isOutOfStock && (
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out px-4">
+              <Button
+                id={`add-to-cart-${product.id}`}
+                className="w-full rounded-xl bg-foreground/95 backdrop-blur-sm text-background hover:bg-foreground shadow-lg flex items-center justify-center gap-2"
+                onClick={handleAddToCart}
+                aria-label={`Add ${product.name} to cart`}
+              >
+                <Plus className="h-4 w-4" />
+                <span className="font-medium text-sm">Quick add</span>
+              </Button>
+            </div>
+          )}
         </div>
-      </CardContent>
 
-      <CardFooter className="p-4 pt-0">
-        <Button
-          id={`add-to-cart-${product.id}`}
-          className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white transition-colors"
-          onClick={handleAddToCart}
-          disabled={isOutOfStock}
-          aria-label={`Add ${product.name} to cart`}
-        >
-          <ShoppingCart className="h-4 w-4" />
-          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-        </Button>
-      </CardFooter>
-    </Card>
+        {/* Content Area */}
+        <div className="flex flex-col flex-1 p-5">
+          <div className="flex justify-between items-start gap-4 mb-2">
+            <h3
+              className="font-semibold text-base leading-tight text-foreground line-clamp-2 transition-colors group-hover:text-amber-600"
+              id={`product-name-link-${product.id}`}
+            >
+              {product.name}
+            </h3>
+            <span className="font-medium text-base text-foreground whitespace-nowrap">
+              ${product.price.toString()}
+            </span>
+          </div>
+          
+          <div className="mt-auto pt-2 flex items-center text-sm text-muted-foreground">
+            <span className="flex items-center">
+              <span className="text-amber-500 mr-1 text-xs">★</span>
+              {/* Mock rating data for UI demo */}
+              4.9 <span className="opacity-60 ml-1">(120)</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }

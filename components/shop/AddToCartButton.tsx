@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, CreditCard } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/providers/CartProvider";
@@ -28,25 +28,37 @@ export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
   };
 
   return (
-    <Button
-      id={`product-add-to-cart-${product.id}`}
-      size="lg"
-      className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white text-base transition-all"
-      onClick={handleClick}
-      disabled={disabled || added}
-      aria-label={`Add ${product.name} to cart`}
-    >
-      {added ? (
-        <>
-          <Check className="h-5 w-5" />
-          Added to Cart!
-        </>
-      ) : (
-        <>
-          <ShoppingCart className="h-5 w-5" />
-          Add to Cart
-        </>
-      )}
-    </Button>
+    <div className="flex flex-col gap-3 mt-6">
+      <Button
+        id={`product-add-to-cart-${product.id}`}
+        size="lg"
+        className="w-full gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-base font-semibold shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.23)] hover:-translate-y-0.5 transition-all duration-300 h-14"
+        onClick={handleClick}
+        disabled={disabled || added}
+        aria-label={`Add ${product.name} to cart`}
+      >
+        {added ? (
+          <>
+            <Check className="h-5 w-5" />
+            Added to Cart successfully!
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="h-5 w-5" />
+            Add to Cart
+          </>
+        )}
+      </Button>
+      
+      <Button
+        variant="outline"
+        size="lg"
+        className="w-full gap-2 rounded-xl text-base font-semibold border-amber-500/20 text-foreground hover:bg-amber-50 hover:text-amber-700 transition-colors h-14"
+        disabled={disabled}
+      >
+        <CreditCard className="h-5 w-5" />
+        Buy it now
+      </Button>
+    </div>
   );
 }

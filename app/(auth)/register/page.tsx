@@ -7,6 +7,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FadeIn } from "@/components/ui/motion";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -51,47 +52,64 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-border/60 bg-white p-8 shadow-lg">
-      <h1 className="mb-1 text-2xl font-bold">Create an account</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        Already have an account?{" "}
-        <Link href="/login" className="text-amber-600 hover:underline font-medium">
-          Sign in
-        </Link>
-      </p>
+    <FadeIn className="w-full max-w-[420px] mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Create an account</h1>
+        <p className="text-muted-foreground text-sm">
+          Join OilMart to track orders and save your favorites.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="name">Full name</Label>
+      {/* Tabs Design */}
+      <div className="flex p-1 bg-muted/50 rounded-xl mb-8 border border-border/50">
+        <Link href="/login" className="flex-1 text-muted-foreground hover:text-foreground rounded-lg py-2 text-sm font-medium text-center transition-all">
+          Sign In
+        </Link>
+        <Link href="/register" className="flex-1 bg-background text-foreground shadow-sm rounded-lg py-2 text-sm font-semibold text-center transition-all">
+          Register
+        </Link>
+      </div>
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm font-medium text-destructive" role="alert">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-sm font-semibold">Full name</Label>
           <Input
             id="name"
             type="text"
             autoComplete="name"
-            placeholder="Rahul Sharma"
+            placeholder="John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
             minLength={2}
             disabled={isPending}
+            className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 transition-all"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-sm font-semibold">Email</Label>
           <Input
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={isPending}
+            className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 transition-all"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
           <div className="relative">
             <Input
               id="password"
@@ -103,11 +121,11 @@ export default function RegisterPage() {
               required
               minLength={8}
               disabled={isPending}
-              className="pr-10"
+              className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 pr-12 transition-all"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setShowPassword((v) => !v)}
               tabIndex={-1}
               aria-label={showPassword ? "Hide password" : "Show password"}
@@ -117,24 +135,18 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {error && (
-          <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
-            {error}
-          </p>
-        )}
-
         <Button
           type="submit"
-          className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+          className="w-full h-12 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium text-base shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.23)] transition-all hover:-translate-y-0.5 active:scale-[0.98]"
           disabled={isPending}
         >
-          {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create account"}
+          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up for OilMart"}
         </Button>
-
-        <p className="text-center text-xs text-muted-foreground">
-          By registering, you agree to our terms and privacy policy.
+        
+        <p className="text-center text-xs text-muted-foreground pt-4">
+          By registering, you agree to our <a href="#" className="underline hover:text-foreground">Terms of Service</a> and <a href="#" className="underline hover:text-foreground">Privacy Policy</a>.
         </p>
       </form>
-    </div>
+    </FadeIn>
   );
 }

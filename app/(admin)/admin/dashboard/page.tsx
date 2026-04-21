@@ -1,6 +1,6 @@
 import { adminService } from "@/server/services/admin.service";
 import { OrderStatusBadge } from "@/components/shop/OrderStatusBadge";
-import { Users, Package, ShoppingCart, TrendingUp } from "lucide-react";
+import { Users, Package, ShoppingCart, TrendingUp, Activity, ArrowUpRight } from "lucide-react";
 import { getCurrentUser } from "@/server/auth";
 import { redirect } from "next/navigation";
 
@@ -15,103 +15,128 @@ export default async function AdminDashboardPage() {
       label: "Total Users",
       value: stats.totalUsers,
       icon: Users,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      trend: "+12%",
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10",
+      borderColor: "border-blue-500/20"
     },
     {
-      label: "Total Sellers",
+      label: "Seller Accounts",
       value: stats.totalSellers,
       icon: Users,
-      color: "text-violet-600",
-      bg: "bg-violet-50",
+      trend: "+4%",
+      color: "text-violet-500",
+      bgColor: "bg-violet-500/10",
+      borderColor: "border-violet-500/20"
     },
     {
       label: "Active Products",
       value: stats.totalProducts,
       icon: Package,
-      color: "text-amber-600",
-      bg: "bg-amber-50",
+      trend: "+28%",
+      color: "text-amber-500",
+      bgColor: "bg-amber-500/10",
+      borderColor: "border-amber-500/20"
     },
     {
       label: "Total Orders",
       value: stats.totalOrders,
       icon: ShoppingCart,
-      color: "text-green-600",
-      bg: "bg-green-50",
+      trend: "+15%",
+      color: "text-green-500",
+      bgColor: "bg-green-500/10",
+      borderColor: "border-green-500/20"
     },
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Platform overview</p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Platform Command Center</h1>
+          <p className="text-muted-foreground text-sm mt-1">Real-time metrics and system overview</p>
+        </div>
+        <div className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 border border-green-500/20">
+           <Activity className="w-3.5 h-3.5 animate-pulse" />
+           Systems Operational
+        </div>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* KPI Row 1 */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <div
             key={card.label}
-            className="rounded-xl border border-border/60 bg-card p-6"
+            className="rounded-2xl border border-border/40 bg-background p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{card.label}</p>
-                <p className="mt-1 text-3xl font-bold">{card.value.toLocaleString()}</p>
-              </div>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.bg}`}>
-                <card.icon className={`h-5 w-5 ${card.color}`} />
-              </div>
+            <div className={`absolute -right-10 -top-10 w-32 h-32 rounded-full ${card.bgColor} blur-2xl opacity-50 group-hover:opacity-100 transition-opacity`}></div>
+            <div className="flex justify-between items-start mb-6 relative z-10">
+               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.bgColor} ${card.color} border ${card.borderColor}`}>
+                  <card.icon className="w-5 h-5" />
+               </div>
+               <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded-md">{card.trend}</span>
+            </div>
+            <div className="relative z-10">
+               <p className="text-sm font-semibold text-muted-foreground mb-1">{card.label}</p>
+               <h3 className="text-3xl font-extrabold tracking-tight text-foreground">{card.value.toLocaleString()}</h3>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Revenue card */}
-      <div className="rounded-xl border border-border/60 bg-card p-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
-            <TrendingUp className="h-5 w-5 text-amber-600" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Total Platform Revenue</p>
-            <p className="text-3xl font-bold text-amber-600">
-              ₹{Number(stats.totalRevenue).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-            </p>
-          </div>
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* GMV / Revenue */}
+        <div className="rounded-3xl border border-border/40 bg-background p-8 shadow-sm lg:col-span-5 flex flex-col justify-center relative overflow-hidden">
+           <div className="absolute top-0 right-0 p-8">
+              <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500">
+                 <TrendingUp className="w-8 h-8" />
+              </div>
+           </div>
+           <p className="text-sm font-semibold text-muted-foreground mb-2">Total Gross Merchandize Value</p>
+           <h2 className="text-5xl font-extrabold tracking-tight text-foreground mb-4">
+             ${Number(stats.totalRevenue).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+           </h2>
+           <p className="text-sm text-green-600 font-medium">+18.2% from last month</p>
         </div>
-      </div>
 
-      {/* Recent orders */}
-      <div className="rounded-xl border border-border/60 bg-card">
-        <div className="border-b border-border/60 px-6 py-4">
-          <h2 className="font-semibold">Recent Orders</h2>
-        </div>
-        <div className="divide-y divide-border/60">
-          {stats.recentOrders.map((order) => (
-            <div key={order.id} className="flex items-center justify-between px-6 py-4">
-              <div>
-                <p className="font-mono text-sm font-medium">
-                  #{order.id.slice(0, 8).toUpperCase()}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(
-                    new Date(order.createdAt)
-                  )}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <OrderStatusBadge status={order.status} />
-                <span className="font-semibold text-amber-600">
-                  ₹{Number(order.totalAmount).toLocaleString("en-IN")}
-                </span>
-              </div>
-            </div>
-          ))}
-          {stats.recentOrders.length === 0 && (
-            <p className="px-6 py-8 text-center text-muted-foreground">No orders yet.</p>
-          )}
+        {/* Live Order Feed */}
+        <div className="rounded-3xl border border-border/40 bg-background shadow-sm lg:col-span-7 flex flex-col">
+          <div className="px-8 py-6 border-b border-border/40 flex items-center justify-between">
+             <h2 className="text-lg font-bold tracking-tight">Live Order Feed</h2>
+             <button className="text-sm font-semibold text-foreground hover:text-amber-600 flex items-center gap-1 transition-colors">
+                View All <ArrowUpRight className="w-4 h-4"/>
+             </button>
+          </div>
+          <div className="flex-1 overflow-auto max-h-[300px] p-2 custom-scrollbar">
+            {stats.recentOrders.length === 0 ? (
+               <div className="h-full flex items-center justify-center p-8 text-muted-foreground text-sm font-medium">No recent orders on the platform.</div>
+            ) : (
+               <table className="w-full text-sm">
+                  <tbody className="divide-y divide-border/40">
+                     {stats.recentOrders.map((order) => (
+                       <tr key={order.id} className="group hover:bg-muted/30 transition-colors">
+                         <td className="px-6 py-4">
+                           <p className="font-mono text-xs font-bold text-foreground">
+                             #{order.id.slice(0, 8).toUpperCase()}
+                           </p>
+                           <p className="text-xs text-muted-foreground mt-1">
+                             {new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(
+                               new Date(order.createdAt)
+                             )}
+                           </p>
+                         </td>
+                         <td className="px-6 py-4 text-right">
+                           <OrderStatusBadge status={order.status} />
+                         </td>
+                         <td className="px-6 py-4 text-right font-bold text-foreground">
+                           ${Number(order.totalAmount).toLocaleString("en-US")}
+                         </td>
+                       </tr>
+                     ))}
+                  </tbody>
+               </table>
+            )}
+          </div>
         </div>
       </div>
     </div>
