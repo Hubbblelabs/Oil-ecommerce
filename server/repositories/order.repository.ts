@@ -11,14 +11,14 @@ const orderSelect = {
   id: true,
   status: true,
   totalAmount: true,
-  guestEmail: true,
+  userId: true,
   createdAt: true,
   items: {
     select: {
       id: true,
       productId: true,
       quantity: true,
-      unitPrice: true,
+      price: true,
       product: {
         select: { name: true },
       },
@@ -34,27 +34,26 @@ function toOrderSummary(
     id: raw.id,
     status: raw.status,
     totalAmount: raw.totalAmount,
-    guestEmail: raw.guestEmail,
+    userId: raw.userId,
     createdAt: raw.createdAt,
     items: raw.items.map((item) => ({
       id: item.id,
       productId: item.productId,
       productName: item.product.name,
       quantity: item.quantity,
-      unitPrice: item.unitPrice,
+      price: item.price,
     })),
   };
 }
 
 export const orderRepository = {
   async findMany(
-    options: PaginationOptions & { guestEmail?: string; userId?: string }
+    options: PaginationOptions & { userId?: string }
   ): Promise<PaginatedResult<OrderSummary>> {
-    const { page, limit, guestEmail, userId } = options;
+    const { page, limit, userId } = options;
     const skip = (page - 1) * limit;
 
     const where: Prisma.OrderWhereInput = {
-      ...(guestEmail ? { guestEmail } : {}),
       ...(userId ? { userId } : {}),
     };
 
@@ -90,20 +89,20 @@ export const orderRepository = {
   async createWithItems(
     tx: Prisma.TransactionClient,
     data: {
-      guestEmail: string;
+      userId: string;
       totalAmount: Prisma.Decimal;
-      items: Array<{ productId: string; quantity: number; unitPrice: Prisma.Decimal }>;
+      items: Array<{ productId: string; quantity: number; price: Prisma.Decimal }>;
     }
   ) {
     return tx.order.create({
       data: {
-        guestEmail: data.guestEmail,
+        userId: data.userId,
         totalAmount: data.totalAmount,
         items: {
           create: data.items.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
-            unitPrice: item.unitPrice,
+            price: item.price,
           })),
         },
       },

@@ -21,8 +21,8 @@ export function ProductCard({ product }: ProductCardProps) {
       productId: product.id,
       name: product.name,
       price: product.price.toString(),
-      imageUrl: product.imageUrl,
-      unit: product.unit,
+      image: product.image,
+      category: product.category,
     });
   };
 
@@ -33,9 +33,9 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product image */}
       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10">
         <Link href={`/products/${product.id}`} id={`product-link-${product.id}`}>
-          {product.imageUrl ? (
+          {product.image ? (
             <Image
-              src={product.imageUrl}
+              src={product.image}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -72,7 +72,7 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           {product.name}
         </Link>
-        <span className="text-sm text-muted-foreground">{product.unit}</span>
+        <span className="text-sm text-muted-foreground">{product.category}</span>
 
         <div className="mt-auto flex items-baseline gap-1">
           <span className="text-2xl font-bold text-amber-600">

@@ -21,7 +21,7 @@ async function main() {
     data: {
       email: "admin@oilmart.in",
       name: "Admin",
-      role: Role.ADMIN,
+      password: 'dummy123', role: Role.ADMIN,
     },
   });
 
@@ -29,7 +29,7 @@ async function main() {
     data: {
       email: "seller1@oilmart.in",
       name: "Ravi Oils",
-      role: Role.SELLER,
+      password: 'dummy123', role: Role.SELLER,
     },
   });
 
@@ -37,7 +37,7 @@ async function main() {
     data: {
       email: "seller2@oilmart.in",
       name: "Annapurna Traders",
-      role: Role.SELLER,
+      password: 'dummy123', role: Role.SELLER,
     },
   });
 
@@ -45,7 +45,7 @@ async function main() {
     data: {
       email: "user@oilmart.in",
       name: "Rahul Sharma",
-      role: Role.USER,
+      password: 'dummy123', role: Role.USER,
     },
   });
 

@@ -16,7 +16,7 @@ export const productService = {
     return productRepository.findAll({
       page: Math.max(1, page),
       limit: Math.min(limit, 100), // cap to prevent abuse
-      category,
+      category: category as any,
     });
   },
 

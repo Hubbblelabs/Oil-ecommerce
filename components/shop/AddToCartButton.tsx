@@ -20,8 +20,8 @@ export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
       productId: product.id,
       name: product.name,
       price: product.price.toString(),
-      imageUrl: product.imageUrl,
-      unit: product.unit,
+      image: product.image,
+      category: product.category,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);

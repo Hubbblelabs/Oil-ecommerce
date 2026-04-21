@@ -88,9 +88,9 @@ async function OrderDetail({ id }: { id: string }) {
             #{order.id.slice(0, 8).toUpperCase()}
           </h1>
           <p className="text-sm text-muted-foreground">{formattedDate}</p>
-          {order.guestEmail && (
+          {order.userId && (
             <p className="mt-1 text-sm text-muted-foreground">
-              {order.guestEmail}
+              {order.userId}
             </p>
           )}
         </div>
@@ -118,7 +118,7 @@ async function OrderDetail({ id }: { id: string }) {
                 <div>
                   <p className="font-medium leading-tight">{item.productName}</p>
                   <p className="text-sm text-muted-foreground">
-                    ${item.unitPrice.toString()} each
+                    ${item.price.toString()} each
                   </p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ async function OrderDetail({ id }: { id: string }) {
                 <p className="text-sm text-muted-foreground">× {item.quantity}</p>
                 <p className="font-semibold text-amber-600">
                   ${(
-                    parseFloat(item.unitPrice.toString()) * item.quantity
+                    parseFloat(item.price.toString()) * item.quantity
                   ).toFixed(2)}
                 </p>
               </div>

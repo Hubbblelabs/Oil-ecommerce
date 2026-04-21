@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!product) return { title: "Product Not Found" };
   return {
     title: product.name,
-    description: product.description,
+    description: '',
   };
 }
 
@@ -52,9 +52,9 @@ async function ProductDetail({ id }: { id: string }) {
     <div className="grid gap-10 md:grid-cols-2">
       {/* Image panel */}
       <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/60 dark:from-amber-950/20 dark:to-amber-900/10">
-        {product.imageUrl ? (
+        {product.image ? (
           <Image
-            src={product.imageUrl}
+            src={product.image}
             alt={product.name}
             fill
             className="object-cover"
@@ -83,14 +83,14 @@ async function ProductDetail({ id }: { id: string }) {
             {product.category}
           </Badge>
           <h1 className="text-3xl font-extrabold leading-tight">{product.name}</h1>
-          <p className="mt-1 text-muted-foreground">{product.unit}</p>
+          <p className="mt-1 text-muted-foreground">{product.category}</p>
         </div>
 
         <div className="flex items-baseline gap-2">
           <span className="text-4xl font-extrabold text-amber-600">
             ${product.price.toString()}
           </span>
-          <span className="text-sm text-muted-foreground">/ {product.unit}</span>
+          <span className="text-sm text-muted-foreground">/ {product.category}</span>
         </div>
 
         {/* Stock indicator */}
@@ -111,7 +111,7 @@ async function ProductDetail({ id }: { id: string }) {
 
         <Separator />
 
-        <p className="leading-relaxed text-muted-foreground">{product.description}</p>
+        <p className="leading-relaxed text-muted-foreground">{''}</p>
 
         {/* Quality badges */}
         <div className="flex flex-wrap gap-2">

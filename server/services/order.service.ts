@@ -40,8 +40,8 @@ export const orderService = {
    * 4. Creates the Order + OrderItems
    * 5. Atomically decrements stock
    */
-  async createOrder(input: CreateOrderInput): Promise<{ id: string }> {
-    const { items, guestEmail } = input;
+  async createOrder(userId: string, input: CreateOrderInput): Promise<{ id: string }> {
+    const { items } = input;
 
     if (items.length === 0) {
       throw new Error("Order must contain at least one item.");
@@ -84,13 +84,13 @@ export const orderService = {
         return {
           productId: item.productId,
           quantity: item.quantity,
-          unitPrice: product.price,
+          price: product.price,
         };
       });
 
       // Step 4: Create the order with items
       const order = await orderRepository.createWithItems(tx, {
-        guestEmail,
+        userId,
         totalAmount,
         items: orderItems,
       });
@@ -114,12 +114,12 @@ export const orderService = {
   async getOrders(
     page = 1,
     limit = DEFAULT_PAGE_LIMIT,
-    guestEmail?: string
+    userId?: string
   ): Promise<PaginatedResult<OrderSummary>> {
     return orderRepository.findMany({
       page: Math.max(1, page),
       limit: Math.min(limit, 50),
-      guestEmail,
+      userId,
     });
   },
 

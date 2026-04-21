@@ -18,8 +18,8 @@ export interface CartItem {
   productId: string;
   name: string;
   price: string; // stored as string to preserve Decimal precision
-  imageUrl: string | null;
-  unit: string;
+  image: string | null;
+  category: string;
   quantity: number;
 }
 

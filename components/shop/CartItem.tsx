@@ -19,9 +19,9 @@ export function CartItem({ item }: CartItemProps) {
     >
       {/* Thumbnail */}
       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10">
-        {item.imageUrl ? (
+        {item.image ? (
           <Image
-            src={item.imageUrl}
+            src={item.image}
             alt={item.name}
             fill
             className="object-cover"
@@ -38,7 +38,7 @@ export function CartItem({ item }: CartItemProps) {
       <div className="flex flex-1 flex-col justify-between gap-2">
         <div>
           <p className="font-semibold leading-tight">{item.name}</p>
-          <p className="text-sm text-muted-foreground">{item.unit}</p>
+          <p className="text-sm text-muted-foreground">{item.category}</p>
         </div>
 
         <div className="flex items-center justify-between">
