@@ -23,6 +23,13 @@ const productDetailSelect = {
   createdAt: true,
 } as const;
 
+function mapProduct<T extends { price: any }>(product: T): T & { price: number } {
+  return {
+    ...product,
+    price: Number(product.price.toString()),
+  };
+}
+
 export const productRepository = {
   async findAll(
     options: PaginationOptions & { category?: Category; search?: string; includeInactive?: boolean }
@@ -50,7 +57,7 @@ export const productRepository = {
     ]);
 
     return {
-      data,
+      data: data.map(mapProduct),
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -76,28 +83,36 @@ export const productRepository = {
       db.product.count({ where }),
     ]);
 
-    return { data, total, page, totalPages: Math.ceil(total / limit) };
+    return { 
+      data: data.map(mapProduct), 
+      total, 
+      page, 
+      totalPages: Math.ceil(total / limit) 
+    };
   },
 
   async findById(id: string): Promise<ProductDetail | null> {
-    return db.product.findUnique({
+    const product = await db.product.findUnique({
       where: { id, isActive: true },
       select: productDetailSelect,
     });
+    return product ? mapProduct(product) : null;
   },
 
   async findByIdAny(id: string): Promise<ProductDetail | null> {
-    return db.product.findUnique({
+    const product = await db.product.findUnique({
       where: { id },
       select: productDetailSelect,
     });
+    return product ? mapProduct(product) : null;
   },
 
   async findByIds(ids: string[]): Promise<ProductSummary[]> {
-    return db.product.findMany({
+    const data = await db.product.findMany({
       where: { id: { in: ids }, isActive: true },
       select: productSummarySelect,
     });
+    return data.map(mapProduct);
   },
 
   async create(data: {
@@ -108,7 +123,7 @@ export const productRepository = {
     category: Category;
     sellerId: string;
   }): Promise<ProductDetail> {
-    return db.product.create({
+    const product = await db.product.create({
       data: {
         name: data.name,
         price: data.price,
@@ -119,6 +134,7 @@ export const productRepository = {
       },
       select: productDetailSelect,
     });
+    return mapProduct(product);
   },
 
   async update(
@@ -132,19 +148,21 @@ export const productRepository = {
       isActive: boolean;
     }>
   ): Promise<ProductDetail> {
-    return db.product.update({
+    const product = await db.product.update({
       where: { id },
       data,
       select: productDetailSelect,
     });
+    return mapProduct(product);
   },
 
   async softDelete(id: string): Promise<ProductDetail> {
-    return db.product.update({
+    const product = await db.product.update({
       where: { id },
       data: { isActive: false },
       select: productDetailSelect,
     });
+    return mapProduct(product);
   },
 
   async getLowStock(sellerId: string, threshold = 10) {

@@ -21,7 +21,8 @@ export const sellerService = {
       where: { product: { sellerId } },
       _sum: { price: true },
     });
-    const totalRevenue = revenueRaw._sum.price ?? new Prisma.Decimal(0);
+    const totalRevenueDecimal = revenueRaw._sum.price ?? new Prisma.Decimal(0);
+    const totalRevenue = Number(totalRevenueDecimal.toString());
 
     // Top selling products
     const topRaw = await db.orderItem.groupBy({
@@ -39,11 +40,14 @@ export const sellerService = {
     });
     const nameMap = new Map(products.map((p) => [p.id, p.name]));
 
-    const topProducts = topRaw.map((r) => ({
-      name: nameMap.get(r.productId) ?? r.productId,
-      totalSold: r._sum.quantity ?? 0,
-      revenue: r._sum.price ?? new Prisma.Decimal(0),
-    }));
+    const topProducts = topRaw.map((r) => {
+      const revRaw = r._sum.price ?? new Prisma.Decimal(0);
+      return {
+        name: nameMap.get(r.productId) ?? r.productId,
+        totalSold: r._sum.quantity ?? 0,
+        revenue: Number(revRaw.toString()),
+      };
+    });
 
     const lowStockProducts = await productRepository.getLowStock(sellerId);
 

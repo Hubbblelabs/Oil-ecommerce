@@ -13,7 +13,7 @@ export interface UserSummary {
 export interface ProductSummary {
   id: string;
   name: string;
-  price: Prisma.Decimal;
+  price: number;
   stock: number;
   image: string | null;
   category: Category;
@@ -42,13 +42,13 @@ export interface OrderItemSummary {
   productId: string;
   productName: string;
   quantity: number;
-  price: Prisma.Decimal;
+  price: number;
 }
 
 export interface OrderSummary {
   id: string;
   status: OrderStatus;
-  totalAmount: Prisma.Decimal;
+  totalAmount: number;
   userId: string;
   shippingAddress: string;
   phone: string;
@@ -73,14 +73,14 @@ export interface AdminStats {
   totalSellers: number;
   totalProducts: number;
   totalOrders: number;
-  totalRevenue: Prisma.Decimal;
+  totalRevenue: number;
   recentOrders: OrderSummary[];
 }
 
 export interface SellerStats {
-  totalRevenue: Prisma.Decimal;
+  totalRevenue: number;
   totalProducts: number;
   pendingOrders: number;
-  topProducts: Array<{ name: string; totalSold: number; revenue: Prisma.Decimal }>;
+  topProducts: Array<{ name: string; totalSold: number; revenue: number }>;
   lowStockProducts: Array<{ id: string; name: string; stock: number }>;
 }

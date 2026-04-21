@@ -14,7 +14,8 @@ export const adminService = {
       db.order.aggregate({ _sum: { totalAmount: true } }),
     ]);
 
-    const totalRevenue = revenueResult._sum.totalAmount ?? new Prisma.Decimal(0);
+    const rawRevenue = revenueResult._sum.totalAmount ?? new Prisma.Decimal(0);
+    const totalRevenue = Number(rawRevenue.toString());
 
     const recentOrdersResult = await orderRepository.findMany({
       page: 1,

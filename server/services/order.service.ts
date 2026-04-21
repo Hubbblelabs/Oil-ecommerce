@@ -83,14 +83,14 @@ export const orderService = {
         return {
           productId: item.productId,
           quantity: item.quantity,
-          price: product.price,
+          price: Number(product.price.toString()),
         };
       });
 
       // Step 4: Create the order with items
       const order = await orderRepository.createWithItems(tx, {
         userId,
-        totalAmount,
+        totalAmount: Number(totalAmount.toString()),
         shippingAddress,
         phone,
         items: orderItems,

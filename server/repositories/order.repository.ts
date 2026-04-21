@@ -29,23 +29,21 @@ const orderSelect = {
 } satisfies Prisma.OrderSelect;
 
 // Map raw DB result to our OrderSummary DTO
-function toOrderSummary(
-  raw: Prisma.OrderGetPayload<{ select: typeof orderSelect }>
-): OrderSummary {
+function toOrderSummary(raw: any): OrderSummary {
   return {
     id: raw.id,
     status: raw.status,
-    totalAmount: raw.totalAmount,
+    totalAmount: Number(raw.totalAmount.toString()),
     userId: raw.userId,
     shippingAddress: raw.shippingAddress,
     phone: raw.phone,
     createdAt: raw.createdAt,
-    items: raw.items.map((item) => ({
+    items: raw.items.map((item: any) => ({
       id: item.id,
       productId: item.productId,
       productName: item.product.name,
       quantity: item.quantity,
-      price: item.price,
+      price: Number(item.price.toString()),
     })),
   };
 }
@@ -97,10 +95,10 @@ export const orderRepository = {
     tx: Prisma.TransactionClient,
     data: {
       userId: string;
-      totalAmount: Prisma.Decimal;
+      totalAmount: number;
       shippingAddress: string;
       phone: string;
-      items: Array<{ productId: string; quantity: number; price: Prisma.Decimal }>;
+      items: Array<{ productId: string; quantity: number; price: number }>;
     }
   ) {
     return tx.order.create({
