@@ -32,7 +32,7 @@ export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
       <Button
         id={`product-add-to-cart-${product.id}`}
         size="lg"
-        className="w-full gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-base font-semibold shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.23)] hover:-translate-y-0.5 transition-all duration-300 h-14"
+        className="w-full gap-2 rounded-xl gradient-amber text-white text-base font-semibold border-0 btn-shine shadow-amber-glow hover:shadow-amber-glow-lg transition-all h-14"
         onClick={handleClick}
         disabled={disabled || added}
         aria-label={`Add ${product.name} to cart`}

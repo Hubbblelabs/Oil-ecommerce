@@ -136,7 +136,7 @@ function LoginForm() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-xl font-medium text-base shadow-lg transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+          className="w-full h-12 gradient-amber text-white border-0 btn-shine rounded-xl font-semibold text-base shadow-amber-glow hover:shadow-amber-glow-lg transition-all"
           disabled={isPending}
         >
           {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign in to your account"}

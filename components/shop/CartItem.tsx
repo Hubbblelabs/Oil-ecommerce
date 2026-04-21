@@ -87,9 +87,10 @@ export function CartItem({ item }: CartItemProps) {
 
           {/* Line total */}
           <div className="text-right">
-             <span className="font-bold text-xl text-foreground">
-              ${(parseFloat(item.price) * item.quantity).toFixed(2)}
+            <span className="font-bold text-xl text-foreground">
+              ₹{(parseFloat(item.price) * item.quantity).toFixed(2)}
             </span>
+            <p className="text-xs text-muted-foreground mt-0.5">₹{parseFloat(item.price).toFixed(2)} each</p>
           </div>
         </div>
       </div>

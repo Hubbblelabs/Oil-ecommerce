@@ -137,7 +137,7 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium text-base shadow-[0_4px_14px_0_rgba(245,158,11,0.39)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.23)] transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+          className="w-full h-12 gradient-amber text-white border-0 btn-shine rounded-xl font-semibold text-base shadow-amber-glow hover:shadow-amber-glow-lg transition-all"
           disabled={isPending}
         >
           {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up for OilMart"}

@@ -9,10 +9,9 @@ import { useCart } from "@/components/providers/CartProvider";
 export function CartSummary() {
   const { itemCount, totalAmount, items } = useCart();
 
-  // Mock values to make it look premium
   const subtotal = parseFloat(totalAmount);
-  const tax = subtotal * 0.08;
-  const total = subtotal + tax;
+  const shipping = subtotal >= 499 ? 0 : 49;
+  const total = subtotal + shipping;
 
   return (
     <div className="sticky top-24 rounded-3xl glass-panel p-8 shadow-[0_8px_40px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_40px_rgba(255,255,255,0.02)]">
@@ -21,16 +20,15 @@ export function CartSummary() {
       <div className="space-y-4 mb-6">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Subtotal ({itemCount} items)</span>
-          <span className="font-semibold text-foreground">${subtotal.toFixed(2)}</span>
+          <span className="font-semibold text-foreground">₹{subtotal.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Estimated Shipping</span>
-          <span className="font-semibold text-foreground">Free</span>
+          <span className="text-muted-foreground">Delivery</span>
+          <span className={`font-semibold ${shipping === 0 ? 'text-green-600' : 'text-foreground'}`}>{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Estimated Tax</span>
-          <span className="font-semibold text-foreground">${tax.toFixed(2)}</span>
-        </div>
+        {shipping > 0 && (
+          <p className="text-xs text-muted-foreground">Add ₹{(499 - subtotal).toFixed(0)} more for free delivery</p>
+        )}
       </div>
 
       <Separator className="my-6" />
@@ -38,14 +36,14 @@ export function CartSummary() {
       <div className="flex justify-between items-end mb-8">
         <span className="text-lg font-semibold text-foreground">Total</span>
         <div className="text-right">
-          <span className="text-3xl font-extrabold tracking-tight text-foreground">${total.toFixed(2)}</span>
-          <p className="text-xs text-muted-foreground mt-1 text-right">USD inclusive of VAT</p>
+          <span className="text-3xl font-extrabold tracking-tight text-foreground">₹{total.toFixed(2)}</span>
+          <p className="text-xs text-muted-foreground mt-1 text-right">Inclusive of all taxes</p>
         </div>
       </div>
 
       <Button
         id="proceed-to-checkout"
-        className="w-full gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background shadow-lg h-14 text-base font-semibold transition-transform hover:scale-[1.02]"
+        className="w-full gap-2 rounded-xl gradient-amber text-white border-0 btn-shine shadow-amber-glow hover:shadow-amber-glow-lg h-14 text-base font-semibold transition-all"
         asChild
         disabled={itemCount === 0}
       >

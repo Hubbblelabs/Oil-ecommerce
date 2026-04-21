@@ -1,20 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, Droplets, Menu, X, LogOut } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ShoppingCart, Droplets, Menu, X, LogOut, ChevronDown, Sparkles } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/components/providers/CartProvider";
 import { cn } from "@/lib/utils";
-import { FadeIn } from "@/components/ui/motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Shop" },
-  { href: "/orders", label: "Orders" },
-] as const;
+const CATEGORIES = [
+  { value: "COOKING", label: "Cooking" },
+  { value: "PREMIUM", label: "Premium" },
+  { value: "ORGANIC", label: "Organic" },
+  { value: "INDUSTRIAL", label: "Bulk" },
+];
 
 interface CurrentUser {
   id: string;
@@ -26,214 +26,202 @@ export function ShopNavbar() {
   const { itemCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<CurrentUser | null>(null);
-  const [userLoading, setUserLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const router = useRouter();
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auth/me")
       .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        setUser(data);
-        setUserLoading(false);
-      })
-      .catch(() => setUserLoading(false));
+      .then(setUser)
+      .catch(() => {});
+  }, []);
 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
+    setUserMenuOpen(false);
     router.push("/");
     router.refresh();
   };
 
   const dashboardHref =
-    user?.role === "ADMIN"
-      ? "/admin/dashboard"
-      : user?.role === "SELLER"
-      ? "/seller/dashboard"
-      : null;
+    user?.role === "ADMIN" ? "/admin/dashboard"
+    : user?.role === "SELLER" ? "/seller/dashboard"
+    : null;
 
   return (
-    <FadeIn>
-      <header
-        className={cn(
-          "fixed top-0 z-50 w-full transition-all duration-300",
-          scrolled ? "glass-panel border-b" : "bg-transparent py-2"
-        )}
-        id="shop-navbar"
-      >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header
+      className={cn(
+        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
+        scrolled
+          ? "bg-white/90 dark:bg-zinc-950/90 backdrop-blur-2xl border-b border-border/50 shadow-[0_1px_0_0_oklch(0_0_0/0.06)]"
+          : "bg-transparent"
+      )}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-4">
+
           {/* Brand */}
-          <Link
-            href="/"
-            className="flex items-center gap-3 transition-transform hover:scale-105"
-            id="brand-logo"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-amber text-white shadow-lg shadow-amber-500/20">
-              <Droplets className="h-5 w-5 fill-white/20" />
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[10px] gradient-amber text-white shadow-amber-glow transition-all duration-300 group-hover:shadow-amber-glow-lg group-hover:scale-105">
+              <Droplets className="h-4 w-4 fill-white/30" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-foreground">
-              OilMart
+            <span className="text-[17px] font-bold tracking-tight">
+              Oil<span className="text-gradient-amber">Mart</span>
             </span>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-8 md:flex absolute left-1/2 -translate-x-1/2" aria-label="Main navigation">
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground relative group"
-                id={`nav-link-${label.toLowerCase()}`}
-              >
-                {label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all group-hover:w-full rounded-full"></span>
+          {/* Center nav — desktop */}
+          <nav className="hidden lg:flex items-center gap-0.5">
+            <Link href="/" className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">All</Link>
+            {CATEGORIES.map((cat) => (
+              <Link key={cat.value} href={`/?category=${cat.value}`} className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">
+                {cat.label}
               </Link>
             ))}
-            {dashboardHref && (
-              <Link
-                href={dashboardHref}
-                className="text-sm font-medium text-amber-600 transition-colors hover:text-amber-700 relative group"
-              >
-                Dashboard
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-600 transition-all group-hover:w-full rounded-full"></span>
-              </Link>
-            )}
+            <Link href="/orders" className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">Orders</Link>
           </nav>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-3">
+          {/* Right */}
+          <div className="flex items-center gap-1">
+
             {/* Cart */}
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              className="relative rounded-full hover:bg-black/5 dark:hover:bg-white/10"
-              id="cart-icon-button"
-              aria-label={`Cart with ${itemCount} items`}
+            <button
+              onClick={() => router.push("/cart")}
+              className="relative h-9 w-9 flex items-center justify-center rounded-[10px] hover:bg-accent/60 transition-colors"
+              aria-label={`Cart (${itemCount} items)`}
             >
-              <Link href="/cart">
-                <ShoppingCart className="h-[18px] w-[18px] text-foreground" />
+              <ShoppingCart className="h-[18px] w-[18px]" />
+              <AnimatePresence>
                 {itemCount > 0 && (
-                  <Badge
-                    className="absolute -right-1 -top-1 h-4.5 w-4.5 flex items-center justify-center rounded-full bg-amber-500 p-0 text-[9px] font-bold text-white border-2 border-background shadow-sm"
-                    id="cart-item-count-badge"
+                  <motion.span
+                    key="badge"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full gradient-amber px-1 text-[10px] font-bold text-white shadow-amber-glow"
                   >
                     {itemCount > 99 ? "99+" : itemCount}
-                  </Badge>
+                  </motion.span>
                 )}
-              </Link>
-            </Button>
+              </AnimatePresence>
+            </button>
 
-            {/* Auth buttons */}
-            {!userLoading && (
-              <div className="hidden md:flex items-center gap-3 ml-2">
-                {user ? (
-                  <>
-                    <div className="flex items-center justify-center h-8 w-8 rounded-full bg-muted border border-border">
-                      <span className="text-xs font-medium text-muted-foreground uppercase">
-                        {user.email.charAt(0)}
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full hover:bg-destructive/10 hover:text-destructive"
-                      onClick={handleLogout}
-                      aria-label="Sign out"
-                      title="Sign out"
+            {/* Auth — desktop */}
+            {user ? (
+              <div className="relative hidden md:block" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className="flex items-center gap-1.5 h-9 px-2.5 rounded-[10px] text-sm font-medium hover:bg-accent/60 transition-all"
+                >
+                  <span className="h-6 w-6 rounded-full gradient-amber flex items-center justify-center text-white text-[11px] font-bold uppercase shrink-0">
+                    {user.email[0]}
+                  </span>
+                  <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform duration-200", userMenuOpen && "rotate-180")} />
+                </button>
+
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.15, ease: [0.25, 0.25, 0, 1] }}
+                      className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-white dark:bg-zinc-900 border border-border/60 shadow-lift p-1.5 z-50"
                     >
-                      <LogOut className="h-[18px] w-[18px]" />
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button asChild variant="ghost" size="sm" className="rounded-full text-sm font-medium">
-                      <Link href="/login">Log in</Link>
-                    </Button>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-sm"
-                    >
-                      <Link href="/register">Sign up</Link>
-                    </Button>
-                  </>
-                )}
+                      <div className="px-3 py-2 mb-1 border-b border-border/40">
+                        <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
+                        <p className="text-xs font-semibold text-amber-600 capitalize">{user.role.toLowerCase()}</p>
+                      </div>
+                      {dashboardHref && (
+                        <Link href={dashboardHref} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent/60 transition-colors">
+                          <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                          Dashboard
+                        </Link>
+                      )}
+                      <Link href="/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent/60 transition-colors">
+                        My Orders
+                      </Link>
+                      <div className="my-1 h-px bg-border/40" />
+                      <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
+                        <LogOut className="h-3.5 w-3.5" />
+                        Sign out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center gap-1.5 ml-1">
+                <Button asChild variant="ghost" size="sm" className="h-9 rounded-[10px] text-[13px] font-medium hover:bg-accent/60">
+                  <Link href="/login">Sign in</Link>
+                </Button>
+                <Button asChild size="sm" className="h-9 rounded-[10px] text-[13px] font-medium gradient-amber text-white border-0 btn-shine shadow-amber-glow hover:shadow-amber-glow-lg transition-all">
+                  <Link href="/register">Get started</Link>
+                </Button>
               </div>
             )}
 
-            {/* Mobile menu toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden rounded-full"
-              onClick={() => setMobileOpen((o) => !o)}
-              id="mobile-menu-toggle"
-              aria-label="Toggle mobile menu"
-            >
+            {/* Mobile toggle */}
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-[10px] hover:bg-accent/60 lg:hidden" onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu">
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile nav dropdown */}
-        <div
-          className={cn(
-            "absolute top-full left-0 w-full glass-panel border-t md:hidden transition-all duration-300 origin-top overflow-hidden",
-            mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 border-transparent"
-          )}
-          id="mobile-nav"
-        >
-          <nav className="flex flex-col gap-1 p-4 shadow-xl" aria-label="Mobile navigation">
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-black/5 dark:hover:bg-white/10"
-                onClick={() => setMobileOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
-            {dashboardHref && (
-              <Link
-                href={dashboardHref}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-amber-600 transition-colors hover:bg-amber-50 dark:hover:bg-amber-500/10"
-                onClick={() => setMobileOpen(false)}
-              >
-                Dashboard
-              </Link>
-            )}
-            <div className="h-px bg-border my-2" />
-            {user ? (
-              <button
-                onClick={() => { handleLogout(); setMobileOpen(false); }}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-left text-destructive transition-colors hover:bg-destructive/10"
-              >
-                Sign out ({user.email})
-              </button>
-            ) : (
-              <div className="flex flex-col gap-2 mt-2">
-                <Button asChild variant="outline" className="w-full justify-center rounded-xl">
-                  <Link href="/login" onClick={() => setMobileOpen(false)}>Log in</Link>
-                </Button>
-                <Button asChild className="w-full justify-center rounded-xl bg-foreground text-background">
-                  <Link href="/register" onClick={() => setMobileOpen(false)}>Sign up</Link>
-                </Button>
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.22, ease: [0.25, 0.25, 0, 1] }}
+            className="overflow-hidden bg-white dark:bg-zinc-950 border-t border-border/50 lg:hidden"
+          >
+            <nav className="flex flex-col p-4 gap-0.5">
+              <Link href="/" className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>All Products</Link>
+              {CATEGORIES.map((cat) => (
+                <Link key={cat.value} href={`/?category=${cat.value}`} className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>{cat.label}</Link>
+              ))}
+              <Link href="/orders" className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>My Orders</Link>
+              {dashboardHref && (
+                <Link href={dashboardHref} className="px-4 py-2.5 rounded-xl text-sm font-medium text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+              )}
+              <div className="mt-2 pt-2 border-t border-border/40 flex gap-2">
+                {user ? (
+                  <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex-1 py-2.5 rounded-xl text-sm font-medium text-center text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors">Sign out</button>
+                ) : (
+                  <>
+                    <Link href="/login" className="flex-1 py-2.5 rounded-xl text-sm font-medium text-center border border-border/60 hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>Sign in</Link>
+                    <Link href="/register" className="flex-1 py-2.5 rounded-xl text-sm font-medium text-center gradient-amber text-white" onClick={() => setMobileOpen(false)}>Register</Link>
+                  </>
+                )}
               </div>
-            )}
-          </nav>
-        </div>
-      </header>
-    </FadeIn>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
 

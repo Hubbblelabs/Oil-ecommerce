@@ -94,8 +94,8 @@ export function ProductCard({ product }: ProductCardProps) {
             >
               {product.name}
             </h3>
-            <span className="font-medium text-base text-foreground whitespace-nowrap">
-              ${product.price.toString()}
+            <span className="font-semibold text-base text-foreground whitespace-nowrap">
+              ₹{product.price.toString()}
             </span>
           </div>
           

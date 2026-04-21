@@ -148,9 +148,9 @@ async function ProductDetail({ id }: { id: string }) {
             </span>
           </div>
 
-          <div className="text-3xl font-semibold text-foreground mb-8">
-            ${product.price.toString()}
-            <span className="text-sm font-normal text-muted-foreground ml-2">USD</span>
+          <div className="text-3xl font-bold text-foreground mb-8">
+            ₹{product.price.toString()}
+            <span className="text-sm font-normal text-muted-foreground ml-2">incl. taxes</span>
           </div>
 
           <Separator className="my-2" />
