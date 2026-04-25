@@ -56,7 +56,7 @@ export default function RegisterPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Create an account</h1>
         <p className="text-muted-foreground text-sm">
-          Join OilMart to track orders and save your favorites.
+          Join Shri Sameya Village to track orders and save your favorites.
         </p>
       </div>
 
@@ -140,7 +140,7 @@ export default function RegisterPage() {
           className="w-full h-12 gradient-amber text-white border-0 btn-shine rounded-xl font-semibold text-base shadow-amber-glow hover:shadow-amber-glow-lg transition-all"
           disabled={isPending}
         >
-          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up for OilMart"}
+          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up for Shri Sameya Village"}
         </Button>
         
         <p className="text-center text-xs text-muted-foreground pt-4">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getCurrentUser } from "@/server/auth";
 import { redirect } from "next/navigation";
 import {
@@ -33,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
-            <p className="font-bold text-sm tracking-tight text-foreground">OilMart</p>
+            <p className="font-serif font-bold text-sm tracking-tight text-foreground">Shri Sameya Village</p>
             <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">Admin Ops</p>
           </div>
         </Link>
@@ -74,8 +75,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Main content wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Navbar */}
-        <header className="h-[72px] flex items-center justify-between px-8 bg-background border-b border-border/40 shrink-0">
-           <h1 className="text-xl font-bold tracking-tight">Admin Ops Center</h1>
+        <header className="h-[200px] relative flex items-center justify-between px-8 bg-background border-b border-border/40 shrink-0 overflow-hidden">
+           {/* Background Image */}
+           <div className="absolute inset-0 z-0">
+             <Image src="/site_assets/dashboard_warehouse.png" alt="Warehouse" fill className="object-cover opacity-20 dark:opacity-40 object-top" />
+             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+           </div>
+           
+           <h1 className="text-3xl font-bold tracking-tight relative z-10 text-foreground">Admin Ops Center</h1>
            <div className="flex items-center gap-6">
               <button className="relative text-muted-foreground hover:text-foreground transition-colors">
                  <Bell className="w-5 h-5"/>

@@ -25,15 +25,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "OilMart — Premium Natural Oils",
-    template: "%s | OilMart",
+    default: "Shri Sameya Village — Premium Wood Pressed Oils",
+    template: "%s | Shri Sameya Village",
   },
   description:
-    "Shop premium cold-pressed, extra virgin, and specialty oils. Direct from source to your kitchen.",
-  keywords: ["olive oil", "coconut oil", "premium oils", "natural oils", "cooking oil"],
+    "Pure Taste of Tradition. Shop premium wood pressed, organic, and natural Indian household oils. Direct from village farms to your kitchen.",
+  keywords: ["wood pressed oil", "cold pressed oil", "shri sameya village", "organic oils", "indian traditional oils"],
   openGraph: {
-    title: "OilMart — Premium Natural Oils",
-    description: "Shop premium cold-pressed, extra virgin, and specialty oils.",
+    title: "Shri Sameya Village — Wood Pressed Oils",
+    description: "Pure Taste of Tradition. Shop premium wood pressed and natural oils.",
     type: "website",
   },
 };

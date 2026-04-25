@@ -80,13 +80,18 @@ export function ShopNavbar() {
         <div className="flex h-16 items-center justify-between gap-4">
 
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-[10px] gradient-amber text-white shadow-amber-glow transition-all duration-300 group-hover:shadow-amber-glow-lg group-hover:scale-105">
-              <Droplets className="h-4 w-4 fill-white/30" />
+          <Link href="/" className="flex items-center gap-3 shrink-0 group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-amber-700 text-white shadow-[0_0_15px_rgba(180,83,9,0.4)] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(180,83,9,0.6)] group-hover:scale-105 border border-amber-600/50">
+              <Droplets className="h-5 w-5 fill-amber-100/50 text-amber-100" />
             </div>
-            <span className="text-[17px] font-bold tracking-tight">
-              Oil<span className="text-gradient-amber">Mart</span>
-            </span>
+            <div className="flex flex-col justify-center">
+              <span className="font-serif text-lg font-bold tracking-tight leading-none text-amber-900 dark:text-amber-50">
+                Shri Sameya Village
+              </span>
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-amber-700/80 dark:text-amber-400/80 uppercase mt-0.5">
+                Wood Pressed Oils
+              </span>
+            </div>
           </Link>
 
           {/* Center nav — desktop */}

@@ -14,10 +14,17 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
         <div className="relative z-10 flex items-center gap-3">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)] group-hover:scale-105 transition-transform">
-              <Droplets className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-amber-700 text-white shadow-[0_0_15px_rgba(180,83,9,0.4)] group-hover:scale-105 transition-transform border border-amber-600/50">
+              <Droplets className="h-5 w-5 fill-amber-100/50 text-amber-100" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-white">OilMart</span>
+            <div className="flex flex-col justify-center">
+              <span className="font-serif text-2xl font-bold tracking-tight text-white leading-none">
+                Shri Sameya Village
+              </span>
+              <span className="text-xs font-semibold tracking-[0.2em] text-amber-500/80 uppercase mt-1">
+                Wood Pressed Oils
+              </span>
+            </div>
           </Link>
         </div>
 
@@ -29,7 +36,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             Unlock the power of <span className="text-gradient-amber">pure nature.</span>
           </h2>
           <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-            Join thousands of culinary enthusiasts and health-conscious individuals who trust OilMart for 100% pure, cold-pressed premium oils.
+            Join thousands of culinary enthusiasts and health-conscious individuals who trust Shri Sameya Village for 100% pure, wood-pressed premium oils.
           </p>
           
           <div className="space-y-4">
@@ -53,10 +60,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="flex w-full lg:w-[55%] flex-col justify-center px-6 py-12 sm:px-12 lg:px-24 xl:px-32 relative">
         <div className="lg:hidden flex justify-center mb-10">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-              <Droplets className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-amber-700 text-white shadow-[0_0_15px_rgba(180,83,9,0.4)] border border-amber-600/50">
+              <Droplets className="h-5 w-5 fill-amber-100/50 text-amber-100" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-foreground">OilMart</span>
+            <div className="flex flex-col justify-center">
+              <span className="font-serif text-xl font-bold tracking-tight text-foreground leading-none">
+                Shri Sameya Village
+              </span>
+            </div>
           </Link>
         </div>
         

@@ -9,6 +9,9 @@ import { productService } from "@/server/services/product.service";
 import { cacheTag, cacheLife } from "next/cache";
 import { cn } from "@/lib/utils";
 import type { Category } from "@/server/types";
+import { HomeCarousel } from "@/components/shop/HomeCarousel";
+import { CategoryCircles } from "@/components/shop/CategoryCircles";
+import { ProductLane } from "@/components/shop/ProductLane";
 
 const CATEGORIES: { value: string; label: string; icon: React.ElementType; color: string }[] = [
   { value: "", label: "All", icon: Package, color: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300" },
@@ -50,6 +53,25 @@ async function ProductsContent({
   );
 }
 
+async function HomeLanes() {
+  const result = await productService.getProducts(1, 16);
+  const products = result.data;
+  
+  if (!products || products.length === 0) return null;
+
+  const bestSellers = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
+  const todaysDeals = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
+  const healthyOils = [...products].filter(p => p.category === "ORGANIC" || p.category === "PREMIUM").slice(0, 8);
+
+  return (
+    <div className="flex flex-col gap-2 bg-slate-50/50 dark:bg-black/50 py-8">
+      <ProductLane title="Best Sellers" subtitle="Loved by thousands of households" products={bestSellers} />
+      <ProductLane title="Today's Deals" subtitle="Unbeatable prices on premium oils" products={todaysDeals} />
+      {healthyOils.length > 0 && <ProductLane title="Healthy Alternatives" subtitle="Cold-pressed organic goodness" products={healthyOils} />}
+    </div>
+  );
+}
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -60,118 +82,18 @@ export default async function HomePage({
   const page = Math.max(1, Number(params.page ?? "1"));
   const activeLabel = CATEGORIES.find((c) => c.value === category)?.label ?? "All";
 
-  return (
-    <div className="flex flex-col">
-
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative min-h-[560px] flex items-center overflow-hidden bg-zinc-950">
-        {/* Amber radial glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-amber-500/15 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-600/10 rounded-full blur-[100px]" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold tracking-widest uppercase mb-6">
-              <Leaf className="h-3 w-3" />
-              100% Pure &amp; Cold-Pressed
-            </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] mb-6" style={{ fontFamily: "var(--font-heading)" }}>
-              Liquid Gold,<br />
-              <span className="text-gradient-amber">Farm to Table.</span>
-            </h1>
-            <p className="text-lg text-zinc-400 leading-relaxed mb-8 max-w-lg">
-              Premium, unrefined oils sourced from sustainable Indian farms. No additives, no compromise — just pure nature in every drop.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="h-12 px-7 rounded-xl gradient-amber text-white border-0 btn-shine shadow-amber-glow hover:shadow-amber-glow-lg transition-all font-semibold">
-                <Link href="#products">Shop Collection</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 px-7 rounded-xl border-white/15 text-white bg-white/5 hover:bg-white/10 backdrop-blur-sm font-medium">
-                <Link href="/about">Our Story <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
-              </Button>
-            </div>
-
-            {/* Social proof row */}
-            <div className="mt-10 flex items-center gap-6 flex-wrap">
-              <div>
-                <p className="text-2xl font-bold text-white">10k+</p>
-                <p className="text-xs text-zinc-500">Happy customers</p>
-              </div>
-              <div className="h-8 w-px bg-white/10" />
-              <div>
-                <p className="text-2xl font-bold text-white">50+</p>
-                <p className="text-xs text-zinc-500">Premium SKUs</p>
-              </div>
-              <div className="h-8 w-px bg-white/10" />
-              <div className="flex items-center gap-1.5">
-                <div className="flex">
-                  {Array(5).fill(0).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-zinc-400">4.9/5</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Hero visual */}
-          <div className="hidden lg:flex items-center justify-center">
-            <div className="relative w-80 h-80">
-              <div className="absolute inset-0 rounded-full gradient-amber opacity-20 blur-3xl animate-pulse" />
-              <div className="relative flex h-full w-full items-center justify-center">
-                <div className="flex h-48 w-48 items-center justify-center rounded-full border border-amber-500/20 bg-amber-500/10 backdrop-blur-xl shadow-amber-glow-lg">
-                  <Droplet className="h-24 w-24 text-amber-400/80 fill-amber-500/20" />
-                </div>
-              </div>
-              {/* Orbiting badge */}
-              <div className="absolute top-4 right-0 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2.5 text-center shadow-xl">
-                <p className="text-xs text-zinc-400">FSSAI Certified</p>
-                <p className="text-sm font-bold text-white mt-0.5">✓ Verified</p>
-              </div>
-              <div className="absolute bottom-8 left-0 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2.5 text-center shadow-xl">
-                <p className="text-xs text-zinc-400">Free Delivery</p>
-                <p className="text-sm font-bold text-white mt-0.5">Above ₹499</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHY OILMART ──────────────────────────────────────── */}
-      <section className="py-16 bg-amber-50/60 dark:bg-zinc-950 border-y border-border/40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Droplet, title: "First Cold-Pressed", sub: "Extracted at low temperatures to preserve every nutrient, flavor, and aroma." },
-              { icon: Sprout, title: "Sustainably Sourced", sub: "Direct partnerships with organic farmers across India — traceable to the farm." },
-              { icon: ShieldCheck, title: "Purity Guaranteed", sub: "Zero additives, zero chemicals, zero blends. Just pure oil in every bottle." },
-            ].map(({ icon: Icon, title, sub }) => (
-              <div key={title} className="flex gap-4 p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-border/40 shadow-sm hover:shadow-md transition-shadow">
-                <div className="shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                  <Icon className="h-5 w-5 text-amber-700 dark:text-amber-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">{title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT LISTING ──────────────────────────────────── */}
-      <section id="products" className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+  // If a category or page is selected, show standard product listing
+  if (category || page > 1) {
+    return (
+      <div className="flex flex-col py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-foreground">
-                {category ? `${activeLabel} Oils` : "Our Collection"}
+                {activeLabel} Oils
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
-                {category ? `Showing ${activeLabel.toLowerCase()} range` : "All premium, cold-pressed varieties"}
+                Showing {activeLabel.toLowerCase()} range
               </p>
             </div>
           </div>
@@ -203,27 +125,34 @@ export default async function HomePage({
             <ProductsContent category={category} page={page} />
           </Suspense>
         </div>
-      </section>
+      </div>
+    );
+  }
+
+  // Instamart style homepage
+  return (
+    <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
+      <HomeCarousel />
+      <CategoryCircles />
+      
+      <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading products...</div>}>
+        <HomeLanes />
+      </Suspense>
 
       {/* ── BULK / B2B CTA ───────────────────────────────────── */}
-      <section className="py-20 bg-zinc-950 relative overflow-hidden">
+      <section className="py-16 bg-zinc-950 relative overflow-hidden mx-4 sm:mx-6 lg:mx-8 rounded-3xl mb-12 mt-8">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-amber-500/8 rounded-full blur-[100px]" />
+          <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-amber-500/10 rounded-full blur-[100px]" />
         </div>
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold tracking-widest uppercase mb-6">
-            <Package className="h-3 w-3" />
-            Bulk &amp; B2B Orders
-          </span>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4" style={{ fontFamily: "var(--font-heading)" }}>
-            Buying in bulk?<br />
-            <span className="text-gradient-amber">We have you covered.</span>
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Buying in bulk?
           </h2>
-          <p className="text-zinc-400 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+          <p className="text-zinc-400 text-base mb-8 max-w-xl mx-auto">
             Special pricing for restaurants, hotels, and retailers. FSSAI-certified, private-label options available.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Button asChild size="lg" className="h-12 px-7 rounded-xl gradient-amber text-white border-0 btn-shine shadow-amber-glow font-semibold">
+            <Button asChild size="lg" className="h-12 px-7 rounded-xl bg-amber-600 hover:bg-amber-700 text-white border-0 font-semibold">
               <Link href="/?category=INDUSTRIAL">View Bulk Products</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-12 px-7 rounded-xl border-white/15 text-white bg-white/5 hover:bg-white/10 font-medium">
@@ -236,4 +165,3 @@ export default async function HomePage({
     </div>
   );
 }
-

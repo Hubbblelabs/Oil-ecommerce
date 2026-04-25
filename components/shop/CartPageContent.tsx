@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { CartItem } from "@/components/shop/CartItem";
 import { CartSummary } from "@/components/shop/CartSummary";
 import { useCart } from "@/components/providers/CartProvider";
@@ -13,8 +14,8 @@ export function CartPageContent() {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center max-w-lg mx-auto">
-        <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-amber-50 dark:bg-amber-950 shadow-inner">
-          <ShoppingBag className="h-10 w-10 text-amber-500" />
+        <div className="mb-8 flex h-48 w-48 relative mx-auto items-center justify-center">
+          <Image src="/site_assets/empty_state_cart.png" alt="Empty Cart" fill className="object-contain" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight mb-3">Your bag is empty</h2>
         <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
