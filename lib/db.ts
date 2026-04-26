@@ -18,7 +18,18 @@ function createPrismaClient(): PrismaClient {
     );
   }
 
-  const pool = new Pool({ connectionString });
+  const pool = new Pool({
+    connectionString,
+    max: 20, // Maximum pool size (increased from default 10)
+    idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
+    connectionTimeoutMillis: 10000, // Wait up to 10 seconds to acquire a connection
+  });
+
+  // Handle pool errors
+  pool.on("error", (err) => {
+    console.error("Unexpected connection pool error:", err);
+  });
+
   const adapter = new PrismaPg(pool);
 
   return new PrismaClient({
