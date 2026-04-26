@@ -65,9 +65,14 @@ export default function ShopLayout({
                 Pure Taste of Tradition. Premium wood pressed oils from sustainable Indian farms — pure, natural, and traceable.
               </p>
               {/* Location */}
-              <p className="text-xs text-zinc-500 mb-5">
-                📍 Coimbatore, Ramanathapuram, Trichy Road, Tamil Nadu
-              </p>
+              <a
+                href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-zinc-500 mb-5 block hover:text-[#D97706] transition-colors"
+              >
+                Coimbatore, Ramanathapuram, Trichy Road, Tamil Nadu
+              </a>
               {/* WhatsApp */}
               <a
                 href="https://wa.me/917305212759"

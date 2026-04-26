@@ -89,8 +89,13 @@ export function WhatsAppCTASection() {
                 </div>
 
                 {/* Location */}
-                <div className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#D97706]/20 border border-[#D97706]/30">
+                <a
+                  href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm hover:bg-white/15 hover:border-white/20 transition-all group"
+                >
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#D97706]/20 border border-[#D97706]/30 group-hover:bg-[#D97706]/30 transition-colors">
                     <MapPin className="h-6 w-6 text-[#D97706]" />
                   </div>
                   <div>
@@ -99,8 +104,9 @@ export function WhatsAppCTASection() {
                       Coimbatore, Ramanathapuram<br />
                       <span className="text-white/60 font-normal">Trichy Road, Tamil Nadu</span>
                     </p>
+                    <p className="text-[#D97706] text-[10px] font-bold uppercase tracking-wider mt-1 group-hover:underline">Open Map →</p>
                   </div>
-                </div>
+                </a>
 
                 {/* Hours */}
                 <div className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm">

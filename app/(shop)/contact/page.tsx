@@ -81,19 +81,24 @@ export default function ContactPage() {
                 </div>
               </a>
 
-              <div className="flex gap-4 items-start rounded-2xl border border-border bg-card p-5">
+              <a
+                href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex gap-4 items-start rounded-2xl border border-border bg-card hover:bg-amber-50/60 dark:hover:bg-amber-950/10 p-5 transition-colors"
+              >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 dark:bg-blue-900/30">
                   <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
                   <p className="font-bold text-foreground">Our Location</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Coimbatore<br />
-                    Ramanathapuram, Trichy Road<br />
-                    Tamil Nadu, India
+                    Coimbatore, Ramanathapuram<br />
+                    Trichy Road, Tamil Nadu, India
                   </p>
+                  <p className="text-blue-600 font-semibold text-sm mt-1 group-hover:underline">Get Directions →</p>
                 </div>
-              </div>
+              </a>
 
               <div className="flex gap-4 items-start rounded-2xl border border-border bg-card p-5">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-green-100 dark:bg-green-900/30">
@@ -189,22 +194,20 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Map Placeholder ── */}
+      {/* ── Live Map Embed ── */}
       <section className="px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden shadow-premium border border-border h-64 sm:h-80 bg-amber-50 dark:bg-zinc-900 flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="h-10 w-10 text-amber-600 mx-auto mb-3" />
-            <p className="font-bold text-foreground">Coimbatore, Ramanathapuram, Trichy Road</p>
-            <p className="text-sm text-muted-foreground mt-1">Tamil Nadu, India</p>
-            <a
-              href="https://maps.google.com/?q=Ramanathapuram+Coimbatore+Tamil+Nadu"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4 text-sm font-semibold text-amber-600 underline underline-offset-2"
-            >
-              Open in Google Maps →
-            </a>
-          </div>
+        <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden shadow-premium border border-border h-[400px] bg-amber-50 dark:bg-zinc-900">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d195.8368817297839!2d77.0143808!3d10.9977733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8578b603c1543%3A0x643e8cbfc32ce7ab!2sShri%20Sameya%20Village%20Wood%20Cold%20Pressed%20oil%20Mill!5e0!3m2!1sen!2sin!4v1714110000000!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Shri Sameya Village Wood Cold Pressed Oil Mill Location"
+            className="grayscale hover:grayscale-0 transition-all duration-500"
+          />
         </div>
       </section>
 
