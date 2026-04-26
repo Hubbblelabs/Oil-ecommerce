@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { Droplet, Sprout, ShieldCheck, ArrowRight, Flame, Leaf, Star, Package } from "lucide-react";
+import { Droplet, Sprout, ShieldCheck, ArrowRight, Flame, Leaf, Star, Package, CheckCircle2, Heart, Droplets } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 import { ProductGridSkeleton } from "@/components/shop/ProductGridSkeleton";
@@ -133,6 +133,44 @@ export default async function HomePage({
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
       <HomeCarousel />
+
+      {/* ── Tamil Tagline Strip ── */}
+      <div className="bg-amber-50 dark:bg-amber-950/20 border-y border-amber-100 dark:border-amber-900/30 py-6 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-amber-700 dark:text-amber-400 text-lg sm:text-2xl font-serif font-semibold italic tracking-wide">
+            &ldquo;Iyarkaiyanaathu&hellip; Arokiyamanathu&hellip; Suvaiyanathu&hellip;&rdquo;
+          </p>
+          <p className="text-muted-foreground text-xs sm:text-sm font-medium mt-1.5 tracking-widest uppercase">
+            Natural &bull; Healthy &bull; Tasty — The Pure Taste of Tradition
+          </p>
+        </div>
+      </div>
+
+      {/* ── Why Choose Us Band ── */}
+      <div className="py-8 bg-white dark:bg-zinc-950">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {([
+              { icon: Leaf, label: "Wood Cold Pressed", sub: "Chekku method" },
+              { icon: ShieldCheck, label: "No Chemicals", sub: "Zero preservatives" },
+              { icon: Droplets, label: "Village Taste", sub: "Authentic flavour" },
+              { icon: Heart, label: "Nutrient Rich", sub: "Vit E & antioxidants" },
+              { icon: CheckCircle2, label: "Hygienic", sub: "FSSAI certified" },
+            ] as const).map(({ icon: Icon, label, sub }) => (
+              <div key={label} className="flex flex-col items-center text-center gap-2 p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/10 border border-amber-100 dark:border-amber-900/30">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
+                  <Icon className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">{label}</p>
+                  <p className="text-xs text-muted-foreground">{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <CategoryCircles />
       
       <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading products...</div>}>

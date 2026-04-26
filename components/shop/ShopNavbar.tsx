@@ -103,6 +103,8 @@ export function ShopNavbar() {
               </Link>
             ))}
             <Link href="/orders" className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">Orders</Link>
+            <Link href="/about" className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">About</Link>
+            <Link href="/contact" className="px-3 py-1.5 rounded-lg text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-all">Contact</Link>
           </nav>
 
           {/* Right */}
@@ -209,6 +211,8 @@ export function ShopNavbar() {
                 <Link key={cat.value} href={`/?category=${cat.value}`} className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>{cat.label}</Link>
               ))}
               <Link href="/orders" className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>My Orders</Link>
+              <Link href="/about" className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>About</Link>
+              <Link href="/contact" className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
               {dashboardHref && (
                 <Link href={dashboardHref} className="px-4 py-2.5 rounded-xl text-sm font-medium text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors" onClick={() => setMobileOpen(false)}>Dashboard</Link>
               )}

@@ -1,5 +1,6 @@
 import { ShopNavbar } from "@/components/shop/ShopNavbar";
 import { MobileBottomNav } from "@/components/shop/MobileBottomNav";
+import { WhatsAppFAB } from "@/components/shop/WhatsAppFAB";
 import Link from "next/link";
 import { Droplets, Share2, MessageSquare, PlaySquare, ShieldCheck, Truck, Leaf, Award } from "lucide-react";
 
@@ -13,6 +14,8 @@ export default function ShopLayout({
       <ShopNavbar />
 
       <main className="flex-1 pt-16">{children}</main>
+
+      <WhatsAppFAB />
 
       {/* Trust bar */}
       <div className="border-t border-border/40 bg-amber-50/60 dark:bg-amber-950/10">
@@ -103,7 +106,7 @@ export default function ShopLayout({
                 {[
                   { label: "About Us", href: "/about" },
                   { label: "Contact", href: "/contact" },
-                  { label: "FAQ", href: "/faq" },
+                  { label: "FAQ", href: "/contact#faq" },
                 ].map(({ label, href }) => (
                   <li key={href}><Link href={href} className="text-sm font-semibold hover:text-amber-500 transition-colors">{label}</Link></li>
                 ))}
@@ -128,10 +131,14 @@ export default function ShopLayout({
           </div>
 
           <div className="mt-16 pt-8 border-t border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">© 2026 Shri Sameya Village. All rights reserved.</p>
+            <div>
+              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">© 2026 Shri Sameya Village. All rights reserved.</p>
+              <p className="text-xs text-zinc-600 mt-1">Coimbatore, Ramanathapuram, Trichy Road, Tamil Nadu</p>
+            </div>
             <div className="flex flex-wrap justify-center gap-6 text-xs font-bold text-zinc-500 uppercase tracking-wider">
               <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-zinc-300 transition-colors">Terms</Link>
+              <Link href="/refund-policy" className="hover:text-zinc-300 transition-colors">Refund Policy</Link>
               <span className="text-zinc-600">FSSAI Lic. 12345678901234</span>
             </div>
           </div>
