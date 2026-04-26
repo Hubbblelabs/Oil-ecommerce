@@ -88,17 +88,9 @@ export function ShopNavbar() {
     : null;
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
-        (scrolled || !isHome)
-          ? "bg-white/95 dark:bg-[#1a0e04]/95 backdrop-blur-2xl shadow-[0_1px_0_0_rgba(217,119,6,0.15),0_4px_24px_rgba(0,0,0,0.08)] border-b border-[#E9D8A6]/30"
-          : "bg-transparent"
-      )}
-    >
-      {/* Top announcement bar */}
+    <header className="fixed top-0 inset-x-0 z-50 bg-white dark:bg-[#1a0e04] border-b border-[#E9D8A6]/40 dark:border-[#3a2010] shadow-[0_2px_16px_rgba(59,36,22,0.06)]">
       <div className="bg-[#3B2416] text-white py-1.5 text-center text-[11px] font-semibold tracking-wide">
-        🌿 Free delivery on orders above ₹499 · Call us: +91 73052 12759
+        Free delivery on orders above &#8377;499 &middot; Call us: +91 73052 12759
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -111,16 +103,10 @@ export function ShopNavbar() {
                 <Droplets className="h-4 w-4 fill-white/30 text-white" />
               </div>
               <div className="flex flex-col justify-center leading-none">
-                <span className={cn(
-                  "font-heading text-sm sm:text-base font-bold tracking-tight",
-                  (scrolled || !isHome) ? "text-[#3B2416] dark:text-white" : "text-white"
-                )}>
+                <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-[#3B2416] dark:text-white">
                   Shri Sameya Village
                 </span>
-                <span className={cn(
-                  "text-[8px] font-bold tracking-[0.2em] uppercase",
-                  (scrolled || !isHome) ? "text-[#D97706]" : "text-[#E9D8A6]"
-                )}>
+                <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#D97706]">
                   Wood Pressed Oils
                 </span>
               </div>
@@ -131,10 +117,7 @@ export function ShopNavbar() {
           <nav className="hidden lg:flex items-center justify-center gap-4 flex-none">
             <Link
               href="/"
-              className={cn(
-                "px-2 py-1.5 text-[13px] font-bold transition-colors",
-                (scrolled || !isHome) ? "text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]" : "text-white/90 hover:text-white"
-              )}
+              className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]"
             >
               Home
             </Link>
@@ -143,10 +126,7 @@ export function ShopNavbar() {
             <div className="relative" ref={shopMenuRef}>
               <button
                 onClick={() => setShopOpen((v) => !v)}
-                className={cn(
-                  "flex items-center gap-1 px-2 py-1.5 text-[13px] font-bold transition-colors",
-                  (scrolled || !isHome) ? "text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]" : "text-white/90 hover:text-white"
-                )}
+                className="flex items-center gap-1 px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]"
               >
                 Categories
                 <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", shopOpen && "rotate-180")} />
@@ -176,22 +156,13 @@ export function ShopNavbar() {
               </AnimatePresence>
             </div>
 
-            <Link href="/?category=INDUSTRIAL" className={cn(
-              "px-2 py-1.5 text-[13px] font-bold transition-colors",
-              (scrolled || !isHome) ? "text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]" : "text-white/90 hover:text-white"
-            )}>
+            <Link href="/?category=INDUSTRIAL" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
               Bulk Orders
             </Link>
-            <Link href="/about" className={cn(
-              "px-2 py-1.5 text-[13px] font-bold transition-colors",
-              (scrolled || !isHome) ? "text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]" : "text-white/90 hover:text-white"
-            )}>
+            <Link href="/about" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
               About
             </Link>
-            <Link href="/contact" className={cn(
-              "px-2 py-1.5 text-[13px] font-bold transition-colors",
-              (scrolled || !isHome) ? "text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]" : "text-white/90 hover:text-white"
-            )}>
+            <Link href="/contact" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
               Contact
             </Link>
           </nav>
@@ -206,7 +177,7 @@ export function ShopNavbar() {
               className="relative h-9 w-9 flex items-center justify-center rounded-[10px] hover:bg-[#D97706]/10 transition-colors"
               aria-label={`Cart (${itemCount} items)`}
             >
-              <ShoppingCart className={cn("h-[18px] w-[18px]", (scrolled || !isHome) ? "text-[#3B2416] dark:text-white" : "text-white")} />
+              <ShoppingCart className="h-[18px] w-[18px] text-[#3B2416] dark:text-white" />
               <AnimatePresence>
                 {itemCount > 0 && (
                   <motion.span
@@ -265,10 +236,7 @@ export function ShopNavbar() {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-1.5 ml-1">
-                <Button asChild variant="ghost" size="sm" className={cn(
-                  "h-9 rounded-[10px] text-[13px] font-semibold transition-colors",
-                  (scrolled || !isHome) ? "text-[#3B2416] dark:text-white hover:bg-[#D97706]/10 hover:text-[#D97706]" : "text-white hover:bg-white/10"
-                )}>
+                <Button asChild variant="ghost" size="sm" className="h-9 rounded-[10px] text-[13px] font-semibold text-[#3B2416] dark:text-white hover:bg-[#D97706]/10 hover:text-[#D97706]">
                   <Link href="/login">Sign In</Link>
                 </Button>
                 <Link
@@ -288,7 +256,7 @@ export function ShopNavbar() {
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className={cn("h-5 w-5", (scrolled || !isHome) ? "" : "text-white")} /> : <Menu className={cn("h-5 w-5", (scrolled || !isHome) ? "" : "text-white")} />}
+              {mobileOpen ? <X className="h-5 w-5 text-[#3B2416] dark:text-white" /> : <Menu className="h-5 w-5 text-[#3B2416] dark:text-white" />}
             </Button>
           </div>
         </div>

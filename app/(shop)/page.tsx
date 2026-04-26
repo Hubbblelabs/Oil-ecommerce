@@ -14,9 +14,12 @@ import { ProductLane } from "@/components/shop/ProductLane";
 import { HeroSection } from "@/components/shop/HeroSection";
 import { BestSellersSection } from "@/components/shop/BestSellersSection";
 import { WhyChooseUsSection } from "@/components/shop/WhyChooseUsSection";
+import { OilUsageSection } from "@/components/shop/OilUsageSection";
+import { HealthBenefitsSection } from "@/components/shop/HealthBenefitsSection";
 import { ComparisonSection } from "@/components/shop/ComparisonSection";
 import { BrandStorySection } from "@/components/shop/BrandStorySection";
 import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
+import { WhatsAppCTASection } from "@/components/shop/WhatsAppCTASection";
 import { CategoryGridSection } from "@/components/shop/CategoryGridSection";
 import { FAQSection } from "@/components/shop/FAQSection";
 
@@ -141,49 +144,29 @@ export default async function HomePage({
       {/* 4. Why Choose Us */}
       <WhyChooseUsSection />
 
-      {/* 5. Comparison: Wood Pressed vs Refined */}
+      {/* 5. Which Oil for Which Use */}
+      <OilUsageSection />
+
+      {/* 6. Health Benefits — tabbed per oil */}
+      <HealthBenefitsSection />
+
+      {/* 7. Comparison: Wood Pressed vs Refined */}
       <ComparisonSection />
 
-      {/* 6. Brand Story */}
+      {/* 8. Brand Story */}
       <BrandStorySection />
 
-      {/* 7. Customer Testimonials */}
+      {/* 9. Customer Testimonials */}
       <TestimonialsSection />
 
-      {/* 8. Category Grid */}
+      {/* 10. Category Grid */}
       <CategoryGridSection />
 
-      {/* 9. FAQ */}
-      <FAQSection />
+      {/* 11. WhatsApp CTA */}
+      <WhatsAppCTASection />
 
-      {/* 10. Bulk / B2B CTA */}
-      <section className="py-20 bg-[#3B2416] relative overflow-hidden mx-4 sm:mx-6 lg:mx-8 rounded-3xl mb-16 mt-4">
-        <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-[#D97706]/15 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] bg-[#D97706]/8 rounded-full blur-[80px] pointer-events-none" />
-        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
-          <p className="text-[#E9D8A6] text-xs font-bold uppercase tracking-widest mb-4">Wholesale</p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
-            Buying in Bulk?
-          </h2>
-          <p className="text-white/60 text-base mb-8 max-w-xl mx-auto">
-            Special pricing for restaurants, hotels, caterers and retailers. FSSAI-certified, private-label options available.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              href="/?category=INDUSTRIAL"
-              className="inline-flex items-center gap-2 bg-[#D97706] hover:bg-[#b86004] text-white font-bold px-7 py-3.5 rounded-xl text-sm transition-all shadow-[0_8px_24px_rgba(217,119,6,0.4)]"
-            >
-              View Bulk Products
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl text-sm border border-white/20 transition-all"
-            >
-              Contact Sales
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 12. FAQ */}
+      <FAQSection />
 
     </div>
   );
