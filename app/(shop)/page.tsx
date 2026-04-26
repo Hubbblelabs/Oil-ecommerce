@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { Droplet, Sprout, ShieldCheck, ArrowRight, Flame, Leaf, Star, Package, CheckCircle2, Heart, Droplets } from "lucide-react";
+import { Flame, Leaf, Star, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 import { ProductGridSkeleton } from "@/components/shop/ProductGridSkeleton";
@@ -8,12 +8,19 @@ import { PaginationControls } from "@/components/shop/PaginationControls";
 import { productService } from "@/server/services/product.service";
 import { cacheTag, cacheLife } from "next/cache";
 import { cn } from "@/lib/utils";
-import type { Category } from "@/server/types";
-import { HomeCarousel } from "@/components/shop/HomeCarousel";
-import { CategoryCircles } from "@/components/shop/CategoryCircles";
 import { ProductLane } from "@/components/shop/ProductLane";
 
-const CATEGORIES: { value: string; label: string; icon: React.ElementType; color: string }[] = [
+// ── Premium homepage sections ─────────────────────────
+import { HeroSection } from "@/components/shop/HeroSection";
+import { BestSellersSection } from "@/components/shop/BestSellersSection";
+import { WhyChooseUsSection } from "@/components/shop/WhyChooseUsSection";
+import { ComparisonSection } from "@/components/shop/ComparisonSection";
+import { BrandStorySection } from "@/components/shop/BrandStorySection";
+import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
+import { CategoryGridSection } from "@/components/shop/CategoryGridSection";
+import { FAQSection } from "@/components/shop/FAQSection";
+
+const CATEGORIES = [
   { value: "", label: "All", icon: Package, color: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300" },
   { value: "COOKING", label: "Cooking", icon: Flame, color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
   { value: "PREMIUM", label: "Premium", icon: Star, color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" },
@@ -21,53 +28,43 @@ const CATEGORIES: { value: string; label: string; icon: React.ElementType; color
   { value: "INDUSTRIAL", label: "Bulk", icon: Package, color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
 ];
 
-async function ProductsContent({
-  category,
-  page,
-}: {
-  category?: string;
-  page: number;
-}) {
+async function ProductsContent({ category, page }: { category?: string; page: number }) {
   "use cache";
   cacheTag("products");
   cacheLife("minutes");
 
-  const result = await productService.getProducts(
-    page,
-    12,
-    category || undefined
-  );
+  const result = await productService.getProducts(page, 12, category || undefined);
 
   return (
     <>
       <ProductGrid products={result.data} />
       {result.totalPages > 1 && (
         <div className="mt-10">
-          <PaginationControls
-            currentPage={result.page}
-            totalPages={result.totalPages}
-          />
+          <PaginationControls currentPage={result.page} totalPages={result.totalPages} />
         </div>
       )}
     </>
   );
 }
 
-async function HomeLanes() {
+async function LiveProductLanes() {
   const result = await productService.getProducts(1, 16);
   const products = result.data;
-  
   if (!products || products.length === 0) return null;
 
   const bestSellers = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
   const todaysDeals = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
-  const healthyOils = [...products].filter(p => p.category === "ORGANIC" || p.category === "PREMIUM").slice(0, 8);
+  const healthyOils = [...products]
+    .filter((p) => p.category === "ORGANIC" || p.category === "PREMIUM")
+    .slice(0, 8);
 
   return (
-    <div className="flex flex-col gap-2 bg-slate-50/50 dark:bg-black/50 py-8">
+    <div className="flex flex-col gap-2 bg-[#FAF8F2]/70 dark:bg-black/50 py-8">
       <ProductLane title="Best Sellers" subtitle="Loved by thousands of households" products={bestSellers} />
       <ProductLane title="Today's Deals" subtitle="Unbeatable prices on premium oils" products={todaysDeals} />
-      {healthyOils.length > 0 && <ProductLane title="Healthy Alternatives" subtitle="Cold-pressed organic goodness" products={healthyOils} />}
+      {healthyOils.length > 0 && (
+        <ProductLane title="Healthy Alternatives" subtitle="Cold-pressed organic goodness" products={healthyOils} />
+      )}
     </div>
   );
 }
@@ -82,23 +79,20 @@ export default async function HomePage({
   const page = Math.max(1, Number(params.page ?? "1"));
   const activeLabel = CATEGORIES.find((c) => c.value === category)?.label ?? "All";
 
-  // If a category or page is selected, show standard product listing
+  // ── Category / pagination view ─────────────────────
   if (category || page > 1) {
     return (
-      <div className="flex flex-col py-8">
+      <div className="flex flex-col py-8 bg-[#FAF8F2] dark:bg-zinc-950 min-h-screen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
-           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight text-foreground">
-                {activeLabel} Oils
-              </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Showing {activeLabel.toLowerCase()} range
-              </p>
-            </div>
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#3B2416] dark:text-white">
+              {activeLabel} Oils
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">Showing {activeLabel.toLowerCase()} range</p>
           </div>
 
-          {/* Category filter pills */}
+          {/* Filter pills */}
           <div className="flex flex-wrap gap-2 mb-8">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon;
@@ -110,7 +104,7 @@ export default async function HomePage({
                   className={cn(
                     "flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all",
                     isActive
-                      ? "gradient-amber text-white shadow-amber-glow"
+                      ? "bg-[#D97706] text-white shadow-[0_4px_12px_rgba(217,119,6,0.35)]"
                       : `${cat.color} hover:opacity-80`
                   )}
                 >
@@ -129,73 +123,64 @@ export default async function HomePage({
     );
   }
 
-  // Instamart style homepage
+  // ── Premium Homepage ───────────────────────────────
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
-      <HomeCarousel />
+    <div className="flex flex-col bg-[#FAF8F2] dark:bg-zinc-950">
 
-      {/* ── Tamil Tagline Strip ── */}
-      <div className="bg-amber-50 dark:bg-amber-950/20 border-y border-amber-100 dark:border-amber-900/30 py-6 overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-amber-700 dark:text-amber-400 text-lg sm:text-2xl font-serif font-semibold italic tracking-wide">
-            &ldquo;Iyarkaiyanaathu&hellip; Arokiyamanathu&hellip; Suvaiyanathu&hellip;&rdquo;
-          </p>
-          <p className="text-muted-foreground text-xs sm:text-sm font-medium mt-1.5 tracking-widest uppercase">
-            Natural &bull; Healthy &bull; Tasty — The Pure Taste of Tradition
-          </p>
-        </div>
-      </div>
+      {/* 1. Cinematic Hero */}
+      <HeroSection />
 
-      {/* ── Why Choose Us Band ── */}
-      <div className="py-8 bg-white dark:bg-zinc-950">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {([
-              { icon: Leaf, label: "Wood Cold Pressed", sub: "Chekku method" },
-              { icon: ShieldCheck, label: "No Chemicals", sub: "Zero preservatives" },
-              { icon: Droplets, label: "Village Taste", sub: "Authentic flavour" },
-              { icon: Heart, label: "Nutrient Rich", sub: "Vit E & antioxidants" },
-              { icon: CheckCircle2, label: "Hygienic", sub: "FSSAI certified" },
-            ] as const).map(({ icon: Icon, label, sub }) => (
-              <div key={label} className="flex flex-col items-center text-center gap-2 p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/10 border border-amber-100 dark:border-amber-900/30">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                  <Icon className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{label}</p>
-                  <p className="text-xs text-muted-foreground">{sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* 2. Best Sellers (static cards — always visible) */}
+      <BestSellersSection />
 
-      <CategoryCircles />
-      
-      <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading products...</div>}>
-        <HomeLanes />
+      {/* 3. Live product lanes from DB (graceful fallback when DB offline) */}
+      <Suspense fallback={null}>
+        <LiveProductLanes />
       </Suspense>
 
-      {/* ── BULK / B2B CTA ───────────────────────────────────── */}
-      <section className="py-16 bg-zinc-950 relative overflow-hidden mx-4 sm:mx-6 lg:mx-8 rounded-3xl mb-12 mt-8">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-amber-500/10 rounded-full blur-[100px]" />
-        </div>
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Buying in bulk?
+      {/* 4. Why Choose Us */}
+      <WhyChooseUsSection />
+
+      {/* 5. Comparison: Wood Pressed vs Refined */}
+      <ComparisonSection />
+
+      {/* 6. Brand Story */}
+      <BrandStorySection />
+
+      {/* 7. Customer Testimonials */}
+      <TestimonialsSection />
+
+      {/* 8. Category Grid */}
+      <CategoryGridSection />
+
+      {/* 9. FAQ */}
+      <FAQSection />
+
+      {/* 10. Bulk / B2B CTA */}
+      <section className="py-20 bg-[#3B2416] relative overflow-hidden mx-4 sm:mx-6 lg:mx-8 rounded-3xl mb-16 mt-4">
+        <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-[#D97706]/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] bg-[#D97706]/8 rounded-full blur-[80px] pointer-events-none" />
+        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
+          <p className="text-[#E9D8A6] text-xs font-bold uppercase tracking-widest mb-4">Wholesale</p>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
+            Buying in Bulk?
           </h2>
-          <p className="text-zinc-400 text-base mb-8 max-w-xl mx-auto">
-            Special pricing for restaurants, hotels, and retailers. FSSAI-certified, private-label options available.
+          <p className="text-white/60 text-base mb-8 max-w-xl mx-auto">
+            Special pricing for restaurants, hotels, caterers and retailers. FSSAI-certified, private-label options available.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Button asChild size="lg" className="h-12 px-7 rounded-xl bg-amber-600 hover:bg-amber-700 text-white border-0 font-semibold">
-              <Link href="/?category=INDUSTRIAL">View Bulk Products</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 px-7 rounded-xl border-white/15 text-white bg-white/5 hover:bg-white/10 font-medium">
-              <Link href="/contact">Contact Sales</Link>
-            </Button>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link
+              href="/?category=INDUSTRIAL"
+              className="inline-flex items-center gap-2 bg-[#D97706] hover:bg-[#b86004] text-white font-bold px-7 py-3.5 rounded-xl text-sm transition-all shadow-[0_8px_24px_rgba(217,119,6,0.4)]"
+            >
+              View Bulk Products
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl text-sm border border-white/20 transition-all"
+            >
+              Contact Sales
+            </Link>
           </div>
         </div>
       </section>
