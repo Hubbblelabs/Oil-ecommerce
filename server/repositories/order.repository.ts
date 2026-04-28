@@ -5,6 +5,7 @@ import type {
   PaginationOptions,
   PaginatedResult,
 } from "@/server/types";
+import type { PrismaClientExtended } from "@/lib/db";
 
 // Select shape for orders — avoids fetching unnecessary relations
 const orderSelect = {
@@ -62,7 +63,7 @@ export const orderRepository = {
         : {}),
     };
 
-    const [rawOrders, total] = await db.$transaction([
+    const [rawOrders, total] = await Promise.all([
       db.order.findMany({
         where,
         select: orderSelect,
@@ -92,7 +93,7 @@ export const orderRepository = {
 
   /** Must be called inside a Prisma $transaction */
   async createWithItems(
-    tx: Prisma.TransactionClient,
+    tx: any, // Using any for transaction client to support extended Prisma client types
     data: {
       userId: string;
       totalAmount: number;

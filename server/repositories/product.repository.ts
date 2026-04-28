@@ -45,7 +45,7 @@ export const productRepository = {
         : {}),
     };
 
-    const [data, total] = await db.$transaction([
+    const [data, total] = await Promise.all([
       db.product.findMany({
         where,
         select: productSummarySelect,
@@ -72,7 +72,7 @@ export const productRepository = {
     const skip = (page - 1) * limit;
     const where = { sellerId };
 
-    const [data, total] = await db.$transaction([
+    const [data, total] = await Promise.all([
       db.product.findMany({
         where,
         select: productDetailSelect,

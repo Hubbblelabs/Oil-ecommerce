@@ -1,43 +1,68 @@
-import { Pool } from "pg";
+import { Pool, types } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
-// Prisma 7 uses the WASM-based "client" engine which requires an explicit
-// driver adapter. We use @prisma/adapter-pg for standard PostgreSQL.
+// Set Decimal handling for pg (Prisma handles this, but good for raw queries)
+types.setTypeParser(1700, (val) => parseFloat(val));
+
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma: PrismaClientExtended | undefined;
 };
 
-function createPrismaClient(): PrismaClient {
+export type PrismaClientExtended = ReturnType<typeof createPrismaClient>;
+
+function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL environment variable is not set. " +
-        "Copy .env.example to .env and fill in your PostgreSQL connection string."
+      "DATABASE_URL environment variable is not set."
     );
   }
 
+  // Optimized Pool for Neon Serverless
+  // In serverless, we want a smaller pool per instance to avoid global exhaustion
   const pool = new Pool({
     connectionString,
-    max: 20, // Maximum pool size (increased from default 10)
-    idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
-    connectionTimeoutMillis: 10000, // Wait up to 10 seconds to acquire a connection
+    max: 10, // Reduced from 20 to prevent pool exhaustion across multiple lambdas
+    idleTimeoutMillis: 20000, 
+    connectionTimeoutMillis: 15000, // Increased to 15s to handle Neon cold starts/bursts
+    maxUses: 7500, // Helps with memory leaks in long-running processes
   });
 
-  // Handle pool errors
   pool.on("error", (err) => {
-    console.error("Unexpected connection pool error:", err);
+    console.error("CRITICAL: Unexpected connection pool error:", err);
   });
 
   const adapter = new PrismaPg(pool);
 
-  return new PrismaClient({
+  const client = new PrismaClient({
     adapter,
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
+    log: [
+      { emit: 'event', level: 'query' },
+      { emit: 'stdout', level: 'error' },
+      { emit: 'stdout', level: 'warn' },
+    ],
+  });
+
+  // Slow query logging & Performance monitoring
+  return client.$extends({
+    query: {
+      $allModels: {
+        async $allOperations({ operation, model, args, query }) {
+          const start = performance.now();
+          const result = await query(args);
+          const duration = performance.now() - start;
+
+          if (duration > 300) { // Log queries slower than 300ms
+            console.warn(
+              `\x1b[33m[Prisma Slow Query]\x1b[0m ${model}.${operation} took ${duration.toFixed(2)}ms`
+            );
+          }
+          return result;
+        },
+      },
+    },
   });
 }
 

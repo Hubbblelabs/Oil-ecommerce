@@ -62,10 +62,10 @@ model Product {
   seller     User        @relation(fields: [sellerId], references: [id], onDelete: Restrict)
   orderItems OrderItem[]
 
-  @@index([sellerId])
-  @@index([category])
-  @@index([createdAt])
-  @@index([sellerId, createdAt])
+  @@index([isActive, createdAt(sort: Desc)])
+  @@index([isActive, category, createdAt(sort: Desc)])
+  @@index([sellerId, isActive, createdAt(sort: Desc)])
+  @@index([name])
 }
 
 model Order {
