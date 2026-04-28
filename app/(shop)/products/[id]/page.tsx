@@ -11,6 +11,7 @@ import { productService } from "@/server/services/product.service";
 import { AddToCartButton } from "@/components/shop/AddToCartButton";
 import { TrustBadges } from "@/components/shop/TrustBadges";
 import { StickyBottomCartCTA } from "@/components/shop/StickyBottomCartCTA";
+import { PackSizeSelector } from "@/components/shop/PackSizeSelector";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -149,17 +150,7 @@ async function ProductDetail({ id }: { id: string }) {
           {/* Variants / Pack sizes */}
           <div className="my-6">
             <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Pack Size</h3>
-            <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 rounded-xl border-2 border-amber-600 bg-amber-50 dark:bg-amber-900/10 text-amber-700 dark:text-amber-400 font-bold text-sm">
-                1 Litre
-              </button>
-              <button className="px-4 py-2 rounded-xl border-2 border-border bg-background text-foreground font-semibold text-sm hover:border-amber-600/50 transition-colors">
-                5 Litres
-              </button>
-              <button className="px-4 py-2 rounded-xl border-2 border-border bg-background text-foreground font-semibold text-sm hover:border-amber-600/50 transition-colors">
-                15 Litres
-              </button>
-            </div>
+            <PackSizeSelector />
           </div>
 
           <TrustBadges />
