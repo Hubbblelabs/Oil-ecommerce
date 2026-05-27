@@ -91,6 +91,8 @@ export const orderService = {
       const order = await orderRepository.createWithItems(tx, {
         userId,
         totalAmount: Number(totalAmount.toString()),
+        discountAmount: input.discountAmount ?? 0,
+        discountId: input.discountId,
         shippingAddress,
         phone,
         items: orderItems,

@@ -13,7 +13,7 @@ export default function ShopLayout({
     <div className="flex min-h-screen flex-col bg-[#FAF8F2] dark:bg-zinc-950 selection:bg-[#D97706]/30 selection:text-[#3B2416] pb-16 md:pb-0">
       <ShopNavbar />
 
-      <main className="flex-1 pt-24">{children}</main>
+      <main className="flex-1 pt-20">{children}</main>
 
       <WhatsAppFAB />
 

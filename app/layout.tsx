@@ -1,14 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Poppins, Geist_Mono } from "next/font/google";
+import { Lora, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { CartProvider } from "@/components/providers/CartProvider";
 
-const poppins = Poppins({
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+const lora = Lora({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-sans", // using font-sans variable so it applies globally automatically
   display: "swap",
 });
 
@@ -42,7 +42,7 @@ export default function RootLayout({
       lang="en"
       className={cn(
         "h-full antialiased",
-        poppins.variable,
+        lora.variable,
         geistMono.variable,
       )}
     >

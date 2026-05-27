@@ -36,6 +36,8 @@ export const CreateOrderSchema = z.object({
   phone: z
     .string()
     .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number"),
+  discountId: z.string().optional(),
+  discountAmount: z.number().nonnegative().optional(),
 });
 
 export const UpdateOrderStatusSchema = z.object({

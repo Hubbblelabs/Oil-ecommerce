@@ -15,7 +15,6 @@ import { HeroSection } from "@/components/shop/HeroSection";
 import { BestSellersSection } from "@/components/shop/BestSellersSection";
 import { WhyChooseUsSection } from "@/components/shop/WhyChooseUsSection";
 import { HealthBenefitsSection } from "@/components/shop/HealthBenefitsSection";
-import { ComparisonSection } from "@/components/shop/ComparisonSection";
 import { BrandStorySection } from "@/components/shop/BrandStorySection";
 import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
 import { WhatsAppCTASection } from "@/components/shop/WhatsAppCTASection";
@@ -61,7 +60,7 @@ export default async function HomePage({
   // ── Category / pagination view ─────────────────────
   if (category || page > 1) {
     return (
-      <div className="flex flex-col py-8 bg-[#FAF8F2] dark:bg-zinc-950 min-h-screen">
+      <div className="flex flex-col bg-[#FAF8F2] dark:bg-zinc-950 min-h-screen ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           {/* Heading */}
           <div className="mb-8">
@@ -123,7 +122,7 @@ export default async function HomePage({
       <HealthBenefitsSection />
 
       {/* 7. Comparison: Wood Pressed vs Refined */}
-      <ComparisonSection />
+   
 
       {/* 8. Brand Story */}
       <BrandStorySection />

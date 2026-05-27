@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { CldUploadWidget } from "next-cloudinary";
 
 interface ProductFormProps {
   initialData?: {
@@ -189,16 +190,46 @@ export function ProductForm({ initialData }: ProductFormProps) {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="product-image" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image URL</Label>
-              <Input
-                id="product-image"
-                type="text"
-                placeholder="e.g. /site_assets/product_groundnut_1l.png"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                disabled={isPending}
-                className="rounded-xl"
-              />
+              <Label htmlFor="product-image" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Product Image</Label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Input
+                  id="product-image"
+                  type="text"
+                  placeholder="Image URL or upload below"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  disabled={isPending}
+                  className="rounded-xl flex-1"
+                />
+                
+                <CldUploadWidget
+                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "oil_ecommerce"}
+                  onSuccess={(result) => {
+                    if (result.info && typeof result.info === 'object' && 'secure_url' in result.info) {
+                      setImage(result.info.secure_url as string);
+                      toast.success("Image uploaded successfully!");
+                    }
+                  }}
+                  onError={(error) => {
+                    toast.error("Image upload failed. Check Cloudinary settings.");
+                    console.error("Upload error:", error);
+                  }}
+                >
+                  {({ open }) => {
+                    return (
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => open()}
+                        disabled={isPending}
+                        className="rounded-xl shrink-0"
+                      >
+                        Upload Image
+                      </Button>
+                    );
+                  }}
+                </CldUploadWidget>
+              </div>
             </div>
           </div>
 

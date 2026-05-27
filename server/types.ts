@@ -36,6 +36,8 @@ export interface CreateOrderInput {
   items: OrderItemInput[];
   shippingAddress: string;
   phone: string;
+  discountId?: string;
+  discountAmount?: number;
 }
 
 export interface OrderItemSummary {

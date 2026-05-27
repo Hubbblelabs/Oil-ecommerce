@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Star } from "lucide-react";
-import type { Product } from "@prisma/client";
+import type { ProductSummary } from "@/server/types";
 
 interface RelatedProductsCarouselProps {
-  products: Product[];
+  products: ProductSummary[];
 }
 
 export function RelatedProductsCarousel({ products }: RelatedProductsCarouselProps) {
