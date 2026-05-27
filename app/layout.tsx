@@ -1,20 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Inter, DM_Serif_Display, Geist_Mono } from "next/font/google";
+import { Poppins, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { CartProvider } from "@/components/providers/CartProvider";
 
-const inter = Inter({
+const poppins = Poppins({
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const dmSerif = DM_Serif_Display({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-heading",
   display: "swap",
 });
 
@@ -48,8 +42,7 @@ export default function RootLayout({
       lang="en"
       className={cn(
         "h-full antialiased",
-        inter.variable,
-        dmSerif.variable,
+        poppins.variable,
         geistMono.variable,
       )}
     >

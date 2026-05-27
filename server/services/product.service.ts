@@ -54,6 +54,7 @@ export const productService = {
       price: number;
       stock: number;
       image?: string;
+      description?: string;
       category: Category;
     }
   ): Promise<ProductDetail> {
@@ -69,6 +70,7 @@ export const productService = {
       price: number;
       stock: number;
       image: string | null;
+      description: string | null;
       category: Category;
       isActive: boolean;
     }>

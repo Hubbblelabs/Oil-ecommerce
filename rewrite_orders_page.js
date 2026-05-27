@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+const fs = require('fs');
+
+const content = `import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Package, Search, Filter, LayoutGrid, ChevronRight, PackageCheck, Truck, XCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -106,8 +108,8 @@ export default async function OrdersPage({ searchParams }: PageProps) {
                  return (
                    <a 
                      key={t}
-                     href={`?tab=${tKey}`} 
-                     className={`text-sm font-bold pb-2 border-b-2 whitespace-nowrap transition-colors ${isActive ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+                     href={\`?tab=\${tKey}\`} 
+                     className={\`text-sm font-bold pb-2 border-b-2 whitespace-nowrap transition-colors \${isActive ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}\`}
                    >
                      {t}
                    </a>
@@ -179,3 +181,7 @@ function OrdersListSkeleton() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('app/(shop)/orders/page.tsx', content);
+console.log('Orders page rewritten.');

@@ -19,6 +19,7 @@ const productSummarySelect = {
 
 const productDetailSelect = {
   ...productSummarySelect,
+  description: true,
   isActive: true,
   createdAt: true,
 } as const;
@@ -120,6 +121,7 @@ export const productRepository = {
     price: number;
     stock: number;
     image?: string;
+    description?: string;
     category: Category;
     sellerId: string;
   }): Promise<ProductDetail> {
@@ -129,6 +131,7 @@ export const productRepository = {
         price: data.price,
         stock: data.stock,
         image: data.image ?? null,
+        description: data.description ?? null,
         category: data.category,
         sellerId: data.sellerId,
       },
@@ -144,6 +147,7 @@ export const productRepository = {
       price: number;
       stock: number;
       image: string | null;
+      description: string | null;
       category: Category;
       isActive: boolean;
     }>

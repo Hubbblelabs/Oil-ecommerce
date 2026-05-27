@@ -1,4 +1,5 @@
-"use client";
+const fs = require('fs');
+const content = `"use client";
 import { motion } from "framer-motion";
 import { Leaf, ShieldCheck, Heart, CheckCircle2, Truck, Award } from "lucide-react";
 
@@ -81,3 +82,6 @@ export function WhyChooseUsSection() {
     </section>
   );
 }
+`;
+fs.writeFileSync('components/shop/WhyChooseUsSection.tsx', content);
+console.log('WhyChooseUsSection rewritten.');

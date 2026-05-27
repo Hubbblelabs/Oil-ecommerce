@@ -14,15 +14,19 @@ import {
   Bell
 } from "lucide-react";
 
-const NAV = [
-  { href: "/admin/dashboard", label: "Command Center", icon: LayoutDashboard },
-  { href: "/admin/users", label: "User Management", icon: Users },
-  { href: "/admin/products", label: "Global Catalog", icon: Package },
-  { href: "/admin/orders", label: "All Orders", icon: ShoppingCart },
-];
+import { FEATURES } from "@/lib/features";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
+  if (!user || user.role !== "ADMIN") redirect("/login");
+
+  const NAV = [
+    { href: "/admin/dashboard", label: "Command Center", icon: LayoutDashboard },
+    ...(FEATURES.adminUsers ? [{ href: "/admin/users", label: "User Management", icon: Users }] : []),
+    ...(FEATURES.adminProducts ? [{ href: "/admin/products", label: "Global Catalog", icon: Package }] : []),
+    ...(FEATURES.adminOrders ? [{ href: "/admin/orders", label: "All Orders", icon: ShoppingCart }] : []),
+    { href: "/features", label: "Feature Flags", icon: Settings },
+  ];
   if (!user || user.role !== "ADMIN") redirect("/login");
 
   return (

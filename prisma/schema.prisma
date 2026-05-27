@@ -45,22 +45,25 @@ model User {
 
   orders   Order[]
   products Product[]
+  reviews  Review[]
 }
 
 model Product {
-  id        String   @id @default(cuid())
-  name      String
-  price     Decimal  @db.Decimal(10, 2)
-  stock     Int      @default(0)
-  image     String?
-  category  Category
-  sellerId  String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int      @default(0)
+  image       String?
+  description String?  @db.Text
+  category    Category
+  sellerId    String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   seller     User        @relation(fields: [sellerId], references: [id], onDelete: Restrict)
   orderItems OrderItem[]
+  reviews    Review[]
 
   @@index([isActive, createdAt(sort: Desc)])
   @@index([isActive, category, createdAt(sort: Desc)])
@@ -99,4 +102,19 @@ model OrderItem {
   @@unique([orderId, productId])
   @@index([orderId])
   @@index([productId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  userId    String
+  rating    Int      @default(5)
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([userId])
 }

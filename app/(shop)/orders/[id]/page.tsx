@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OrderStatusBadge } from "@/components/shop/OrderStatusBadge";
 import { orderService } from "@/server/services/order.service";
+import { OrderReviewForm } from "@/components/shop/OrderReviewForm";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -142,6 +143,11 @@ async function OrderDetail({ id }: { id: string }) {
         <span>Total</span>
         <span className="text-amber-600">${order.totalAmount.toString()}</span>
       </div>
+
+      {/* Post-Purchase Verified Feedback Form */}
+      {order.status !== "PENDING" && order.status !== "CANCELLED" && (
+        <OrderReviewForm orderId={order.id} items={order.items} />
+      )}
 
       {/* Actions */}
       <div className="flex flex-wrap gap-3 pt-2">
