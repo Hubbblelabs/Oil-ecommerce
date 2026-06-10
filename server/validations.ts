@@ -16,10 +16,14 @@ export const CreateProductSchema = z.object({
   price: z.number().positive(),
   stock: z.number().int().nonnegative(),
   image: z.string().url().optional().or(z.literal("")),
+  description: z.string().optional().or(z.literal("")),
   category: z.enum(["COOKING", "PREMIUM", "ORGANIC", "INDUSTRIAL"]),
 });
 
-export const UpdateProductSchema = CreateProductSchema.partial();
+export const UpdateProductSchema = CreateProductSchema.partial().extend({
+  description: z.string().nullable().optional(),
+  image: z.string().nullable().optional(),
+});
 
 export const OrderItemSchema = z.object({
   productId: z.string().cuid(),
@@ -32,6 +36,8 @@ export const CreateOrderSchema = z.object({
   phone: z
     .string()
     .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number"),
+  discountId: z.string().optional(),
+  discountAmount: z.number().nonnegative().optional(),
 });
 
 export const UpdateOrderStatusSchema = z.object({

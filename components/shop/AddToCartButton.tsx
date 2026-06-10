@@ -2,6 +2,7 @@
 
 import { ShoppingCart, Check, CreditCard, Plus, Minus } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/providers/CartProvider";
 import type { ProductDetail } from "@/server/types";
@@ -12,6 +13,7 @@ interface AddToCartButtonProps {
 }
 
 export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
+  const router = useRouter();
   const { items, addItem, updateQuantity } = useCart();
   const [added, setAdded] = useState(false);
 
@@ -36,6 +38,19 @@ export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
 
   const handleDecrement = () => {
     updateQuantity(product.id, quantity - 1);
+  };
+
+  const handleBuyNow = () => {
+    if (quantity === 0) {
+      addItem({
+        productId: product.id,
+        name: product.name,
+        price: product.price.toString(),
+        image: product.image,
+        category: product.category,
+      });
+    }
+    router.push("/checkout");
   };
 
   return (
@@ -78,6 +93,7 @@ export function AddToCartButton({ product, disabled }: AddToCartButtonProps) {
         size="lg"
         className="w-full gap-2 rounded-xl text-base font-semibold border-amber-500/20 text-foreground hover:bg-amber-50 hover:text-amber-700 transition-colors h-14"
         disabled={disabled}
+        onClick={handleBuyNow}
       >
         <CreditCard className="h-5 w-5" />
         Buy it now

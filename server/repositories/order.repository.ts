@@ -97,6 +97,8 @@ export const orderRepository = {
     data: {
       userId: string;
       totalAmount: number;
+      discountAmount?: number;
+      discountId?: string;
       shippingAddress: string;
       phone: string;
       items: Array<{ productId: string; quantity: number; price: number }>;
@@ -106,6 +108,8 @@ export const orderRepository = {
       data: {
         userId: data.userId,
         totalAmount: data.totalAmount,
+        discountAmount: data.discountAmount ?? 0,
+        ...(data.discountId ? { discountId: data.discountId } : {}),
         shippingAddress: data.shippingAddress,
         phone: data.phone,
         items: {

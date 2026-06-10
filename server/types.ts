@@ -22,6 +22,7 @@ export interface ProductSummary {
 }
 
 export interface ProductDetail extends ProductSummary {
+  description: string | null;
   isActive: boolean;
   createdAt: Date;
 }
@@ -35,6 +36,8 @@ export interface CreateOrderInput {
   items: OrderItemInput[];
   shippingAddress: string;
   phone: string;
+  discountId?: string;
+  discountAmount?: number;
 }
 
 export interface OrderItemSummary {

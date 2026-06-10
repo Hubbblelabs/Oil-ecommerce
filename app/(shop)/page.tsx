@@ -14,14 +14,11 @@ import { ProductLane } from "@/components/shop/ProductLane";
 import { HeroSection } from "@/components/shop/HeroSection";
 import { BestSellersSection } from "@/components/shop/BestSellersSection";
 import { WhyChooseUsSection } from "@/components/shop/WhyChooseUsSection";
-import { OilUsageSection } from "@/components/shop/OilUsageSection";
 import { HealthBenefitsSection } from "@/components/shop/HealthBenefitsSection";
-import { ComparisonSection } from "@/components/shop/ComparisonSection";
 import { BrandStorySection } from "@/components/shop/BrandStorySection";
 import { TestimonialsSection } from "@/components/shop/TestimonialsSection";
 import { WhatsAppCTASection } from "@/components/shop/WhatsAppCTASection";
 import { CategoryGridSection } from "@/components/shop/CategoryGridSection";
-import { FAQSection } from "@/components/shop/FAQSection";
 
 const CATEGORIES = [
   { value: "", label: "All", icon: Package, color: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300" },
@@ -50,28 +47,6 @@ async function ProductsContent({ category, page }: { category?: string; page: nu
   );
 }
 
-async function LiveProductLanes() {
-  const result = await productService.getProducts(1, 16);
-  const products = result.data;
-  if (!products || products.length === 0) return null;
-
-  const bestSellers = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
-  const todaysDeals = [...products].sort(() => 0.5 - Math.random()).slice(0, 8);
-  const healthyOils = [...products]
-    .filter((p) => p.category === "ORGANIC" || p.category === "PREMIUM")
-    .slice(0, 8);
-
-  return (
-    <div className="flex flex-col gap-2 bg-[#FAF8F2]/70 dark:bg-black/50 py-8">
-      <ProductLane title="Best Sellers" subtitle="Loved by thousands of households" products={bestSellers} />
-      <ProductLane title="Today's Deals" subtitle="Unbeatable prices on premium oils" products={todaysDeals} />
-      {healthyOils.length > 0 && (
-        <ProductLane title="Healthy Alternatives" subtitle="Cold-pressed organic goodness" products={healthyOils} />
-      )}
-    </div>
-  );
-}
-
 export default async function HomePage({
   searchParams,
 }: {
@@ -85,7 +60,7 @@ export default async function HomePage({
   // ── Category / pagination view ─────────────────────
   if (category || page > 1) {
     return (
-      <div className="flex flex-col py-8 bg-[#FAF8F2] dark:bg-zinc-950 min-h-screen">
+      <div className="flex flex-col bg-[#FAF8F2] dark:bg-zinc-950 min-h-screen ">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           {/* Heading */}
           <div className="mb-8">
@@ -127,31 +102,27 @@ export default async function HomePage({
   }
 
   // ── Premium Homepage ───────────────────────────────
+  const bestSellersResult = await productService.getProducts(1, 4);
+  const bestSellers = bestSellersResult.data;
+
   return (
     <div className="flex flex-col bg-[#FAF8F2] dark:bg-zinc-950">
 
       {/* 1. Cinematic Hero */}
       <HeroSection />
 
-      {/* 2. Best Sellers (static cards — always visible) */}
-      <BestSellersSection />
+      {/* 2. Best Sellers (fetched dynamically from DB) */}
+      <BestSellersSection products={bestSellers} />
 
-      {/* 3. Live product lanes from DB (graceful fallback when DB offline) */}
-      <Suspense fallback={null}>
-        <LiveProductLanes />
-      </Suspense>
 
-      {/* 4. Why Choose Us */}
+            {/* 4. Why Choose Us */}
       <WhyChooseUsSection />
 
-      {/* 5. Which Oil for Which Use */}
-      <OilUsageSection />
-
-      {/* 6. Health Benefits — tabbed per oil */}
+            {/* 6. Health Benefits — tabbed per oil */}
       <HealthBenefitsSection />
 
       {/* 7. Comparison: Wood Pressed vs Refined */}
-      <ComparisonSection />
+   
 
       {/* 8. Brand Story */}
       <BrandStorySection />
@@ -165,9 +136,6 @@ export default async function HomePage({
       {/* 11. WhatsApp CTA */}
       <WhatsAppCTASection />
 
-      {/* 12. FAQ */}
-      <FAQSection />
-
-    </div>
+          </div>
   );
 }

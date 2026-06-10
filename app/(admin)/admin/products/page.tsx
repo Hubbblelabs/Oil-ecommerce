@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -57,9 +58,14 @@ export default function AdminProductsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Products</h1>
-        <p className="text-muted-foreground">Manage all products on the platform</p>
+      <div className="flex justify-between items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Products</h1>
+          <p className="text-muted-foreground">Manage all products on the platform</p>
+        </div>
+        <Button asChild size="sm" className="bg-amber-600 text-white hover:bg-amber-700 rounded-xl font-bold uppercase tracking-wider text-xs px-4 py-2.5 h-10 shadow-sm">
+          <Link href="/admin/products/new">Add Product</Link>
+        </Button>
       </div>
 
       <div className="flex gap-2">
@@ -128,15 +134,25 @@ export default function AdminProductsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className={`h-7 text-xs ${product.isActive ? "hover:text-red-600" : "hover:text-green-600"}`}
-                      disabled={isPending}
-                      onClick={() => handleToggle(product.id, product.isActive)}
-                    >
-                      {product.isActive ? "Disable" : "Enable"}
-                    </Button>
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        asChild
+                        className="h-7 text-xs hover:text-amber-600 hover:border-amber-600/50"
+                      >
+                        <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className={`h-7 text-xs ${product.isActive ? "hover:text-red-600" : "hover:text-green-600"}`}
+                        disabled={isPending}
+                        onClick={() => handleToggle(product.id, product.isActive)}
+                      >
+                        {product.isActive ? "Disable" : "Enable"}
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))

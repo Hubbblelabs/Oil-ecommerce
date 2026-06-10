@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
+import { FAQSection } from "@/components/shop/FAQSection";
 
 export const metadata: Metadata = {
   title: "About Us — Shri Sameya Village Wood Cold Pressed Oils",
@@ -337,6 +338,11 @@ export default function AboutPage() {
             </Button>
           </div>
         </section>
+
+        {/* ── FAQ Section ── */}
+        <div className="mb-24">
+          <FAQSection />
+        </div>
 
       </div>
     </div>

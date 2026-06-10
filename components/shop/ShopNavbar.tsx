@@ -14,9 +14,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Shop", href: "/products" },
-  { label: "About", href: "/about" },
-  { label: "Bulk Orders", href: "/contact" },
+  { label: "Menu", href: "/products" },
+  { label: "Services", href: "/services" },
+  { label: "Orders", href: "/orders" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -88,10 +88,8 @@ export function ShopNavbar() {
     : null;
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-white dark:bg-[#1a0e04] border-b border-[#E9D8A6]/40 dark:border-[#3a2010] shadow-[0_2px_16px_rgba(59,36,22,0.06)]">
-      <div className="bg-[#3B2416] text-white py-1.5 text-center text-[11px] font-semibold tracking-wide">
-        Free delivery on orders above &#8377;499 &middot; Call us: +91 73052 12759
-      </div>
+    <header className="fixed top-0 inset-x-0 z-50 bg-white dark:bg-[#1a0e04] border-b border-border dark:border-[#3a2010] shadow-[0_2px_16px_rgba(59,36,22,0.06)]">
+      
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
@@ -99,14 +97,14 @@ export function ShopNavbar() {
           {/* Left: Brand Logo */}
           <div className="flex-1 flex justify-start">
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#D97706] text-white shadow-[0_0_15px_rgba(217,119,6,0.4)] transition-all duration-300 group-hover:scale-105 border border-[#E9D8A6]/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-primary text-white shadow-[0_0_15px_rgba(217,119,6,0.4)] transition-all duration-300 group-hover:scale-105 border border-border">
                 <Droplets className="h-4 w-4 fill-white/30 text-white" />
               </div>
               <div className="flex flex-col justify-center leading-none">
-                <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-[#3B2416] dark:text-white">
+                <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-foreground dark:text-white">
                   Shri Sameya Village
                 </span>
-                <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-[#D97706]">
+                <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-primary">
                   Wood Pressed Oils
                 </span>
               </div>
@@ -114,149 +112,86 @@ export function ShopNavbar() {
           </div>
 
           {/* Center: Desktop Nav */}
-          <nav className="hidden lg:flex items-center justify-center gap-4 flex-none">
-            <Link
-              href="/"
-              className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]"
-            >
-              Home
-            </Link>
-
-            {/* Shop dropdown */}
-            <div className="relative" ref={shopMenuRef}>
-              <button
-                onClick={() => setShopOpen((v) => !v)}
-                className="flex items-center gap-1 px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]"
-              >
-                Categories
-                <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", shopOpen && "rotate-180")} />
-              </button>
-              <AnimatePresence>
-                {shopOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                    transition={{ duration: 0.15, ease: [0.25, 0.25, 0, 1] }}
-                    className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 rounded-2xl bg-white dark:bg-zinc-900 border border-[#E9D8A6]/60 dark:border-zinc-700 shadow-[0_8px_40px_rgba(0,0,0,0.12)] p-2 z-50"
-                  >
-                    {CATEGORY_LINKS.map((c) => (
-                      <Link
-                        key={c.href + c.label}
-                        href={c.href}
-                        onClick={() => setShopOpen(false)}
-                        className="flex flex-col gap-0.5 px-4 py-3 rounded-xl hover:bg-[#D97706]/8 hover:text-[#D97706] transition-colors group"
-                      >
-                        <span className="text-sm font-semibold text-[#3B2416] dark:text-white group-hover:text-[#D97706]">{c.label}</span>
-                        <span className="text-[11px] text-muted-foreground">{c.sub}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <Link href="/?category=INDUSTRIAL" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
-              Bulk Orders
-            </Link>
-            <Link href="/about" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
-              About
-            </Link>
-            <Link href="/contact" className="px-2 py-1.5 text-[13px] font-bold transition-colors text-[#3B2416]/80 dark:text-white/70 hover:text-[#D97706]">
-              Contact
-            </Link>
+          <nav className="hidden lg:flex items-center justify-center gap-1 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm flex-none">
+            {NAV_LINKS.map((link) => {
+               const isActive = pathname === link.href || (pathname.startsWith('/services') && link.label === 'Services');
+               return (
+                 <Link
+                   key={link.label}
+                   href={link.href}
+                   className={cn(
+                     "px-5 py-2 text-[13px] font-bold rounded-full transition-all duration-300",
+                     isActive 
+                       ? "bg-primary text-primary-foreground shadow-[0_2px_10px_rgba(249,115,22,0.3)]" 
+                       : "text-foreground hover:text-primary hover:bg-muted"
+                   )}
+                 >
+                   {link.label}
+                 </Link>
+               );
+            })}
           </nav>
 
           {/* Right: Actions */}
-          <div className="flex-1 flex items-center justify-end gap-1.5">
-
-
-            {/* Cart */}
-            <button
-              onClick={() => router.push("/cart")}
-              className="relative h-9 w-9 flex items-center justify-center rounded-[10px] hover:bg-[#D97706]/10 transition-colors"
-              aria-label={`Cart (${itemCount} items)`}
-            >
-              <ShoppingCart className="h-[18px] w-[18px] text-[#3B2416] dark:text-white" />
-              <AnimatePresence>
-                {itemCount > 0 && (
-                  <motion.span
-                    key="badge"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#D97706] px-1 text-[10px] font-bold text-white shadow-[0_0_8px_rgba(217,119,6,0.5)]"
-                  >
-                    {itemCount > 99 ? "99+" : itemCount}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-
-            {/* Auth — desktop */}
-            {user ? (
-              <div className="relative hidden md:block" ref={userMenuRef}>
-                <button
-                  onClick={() => setUserMenuOpen((v) => !v)}
-                  className="flex items-center gap-1.5 h-9 px-2.5 rounded-[10px] text-sm font-medium hover:bg-[#D97706]/10 transition-all"
-                >
-                  <span className="h-6 w-6 rounded-full bg-[#D97706] flex items-center justify-center text-white text-[11px] font-bold uppercase shrink-0">
-                    {user.email[0]}
-                  </span>
-                  <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform duration-200", userMenuOpen && "rotate-180")} />
-                </button>
-                <AnimatePresence>
-                  {userMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-white dark:bg-zinc-900 border border-[#E9D8A6]/60 dark:border-zinc-700 shadow-[0_8px_40px_rgba(0,0,0,0.12)] p-1.5 z-50"
-                    >
-                      <div className="px-3 py-2 mb-1 border-b border-[#E9D8A6]/40 dark:border-zinc-700">
-                        <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
-                        <p className="text-xs font-bold text-[#D97706] capitalize">{user.role.toLowerCase()}</p>
-                      </div>
-                      {dashboardHref && (
-                        <Link href={dashboardHref} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-[#D97706]/8 hover:text-[#D97706] transition-colors">
-                          <Sparkles className="h-3.5 w-3.5" /> Dashboard
+          <div className="flex-1 flex items-center justify-end gap-3">
+             <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-border/50 hover:bg-muted transition-colors">
+               <Search className="h-4 w-4" />
+             </button>
+             
+             {user ? (
+                <div className="relative" ref={userMenuRef}>
+                  <button onClick={() => setUserMenuOpen((v) => !v)} className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-border/50 hover:bg-muted transition-colors">
+                    <span className="text-xs font-bold uppercase">{user.email[0]}</span>
+                  </button>
+                  <AnimatePresence>
+                    {userMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-white dark:bg-zinc-900 border border-border shadow-lg p-1.5 z-50"
+                      >
+                        <div className="px-3 py-2 mb-1 border-b border-border">
+                          <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
+                          <p className="text-xs font-bold text-primary capitalize">{user.role.toLowerCase()}</p>
+                        </div>
+                        {dashboardHref && (
+                          <Link href={dashboardHref} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors">
+                            <Sparkles className="h-3.5 w-3.5" /> Dashboard
+                          </Link>
+                        )}
+                        <Link href="/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors">
+                          My Orders
                         </Link>
-                      )}
-                      <Link href="/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-[#D97706]/8 hover:text-[#D97706] transition-colors">
-                        My Orders
-                      </Link>
-                      <div className="my-1 h-px bg-[#E9D8A6]/40 dark:bg-zinc-700" />
-                      <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
-                        <LogOut className="h-3.5 w-3.5" /> Sign out
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <div className="hidden md:flex items-center gap-1.5 ml-1">
-                <Button asChild variant="ghost" size="sm" className="h-9 rounded-[10px] text-[13px] font-semibold text-[#3B2416] dark:text-white hover:bg-[#D97706]/10 hover:text-[#D97706]">
+                        <div className="my-1 h-px bg-border" />
+                        <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
+                          <LogOut className="h-3.5 w-3.5" /> Sign out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+             ) : (
+                <Button asChild variant="ghost" size="sm" className="hidden sm:flex h-10 rounded-full text-[13px] font-bold hover:bg-muted transition-colors">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Link
-                  href="/products"
-                  className="h-9 px-4 rounded-[10px] text-[13px] font-bold bg-[#D97706] hover:bg-[#b86004] text-white transition-all shadow-[0_4px_12px_rgba(217,119,6,0.35)] hover:shadow-[0_6px_20px_rgba(217,119,6,0.5)] inline-flex items-center"
-                >
-                  Shop Now
-                </Link>
-              </div>
-            )}
+             )}
 
-            {/* Mobile toggle */}
+             <button onClick={() => router.push("/cart")} className="flex items-center gap-2 h-10 px-4 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-[0_4px_12px_rgba(249,115,22,0.3)]">
+               <ShoppingCart className="h-4 w-4" />
+               <span className="text-xs font-bold hidden sm:inline-block">{itemCount} items</span>
+             </button>
+
+          {/* Mobile toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 rounded-[10px] hover:bg-[#D97706]/10 lg:hidden"
+              className="h-9 w-9 rounded-[10px] hover:bg-primary/10 lg:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="h-5 w-5 text-[#3B2416] dark:text-white" /> : <Menu className="h-5 w-5 text-[#3B2416] dark:text-white" />}
+              {mobileOpen ? <X className="h-5 w-5 text-foreground dark:text-white" /> : <Menu className="h-5 w-5 text-foreground dark:text-white" />}
             </Button>
           </div>
         </div>
@@ -270,31 +205,31 @@ export function ShopNavbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: [0.25, 0.25, 0, 1] }}
-            className="overflow-hidden bg-white dark:bg-[#1a0e04] border-t border-[#E9D8A6]/40 lg:hidden"
+            className="overflow-hidden bg-white dark:bg-[#1a0e04] border-t border-border lg:hidden"
           >
             <nav className="flex flex-col p-4 gap-0.5">
-              <Link href="/" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#3B2416] dark:text-white hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
-              <Link href="/products" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#3B2416] dark:text-white hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>All Products</Link>
+              <Link href="/" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
+              <Link href="/products" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>All Products</Link>
               {CATEGORY_LINKS.map((c) => (
-                <Link key={c.label} href={c.href} className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>{c.label}</Link>
+                <Link key={c.label} href={c.href} className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>{c.label}</Link>
               ))}
-              <Link href="/?category=INDUSTRIAL" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#3B2416] dark:text-white hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>Bulk Orders</Link>
-              <Link href="/about" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#3B2416] dark:text-white hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>About</Link>
-              <Link href="/contact" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#3B2416] dark:text-white hover:text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
+              <Link href="/?category=INDUSTRIAL" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Bulk Orders</Link>
+              <Link href="/about" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>About</Link>
+              <Link href="/contact" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
               {dashboardHref && (
-                <Link href={dashboardHref} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-[#D97706] hover:bg-[#D97706]/8 transition-colors" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+                <Link href={dashboardHref} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Dashboard</Link>
               )}
-              <div className="mt-3 pt-3 border-t border-[#E9D8A6]/40 flex gap-2">
+              <div className="mt-3 pt-3 border-t border-border flex gap-2">
                 {user ? (
                   <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-center text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors">
                     Sign out
                   </button>
                 ) : (
                   <>
-                    <Link href="/login" className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-center border border-[#E9D8A6] hover:border-[#D97706] hover:text-[#D97706] transition-colors" onClick={() => setMobileOpen(false)}>
+                    <Link href="/login" className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-center border border-[#E9D8A6] hover:border-[#D97706] hover:text-primary transition-colors" onClick={() => setMobileOpen(false)}>
                       Sign In
                     </Link>
-                    <Link href="/products" className="flex-1 py-2.5 rounded-xl text-sm font-bold text-center bg-[#D97706] text-white" onClick={() => setMobileOpen(false)}>
+                    <Link href="/products" className="flex-1 py-2.5 rounded-xl text-sm font-bold text-center bg-primary text-white" onClick={() => setMobileOpen(false)}>
                       Shop Now
                     </Link>
                   </>
