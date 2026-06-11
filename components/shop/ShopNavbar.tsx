@@ -38,7 +38,7 @@ function Wordmark() {
       <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
         Shri Sameya
       </span>
-      <span className="label-tiny text-primary mt-0.5">Village Â· Wood Pressed</span>
+      <span className="label-tiny text-primary mt-0.5">Village · Wood Pressed</span>
     </Link>
   );
 }

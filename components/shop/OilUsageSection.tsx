@@ -15,7 +15,7 @@ const OILS = [
     accentText: "text-[#D97706]",
     image: "/site_assets/product_groundnut_1l.png",
     bestFor: ["Deep Frying", "Daily Cooking", "Indian Curries"],
-    highlight: "High smoke point â€” perfect for high-heat Indian cooking.",
+    highlight: "High smoke point — perfect for high-heat Indian cooking.",
     href: "/products?category=COOKING",
   },
   {
@@ -28,7 +28,7 @@ const OILS = [
     accentText: "text-orange-700 dark:text-orange-400",
     image: "/site_assets/hero_gingelly_oil.png",
     bestFor: ["Traditional Cooking", "Antioxidant Rich", "Tempering"],
-    highlight: "Powerhouse of sesamol â€” the antioxidant that never breaks down.",
+    highlight: "Powerhouse of sesamol — the antioxidant that never breaks down.",
     href: "/products?category=COOKING",
   },
   {
@@ -41,7 +41,7 @@ const OILS = [
     accentText: "text-green-700 dark:text-green-400",
     image: "/site_assets/product_coconut_1l.png",
     bestFor: ["Light Cooking", "Energy Boost", "Hair & Skin Care"],
-    highlight: "MCT-rich formula â€” fuels energy and supports immunity.",
+    highlight: "MCT-rich formula — fuels energy and supports immunity.",
     href: "/products?category=PREMIUM",
   },
   {
@@ -54,7 +54,7 @@ const OILS = [
     accentText: "text-yellow-700 dark:text-yellow-400",
     image: "/site_assets/hero_sunflower_oil.png",
     bestFor: ["Daily Cooking", "High Vitamin E", "Light Frying"],
-    highlight: "Rich in Vitamin E â€” a daily essential for every kitchen.",
+    highlight: "Rich in Vitamin E — a daily essential for every kitchen.",
     href: "/products?category=ORGANIC",
   },
 ];

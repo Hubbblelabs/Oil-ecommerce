@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Phone, MessageCircle, Mail, Clock, ChevronDown, ChevronUp, CheckCircle2, Send } from "lucide-react";
+import { MapPin, Phone, MessageCircle, Clock, ChevronDown, ChevronUp, CheckCircle2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Metadata } from "next";
 
 const FAQS = [
   { q: "How do I place an order?", a: "You can order directly through our website, or reach us instantly on WhatsApp at 7305212759. We're happy to assist you pick the right oils for your needs." },
@@ -33,19 +32,25 @@ export default function ContactPage() {
     <div className="flex flex-col">
 
       {/* ── Hero ── */}
-      <section className="bg-zinc-950 relative overflow-hidden pt-10 pb-16">
-        <div className="absolute top-0 left-1/3 w-[600px] h-[300px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-amber-400 text-sm font-bold uppercase tracking-widest mb-3">Get In Touch</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">Contact Us</h1>
-          <p className="text-zinc-400 max-w-lg mx-auto">
-            Order via WhatsApp, ask us anything, or visit us in Coimbatore. We'd love to hear from you.
+      <section className="grain relative overflow-hidden bg-secondary pb-16 pt-14 text-secondary-foreground">
+        <div className="pointer-events-none absolute left-1/3 top-0 h-[300px] w-[600px] rounded-full bg-primary/15 blur-[120px]" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <p className="eyebrow mb-4 flex items-center justify-center gap-3">
+            <span className="inline-block h-px w-10 bg-primary" />
+            Get in touch
+            <span className="inline-block h-px w-10 bg-primary" />
+          </p>
+          <h1 className="text-display-hero mb-5 text-4xl sm:text-5xl lg:text-6xl">
+            Talk to the <em className="text-display-italic text-primary">village.</em>
+          </h1>
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-secondary-foreground/60 sm:text-base">
+            Order via WhatsApp, ask us anything, or visit us in Coimbatore. We&rsquo;d love to hear from you.
           </p>
         </div>
       </section>
 
       {/* ── Contact Cards + Form ── */}
-      <section className="py-16 bg-white dark:bg-zinc-950">
+      <section className="bg-background py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
 
@@ -69,15 +74,15 @@ export default function ContactPage() {
 
               <a
                 href="tel:+917305212759"
-                className="group flex gap-4 items-start rounded-2xl border border-border bg-card hover:bg-amber-50/60 dark:hover:bg-amber-950/10 p-5 transition-colors"
+                className="group flex gap-4 items-start rounded-2xl border border-border bg-card hover:bg-accent/60 p-5 transition-colors"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 dark:bg-amber-900/30">
-                  <Phone className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+                  <Phone className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <p className="font-bold text-foreground">Call Us</p>
                   <p className="text-sm text-muted-foreground">Mon–Sat, 9am–7pm</p>
-                  <p className="text-amber-600 font-semibold text-sm mt-1">+91 73052 12759</p>
+                  <p className="text-primary font-semibold text-sm mt-1">+91 73052 12759</p>
                 </div>
               </a>
 
@@ -85,10 +90,10 @@ export default function ContactPage() {
                 href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex gap-4 items-start rounded-2xl border border-border bg-card hover:bg-amber-50/60 dark:hover:bg-amber-950/10 p-5 transition-colors"
+                className="group flex gap-4 items-start rounded-2xl border border-border bg-card hover:bg-accent/60 p-5 transition-colors"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 dark:bg-blue-900/30">
-                  <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-sage/15">
+                  <MapPin className="h-6 w-6 text-sage" />
                 </div>
                 <div>
                   <p className="font-bold text-foreground">Our Location</p>
@@ -96,13 +101,13 @@ export default function ContactPage() {
                     Coimbatore, Ramanathapuram<br />
                     Trichy Road, Tamil Nadu, India
                   </p>
-                  <p className="text-blue-600 font-semibold text-sm mt-1 group-hover:underline">Get Directions →</p>
+                  <p className="text-sage font-semibold text-sm mt-1 group-hover:underline">Get Directions →</p>
                 </div>
               </a>
 
               <div className="flex gap-4 items-start rounded-2xl border border-border bg-card p-5">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-green-100 dark:bg-green-900/30">
-                  <Clock className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-light">
+                  <Clock className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <p className="font-bold text-foreground">Business Hours</p>
@@ -119,7 +124,7 @@ export default function ContactPage() {
                   <CheckCircle2 className="h-16 w-16 text-[#25D366]" />
                   <h2 className="text-2xl font-bold text-foreground">Message sent via WhatsApp!</h2>
                   <p className="text-muted-foreground max-w-sm">
-                    We've opened WhatsApp with your message pre-filled. We'll reply as soon as possible!
+                    We&rsquo;ve opened WhatsApp with your message pre-filled. We&rsquo;ll reply as soon as possible!
                   </p>
                   <Button
                     onClick={() => setSubmitted(false)}
@@ -133,7 +138,7 @@ export default function ContactPage() {
                 <div className="bg-card border border-border rounded-3xl p-8 shadow-premium">
                   <h2 className="text-2xl font-bold text-foreground mb-2">Send us a message</h2>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Fill in your details and we'll open WhatsApp with your message pre-filled.
+                    Fill in your details and we&rsquo;ll open WhatsApp with your message pre-filled.
                   </p>
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
@@ -195,8 +200,8 @@ export default function ContactPage() {
       </section>
 
       {/* ── Live Map Embed ── */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden shadow-premium border border-border h-[400px] bg-amber-50 dark:bg-zinc-900">
+      <section className="px-4 sm:px-6 lg:px-8 pb-8 bg-background">
+        <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden shadow-premium border border-border h-[320px] sm:h-[400px] bg-paper-deep">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d195.8368817297839!2d77.0143808!3d10.9977733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8578b603c1543%3A0x643e8cbfc32ce7ab!2sShri%20Sameya%20Village%20Wood%20Cold%20Pressed%20oil%20Mill!5e0!3m2!1sen!2sin!4v1714110000000!5m2!1sen!2sin"
             width="100%"
@@ -212,11 +217,17 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-16 bg-white dark:bg-zinc-950">
+      <section className="py-16 bg-background">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-amber-600 text-sm font-bold uppercase tracking-widest mb-2">FAQ</p>
-            <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
+            <p className="eyebrow mb-3 flex items-center justify-center gap-3">
+              <span className="inline-block h-px w-10 bg-primary" />
+              FAQ
+              <span className="inline-block h-px w-10 bg-primary" />
+            </p>
+            <h2 className="text-display-hero text-3xl text-foreground sm:text-4xl">
+              Frequently asked <em className="text-display-italic text-primary">questions</em>
+            </h2>
           </div>
           <div className="space-y-3">
             {FAQS.map((faq, i) => (
@@ -224,17 +235,17 @@ export default function ContactPage() {
                 <button
                   id={`faq-${i}`}
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-card hover:bg-amber-50/50 dark:hover:bg-amber-950/10 transition-colors"
+                  className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-card hover:bg-accent/50 transition-colors"
                   aria-expanded={openFaq === i}
                   aria-controls={`faq-answer-${i}`}
                 >
                   <span className="font-semibold text-foreground text-sm">{faq.q}</span>
                   {openFaq === i
-                    ? <ChevronUp className="h-4 w-4 text-amber-600 shrink-0" />
+                    ? <ChevronUp className="h-4 w-4 text-primary shrink-0" />
                     : <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />}
                 </button>
                 {openFaq === i && (
-                  <div id={`faq-answer-${i}`} className="px-6 py-4 bg-amber-50/40 dark:bg-amber-950/10 border-t border-border">
+                  <div id={`faq-answer-${i}`} className="px-6 py-4 bg-paper-deep border-t border-border">
                     <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
                   </div>
                 )}

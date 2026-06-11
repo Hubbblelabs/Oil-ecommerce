@@ -8,9 +8,9 @@ const MARQUEE_ITEMS = [
   "Traditional Chekku Pressed",
   "Zero Chemicals",
   "FSSAI Certified",
-  "Free Delivery Above â‚¹499",
+  "Free Delivery Above ₹499",
   "Farm to Kitchen",
-  "Cold Pressed Â· No Heat",
+  "Cold Pressed · No Heat",
 ];
 
 const FOOTER_COLUMNS = [
@@ -79,7 +79,7 @@ export default function ShopLayout({
 
       <TrustMarquee />
 
-      {/* â”€â”€ Editorial footer â”€â”€ */}
+      {/* ── Editorial footer ── */}
       <footer className="bg-secondary text-secondary-foreground grain">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
           {/* Top: oversized brand statement */}
@@ -92,7 +92,7 @@ export default function ShopLayout({
                 <em className="text-display-italic text-primary">tradition.</em>
               </h2>
               <p className="max-w-sm text-sm leading-relaxed text-secondary-foreground/60">
-                Premium wood pressed oils from sustainable Tamil Nadu farms â€”
+                Premium wood pressed oils from sustainable Tamil Nadu farms —
                 pure, natural, and traceable from seed to bottle.
               </p>
             </div>
@@ -155,7 +155,7 @@ export default function ShopLayout({
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
             <p className="label-tiny text-secondary-foreground/40">
-              Â© 2026 Shri Sameya Village Wood Pressed Oils
+              © 2026 Shri Sameya Village Wood Pressed Oils
             </p>
             <div className="flex flex-wrap justify-center gap-6">
               <Link href="/privacy" className="label-tiny text-secondary-foreground/40 hover:text-secondary-foreground transition-colors">

@@ -24,7 +24,7 @@ const OILS = [
     benefits: [
       "Boosts heart health with high MUFA content",
       "Natural Vitamin E antioxidant",
-      "High smoke point â€” ideal for deep frying",
+      "High smoke point — ideal for deep frying",
       "Resveratrol supports anti-ageing",
     ],
     cookingUse: "Deep frying, daily cooking, Indian curries",
@@ -38,7 +38,7 @@ const OILS = [
     color: "#C97B3D",
     tagline: "Ancient remedy with powerful heat-stable antioxidants",
     description:
-      "Sesamol â€” a unique, heat-stable antioxidant found only in sesame â€” makes this oil a powerhouse of anti-inflammatory compounds. Traditional Tamil households have trusted it for generations.",
+      "Sesamol — a unique, heat-stable antioxidant found only in sesame — makes this oil a powerhouse of anti-inflammatory compounds. Traditional Tamil households have trusted it for generations.",
     nutrients: [
       { name: "Sesamol", amount: "High" },
       { name: "Vitamin E", amount: "~1.4mg/100g" },
@@ -46,7 +46,7 @@ const OILS = [
       { name: "MUFA", amount: "~41%" },
     ],
     benefits: [
-      "Sesamol â€” a powerful heat-stable antioxidant",
+      "Sesamol — a powerful heat-stable antioxidant",
       "Anti-inflammatory (sesamin compound)",
       "Supports bone density via natural calcium",
       "Traditional remedy for joint pain",
@@ -62,7 +62,7 @@ const OILS = [
     color: "#7FB069",
     tagline: "MCT-rich immunity booster from the finest coconuts",
     description:
-      "Lauric acid in coconut oil converts to monolaurin â€” a powerful anti-microbial agent. Our wood-pressed extraction retains full MCT content for quick, clean energy and immune support.",
+      "Lauric acid in coconut oil converts to monolaurin — a powerful anti-microbial agent. Our wood-pressed extraction retains full MCT content for quick, clean energy and immune support.",
     nutrients: [
       { name: "MCT", amount: "~62%" },
       { name: "Lauric Acid", amount: "~49%" },
@@ -99,7 +99,7 @@ const OILS = [
       "Reduces LDL cholesterol levels",
       "Skin barrier protection topically",
     ],
-    cookingUse: "Daily cooking, baking, salad dressings, sautÃ©ing",
+    cookingUse: "Daily cooking, baking, salad dressings, sautéing",
     href: "/products?category=ORGANIC",
   },
 ];
@@ -163,7 +163,7 @@ export function HealthBenefitsSection() {
         </div>
 
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
-          {/* LEFT â€” copy */}
+          {/* LEFT — copy */}
           <AnimatePresence mode="wait">
             <motion.div
               key={oil.id}
@@ -180,7 +180,7 @@ export function HealthBenefitsSection() {
                 {oil.description}
               </p>
 
-              {/* Nutrients â€” tabular editorial list */}
+              {/* Nutrients — tabular editorial list */}
               <dl className="mb-8 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-2xl border border-secondary-foreground/15 bg-secondary-foreground/15">
                 {oil.nutrients.map(({ name, amount }) => (
                   <div key={name} className="bg-secondary px-5 py-4">
@@ -215,7 +215,7 @@ export function HealthBenefitsSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* RIGHT â€” imagery */}
+          {/* RIGHT — imagery */}
           <div className="relative">
             <div className="grain relative mx-auto aspect-[3/4] max-w-sm overflow-hidden rounded-[2rem] border border-secondary-foreground/15">
               <AnimatePresence mode="wait">

@@ -93,6 +93,7 @@ export function LandingV2({
 }) {
   const { items, itemCount, addItem, updateQuantity } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [loaderPhase, setLoaderPhase] = useState<"loading" | "done" | "gone">("loading");
   const [count, setCount] = useState(0);
   const [navSolid, setNavSolid] = useState(false);
@@ -142,8 +143,16 @@ export function LandingV2({
 
   const discoveryPrice = products.reduce((a, p) => a + p.price, 0);
 
-  /* ---------- Loader ---------- */
+  /* ---------- Loader (once per session; skipped for reduced motion) ---------- */
   useEffect(() => {
+    const seen =
+      sessionStorage.getItem("lv2-intro-seen") === "1" ||
+      window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    if (seen) {
+      const skip = requestAnimationFrame(() => setLoaderPhase("gone"));
+      return () => cancelAnimationFrame(skip);
+    }
+    sessionStorage.setItem("lv2-intro-seen", "1");
     const iv = setInterval(() => {
       setCount((n) => {
         const next = n + Math.floor(Math.random() * 16) + 5;
@@ -159,6 +168,14 @@ export function LandingV2({
       clearTimeout(t2);
     };
   }, []);
+
+  /* ---------- Mobile menu scroll lock ---------- */
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   /* ---------- Smooth anchor scrolling while mounted ---------- */
   useEffect(() => {
@@ -242,8 +259,16 @@ export function LandingV2({
     const htrack = htrackRef.current!;
     const hbar = hbarRef.current!;
 
-    /* size the horizontal section: scroll height = track overflow + viewport */
+    const mobileMq = window.matchMedia("(max-width: 900px)");
+
+    /* size the horizontal section: scroll height = track overflow + viewport.
+       On mobile the track is natively swipe-scrollable instead. */
     const sizeH = () => {
+      if (mobileMq.matches) {
+        hwrap.style.height = "";
+        htrack.style.transform = "";
+        return;
+      }
       const overflow = htrack.scrollWidth - window.innerWidth;
       hwrap.style.height = window.innerHeight + Math.max(0, overflow) + "px";
     };
@@ -262,6 +287,7 @@ export function LandingV2({
       const lit = Math.floor(t * words.length * 1.15);
       words.forEach((w, i) => w.classList.toggle("lit", i < lit));
 
+      if (mobileMq.matches) return;
       const hr = hwrap.getBoundingClientRect();
       const total = hwrap.offsetHeight - vh;
       if (total > 0) {
@@ -270,6 +296,13 @@ export function LandingV2({
         htrack.style.transform = `translateX(${-p * overflow}px)`;
         hbar.style.transform = `scaleX(${p})`;
       }
+    };
+
+    /* drive the hint bar from native horizontal swipe on mobile */
+    const onTrackScroll = () => {
+      if (!mobileMq.matches) return;
+      const maxX = htrack.scrollWidth - htrack.clientWidth;
+      hbar.style.transform = `scaleX(${maxX > 0 ? htrack.scrollLeft / maxX : 0})`;
     };
 
     const onResize = () => {
@@ -285,9 +318,11 @@ export function LandingV2({
     });
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
+    htrack.addEventListener("scroll", onTrackScroll, { passive: true });
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
+      htrack.removeEventListener("scroll", onTrackScroll);
     };
   }, []);
 
@@ -388,8 +423,75 @@ export function LandingV2({
           <button className="nav__cart" onClick={() => setCartOpen(true)}>
             Cart <span className="dot">{itemCount}</span>
           </button>
+          <button
+            className={`nav__burger${menuOpen ? " open" : ""}`}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <i />
+            <i />
+          </button>
         </div>
       </nav>
+
+      {/* ===== MOBILE MENU ===== */}
+      <div className={`mmenu${menuOpen ? " open" : ""}`} aria-hidden={!menuOpen}>
+        <nav className="mmenu__links">
+          {[
+            { label: "Collection", href: "/products" },
+            { label: "Our Story", href: "#chapters" },
+            { label: "Process", href: "#process" },
+            { label: "Journal", href: "/oil-guide" },
+            { label: "Account", href: "/orders" },
+          ].map((l, i) =>
+            l.href.startsWith("#") ? (
+              <a
+                key={l.label}
+                href={l.href}
+                style={{ transitionDelay: menuOpen ? `${0.12 + i * 0.05}s` : "0s" }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  const target = document.querySelector(l.href);
+                  setTimeout(() => target?.scrollIntoView({ behavior: "smooth" }), 60);
+                }}
+              >
+                <small>0{i + 1}</small>
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.label}
+                href={l.href}
+                style={{ transitionDelay: menuOpen ? `${0.12 + i * 0.05}s` : "0s" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                <small>0{i + 1}</small>
+                {l.label}
+              </Link>
+            )
+          )}
+        </nav>
+        <div className="mmenu__foot">
+          <button
+            className="btn btn--light"
+            onClick={() => {
+              setMenuOpen(false);
+              setCartOpen(true);
+            }}
+          >
+            <span className="btn__label">View Cart · {itemCount}</span>
+          </button>
+          <a
+            href="https://wa.me/917305212759"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp — +91 73052 12759
+          </a>
+        </div>
+      </div>
 
       {/* ===== HERO ===== */}
       <header className={`hero${loaderPhase !== "loading" ? " in" : ""}`} ref={heroRef}>
@@ -778,7 +880,7 @@ export function LandingV2({
                 <Link href="/orders">Account</Link>
               </li>
               <li>
-                <Link href="/admin/dashboard">Admin</Link>
+                <Link href="/contact">Contact</Link>
               </li>
             </ul>
           </div>
@@ -798,14 +900,31 @@ export function LandingV2({
               <button aria-label="Subscribe">{subscribed ? "✓" : "→"}</button>
             </form>
             <div className="final__social">
-              <a href="#">Instagram</a>
-              <a href="#">Pinterest</a>
-              <a href="#">YouTube</a>
+              <a
+                href="https://wa.me/917305212759"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp
+              </a>
+              <a
+                href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Find the Mill
+              </a>
+              <Link href="/contact">Write to Us</Link>
             </div>
           </div>
         </div>
         <div className="final__base">
           <span>© 2026 Shri Sameya Village</span>
+          <span className="final__policies">
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/refund-policy">Refunds</Link>
+          </span>
           <span>Pressed in India · Shipped with care</span>
         </div>
         <div className="final__wordmark" aria-hidden="true">
