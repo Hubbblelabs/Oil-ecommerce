@@ -2,50 +2,56 @@
 
 import Link from "next/link";
 import {
-  ShoppingCart, Droplets, Menu, X, LogOut, ChevronDown,
-  Sparkles, Search, Phone,
+  ShoppingBag, Menu, X, LogOut, Sparkles, Phone, ArrowUpRight,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/providers/CartProvider";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Menu", href: "/products" },
+  { label: "Shop", href: "/products" },
   { label: "Services", href: "/services" },
   { label: "Orders", href: "/orders" },
   { label: "Contact", href: "/contact" },
 ];
 
-const CATEGORY_LINKS = [
-  { label: "Groundnut Oil", href: "/?category=COOKING", sub: "Heart-healthy MUFA rich" },
-  { label: "Coconut Oil", href: "/?category=PREMIUM", sub: "MCT-rich, immunity boost" },
-  { label: "Gingelly Oil", href: "/?category=COOKING", sub: "Powerful antioxidants" },
-  { label: "Sunflower Oil", href: "/?category=ORGANIC", sub: "High Vitamin E" },
-  { label: "Bulk / Industrial", href: "/?category=INDUSTRIAL", sub: "For restaurants & retail" },
+const MOBILE_CATEGORIES = [
+  { label: "Groundnut Oil", href: "/?category=COOKING" },
+  { label: "Coconut Oil", href: "/?category=PREMIUM" },
+  { label: "Gingelly Oil", href: "/?category=COOKING" },
+  { label: "Sunflower Oil", href: "/?category=ORGANIC" },
+  { label: "Bulk / Industrial", href: "/?category=INDUSTRIAL" },
 ];
 
 interface CurrentUser {
   id: string;
   email: string;
-  role: "ADMIN" | "SELLER" | "USER";
+  role: "ADMIN" | "USER";
+}
+
+function Wordmark() {
+  return (
+    <Link href="/" className="group flex flex-col leading-none shrink-0">
+      <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+        Shri Sameya
+      </span>
+      <span className="label-tiny text-primary mt-0.5">Village · Wood Pressed</span>
+    </Link>
+  );
 }
 
 export function ShopNavbar() {
   const { itemCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const isHome = pathname === "/";
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const shopMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -55,24 +61,28 @@ export function ShopNavbar() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false);
       }
-      if (shopMenuRef.current && !shopMenuRef.current.contains(e.target as Node)) {
-        setShopOpen(false);
-      }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // Lock body scroll while the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -82,168 +92,227 @@ export function ShopNavbar() {
     router.refresh();
   };
 
-  const dashboardHref =
-    user?.role === "ADMIN" ? "/admin/dashboard"
-    : user?.role === "SELLER" ? "/seller/dashboard"
-    : null;
+  const dashboardHref = user?.role === "ADMIN" ? "/admin/dashboard" : null;
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-white dark:bg-[#1a0e04] border-b border-border dark:border-[#3a2010] shadow-[0_2px_16px_rgba(59,36,22,0.06)]">
-      
-
+    <header
+      className={cn(
+        "fixed top-0 inset-x-0 z-50 transition-all duration-500",
+        scrolled
+          ? "glass border-b border-border/60"
+          : "bg-background/0 border-b border-transparent"
+      )}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between gap-6">
+          {/* Brand */}
+          <Wordmark />
 
-          {/* Left: Brand Logo */}
-          <div className="flex-1 flex justify-start">
-            <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-primary text-white shadow-[0_0_15px_rgba(217,119,6,0.4)] transition-all duration-300 group-hover:scale-105 border border-border">
-                <Droplets className="h-4 w-4 fill-white/30 text-white" />
-              </div>
-              <div className="flex flex-col justify-center leading-none">
-                <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-foreground dark:text-white">
-                  Shri Sameya Village
-                </span>
-                <span className="text-[8px] font-bold tracking-[0.2em] uppercase text-primary">
-                  Wood Pressed Oils
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center: Desktop Nav */}
-          <nav className="hidden lg:flex items-center justify-center gap-1 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm flex-none">
+          {/* Center nav */}
+          <nav className="hidden lg:flex items-center gap-9">
             {NAV_LINKS.map((link) => {
-               const isActive = pathname === link.href || (pathname.startsWith('/services') && link.label === 'Services');
-               return (
-                 <Link
-                   key={link.label}
-                   href={link.href}
-                   className={cn(
-                     "px-5 py-2 text-[13px] font-bold rounded-full transition-all duration-300",
-                     isActive 
-                       ? "bg-primary text-primary-foreground shadow-[0_2px_10px_rgba(249,115,22,0.3)]" 
-                       : "text-foreground hover:text-primary hover:bg-muted"
-                   )}
-                 >
-                   {link.label}
-                 </Link>
-               );
+              const isActive =
+                pathname === link.href ||
+                (link.href !== "/" && pathname.startsWith(link.href));
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  data-active={isActive}
+                  className={cn(
+                    "link-underline text-[13px] font-semibold tracking-wide uppercase transition-colors",
+                    isActive ? "text-primary" : "text-foreground/70 hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
             })}
           </nav>
 
-          {/* Right: Actions */}
-          <div className="flex-1 flex items-center justify-end gap-3">
-             <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-border/50 hover:bg-muted transition-colors">
-               <Search className="h-4 w-4" />
-             </button>
-             
-             {user ? (
-                <div className="relative" ref={userMenuRef}>
-                  <button onClick={() => setUserMenuOpen((v) => !v)} className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-zinc-900 border border-border/50 hover:bg-muted transition-colors">
-                    <span className="text-xs font-bold uppercase">{user.email[0]}</span>
-                  </button>
-                  <AnimatePresence>
-                    {userMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-white dark:bg-zinc-900 border border-border shadow-lg p-1.5 z-50"
-                      >
-                        <div className="px-3 py-2 mb-1 border-b border-border">
-                          <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
-                          <p className="text-xs font-bold text-primary capitalize">{user.role.toLowerCase()}</p>
-                        </div>
-                        {dashboardHref && (
-                          <Link href={dashboardHref} onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors">
-                            <Sparkles className="h-3.5 w-3.5" /> Dashboard
-                          </Link>
-                        )}
-                        <Link href="/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors">
-                          My Orders
+          {/* Actions */}
+          <div className="flex items-center gap-2.5">
+            {user ? (
+              <div className="relative hidden sm:block" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-xs font-bold uppercase text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                  aria-label="Account menu"
+                >
+                  {user.email[0]}
+                </button>
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                      transition={{ duration: 0.16 }}
+                      className="absolute right-0 top-full mt-3 w-56 rounded-2xl bg-popover border border-border shadow-lift p-1.5 z-50"
+                    >
+                      <div className="px-3 py-2.5 mb-1 border-b border-border">
+                        <p className="text-[11px] text-muted-foreground truncate">{user.email}</p>
+                        <p className="label-tiny text-primary mt-0.5">{user.role.toLowerCase()}</p>
+                      </div>
+                      {dashboardHref && (
+                        <Link
+                          href={dashboardHref}
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent transition-colors"
+                        >
+                          <Sparkles className="h-3.5 w-3.5 text-primary" /> Dashboard
                         </Link>
-                        <div className="my-1 h-px bg-border" />
-                        <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
-                          <LogOut className="h-3.5 w-3.5" /> Sign out
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-             ) : (
-                <Button asChild variant="ghost" size="sm" className="hidden sm:flex h-10 rounded-full text-[13px] font-bold hover:bg-muted transition-colors">
-                  <Link href="/login">Sign In</Link>
-                </Button>
-             )}
+                      )}
+                      <Link
+                        href="/orders"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <div className="my-1 h-px bg-border" />
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      >
+                        <LogOut className="h-3.5 w-3.5" /> Sign out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden sm:inline-flex link-underline text-[13px] font-semibold uppercase tracking-wide text-foreground/70 hover:text-foreground transition-colors mr-2"
+              >
+                Sign in
+              </Link>
+            )}
 
-             <button onClick={() => router.push("/cart")} className="flex items-center gap-2 h-10 px-4 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-[0_4px_12px_rgba(249,115,22,0.3)]">
-               <ShoppingCart className="h-4 w-4" />
-               <span className="text-xs font-bold hidden sm:inline-block">{itemCount} items</span>
-             </button>
+            {/* Cart */}
+            <button
+              onClick={() => router.push("/cart")}
+              className="btn-shine group relative flex h-11 items-center gap-2.5 rounded-full bg-secondary pl-4 pr-5 text-secondary-foreground transition-transform duration-300 hover:scale-[1.03] active:scale-[0.98]"
+              aria-label={`Cart, ${itemCount} items`}
+            >
+              <ShoppingBag className="h-4 w-4" />
+              <span className="text-xs font-bold tracking-wide">Cart</span>
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                {itemCount}
+              </span>
+            </button>
 
-          {/* Mobile toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-9 w-9 rounded-[10px] hover:bg-primary/10 lg:hidden"
+            {/* Mobile toggle */}
+            <button
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card lg:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="h-5 w-5 text-foreground dark:text-white" /> : <Menu className="h-5 w-5 text-foreground dark:text-white" />}
-            </Button>
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile full-screen editorial menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.25, 0.25, 0, 1] }}
-            className="overflow-hidden bg-white dark:bg-[#1a0e04] border-t border-border lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 top-20 z-40 overflow-y-auto bg-background lg:hidden"
           >
-            <nav className="flex flex-col p-4 gap-0.5">
-              <Link href="/" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
-              <Link href="/products" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>All Products</Link>
-              {CATEGORY_LINKS.map((c) => (
-                <Link key={c.label} href={c.href} className="px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>{c.label}</Link>
-              ))}
-              <Link href="/?category=INDUSTRIAL" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Bulk Orders</Link>
-              <Link href="/about" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>About</Link>
-              <Link href="/contact" className="px-4 py-2.5 rounded-xl text-sm font-semibold text-foreground dark:text-white hover:text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
-              {dashboardHref && (
-                <Link href={dashboardHref} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-primary hover:bg-primary/8 transition-colors" onClick={() => setMobileOpen(false)}>Dashboard</Link>
-              )}
-              <div className="mt-3 pt-3 border-t border-border flex gap-2">
+            <nav className="flex min-h-full flex-col px-6 pt-8 pb-12">
+              <p className="eyebrow-muted mb-5">Menu</p>
+              <div className="flex flex-col gap-1">
+                {NAV_LINKS.map((link, i) => (
+                  <motion.div
+                    key={link.label}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="group flex items-center justify-between border-b border-border py-4"
+                    >
+                      <span className="font-display text-3xl font-medium tracking-tight text-foreground group-hover:text-primary transition-colors">
+                        {link.label}
+                      </span>
+                      <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </Link>
+                  </motion.div>
+                ))}
+                {dashboardHref && (
+                  <Link
+                    href={dashboardHref}
+                    onClick={() => setMobileOpen(false)}
+                    className="group flex items-center justify-between border-b border-border py-4"
+                  >
+                    <span className="font-display text-3xl font-medium tracking-tight text-primary">
+                      Dashboard
+                    </span>
+                    <ArrowUpRight className="h-5 w-5 text-primary" />
+                  </Link>
+                )}
+              </div>
+
+              <p className="eyebrow-muted mt-10 mb-4">Oils</p>
+              <div className="flex flex-wrap gap-2">
+                {MOBILE_CATEGORIES.map((c) => (
+                  <Link
+                    key={c.label}
+                    href={c.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
+                  >
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-10 flex flex-col gap-3">
                 {user ? (
-                  <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-center text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors">
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileOpen(false);
+                    }}
+                    className="w-full rounded-full border border-border py-3.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-destructive"
+                  >
                     Sign out
                   </button>
                 ) : (
-                  <>
-                    <Link href="/login" className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-center border border-[#E9D8A6] hover:border-[#D97706] hover:text-primary transition-colors" onClick={() => setMobileOpen(false)}>
-                      Sign In
+                  <div className="flex gap-3">
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex-1 rounded-full border border-border py-3.5 text-center text-sm font-semibold transition-colors hover:border-primary/50 hover:text-primary"
+                    >
+                      Sign in
                     </Link>
-                    <Link href="/products" className="flex-1 py-2.5 rounded-xl text-sm font-bold text-center bg-primary text-white" onClick={() => setMobileOpen(false)}>
-                      Shop Now
+                    <Link
+                      href="/products"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex-1 rounded-full bg-secondary py-3.5 text-center text-sm font-bold text-secondary-foreground"
+                    >
+                      Shop now
                     </Link>
-                  </>
+                  </div>
                 )}
+                <a
+                  href="https://wa.me/917305212759"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-full border border-[#25D366]/40 py-3.5 text-sm font-semibold text-[#1fa855] transition-colors hover:bg-[#25D366]/10"
+                >
+                  <Phone className="h-4 w-4" /> WhatsApp us
+                </a>
               </div>
-              {/* WhatsApp quick contact */}
-              <a
-                href="https://wa.me/917305212759"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-[#25D366] border border-[#25D366]/30 hover:bg-[#25D366]/8 transition-colors"
-              >
-                <Phone className="h-4 w-4" /> WhatsApp Us
-              </a>
             </nav>
           </motion.div>
         )}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/server/auth";
 import { adminService } from "@/server/services/admin.service";
+import { OrderNotFoundError, InvalidStatusTransitionError } from "@/server/services/order.service";
 import { UpdateOrderStatusSchema } from "@/server/validations";
 import { Role } from "@prisma/client";
 
@@ -23,6 +24,8 @@ export async function PATCH(
   } catch (error: any) {
     if (error.message === "UNAUTHORIZED") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (error.message === "FORBIDDEN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (error instanceof OrderNotFoundError) return NextResponse.json({ error: error.message }, { status: 404 });
+    if (error instanceof InvalidStatusTransitionError) return NextResponse.json({ error: error.message }, { status: 400 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

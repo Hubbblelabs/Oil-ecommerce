@@ -14,7 +14,7 @@ const productSummarySelect = {
   stock: true,
   image: true,
   category: true,
-  sellerId: true,
+  createdByAdminId: true,
 } as const;
 
 const productDetailSelect = {
@@ -65,33 +65,6 @@ export const productRepository = {
     };
   },
 
-  async findBySeller(
-    sellerId: string,
-    options: PaginationOptions
-  ): Promise<PaginatedResult<ProductDetail>> {
-    const { page, limit } = options;
-    const skip = (page - 1) * limit;
-    const where = { sellerId };
-
-    const [data, total] = await Promise.all([
-      db.product.findMany({
-        where,
-        select: productDetailSelect,
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit,
-      }),
-      db.product.count({ where }),
-    ]);
-
-    return { 
-      data: data.map(mapProduct), 
-      total, 
-      page, 
-      totalPages: Math.ceil(total / limit) 
-    };
-  },
-
   async findById(id: string): Promise<ProductDetail | null> {
     const product = await db.product.findUnique({
       where: { id, isActive: true },
@@ -123,7 +96,7 @@ export const productRepository = {
     image?: string;
     description?: string;
     category: Category;
-    sellerId: string;
+    createdByAdminId: string;
   }): Promise<ProductDetail> {
     const product = await db.product.create({
       data: {
@@ -133,7 +106,7 @@ export const productRepository = {
         image: data.image ?? null,
         description: data.description ?? null,
         category: data.category,
-        sellerId: data.sellerId,
+        createdByAdminId: data.createdByAdminId,
       },
       select: productDetailSelect,
     });
@@ -169,9 +142,9 @@ export const productRepository = {
     return mapProduct(product);
   },
 
-  async getLowStock(sellerId: string, threshold = 10) {
+  async getLowStock(threshold = 10) {
     return db.product.findMany({
-      where: { sellerId, stock: { lte: threshold }, isActive: true },
+      where: { stock: { lte: threshold }, isActive: true },
       select: { id: true, name: true, stock: true },
       orderBy: { stock: 'asc' },
       take: 10,

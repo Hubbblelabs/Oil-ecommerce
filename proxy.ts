@@ -8,7 +8,7 @@ const SECRET = new TextEncoder().encode(
 type SessionPayload = {
   id: string;
   email: string;
-  role: "ADMIN" | "SELLER" | "USER";
+  role: "ADMIN" | "USER";
 };
 
 async function getSession(request: NextRequest): Promise<SessionPayload | null> {
@@ -39,20 +39,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // ── Seller routes ─────────────────────────────────────────────────────────
-  if (pathname.startsWith("/seller")) {
-    const session = await getSession(request);
-    if (!session) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/login";
-      url.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(url);
-    }
-    if (session.role !== "SELLER" && session.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
   // ── Protected user routes ─────────────────────────────────────────────────
   if (pathname.startsWith("/checkout") || pathname.startsWith("/orders")) {
     const session = await getSession(request);
@@ -70,7 +56,6 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*",
-    "/seller/:path*",
     "/checkout/:path*",
     "/orders/:path*",
   ],

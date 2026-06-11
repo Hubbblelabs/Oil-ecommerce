@@ -20,7 +20,6 @@ async function main() {
   await prisma.user.deleteMany();
 
   const adminPassword = await bcrypt.hash("Admin@123", SALT_ROUNDS);
-  const sellerPassword = await bcrypt.hash("Seller@123", SALT_ROUNDS);
   const userPassword = await bcrypt.hash("User@1234", SALT_ROUNDS);
 
   // 👤 Users
@@ -30,24 +29,6 @@ async function main() {
       name: "Admin",
       password: adminPassword,
       role: Role.ADMIN,
-    },
-  });
-
-  const seller1 = await prisma.user.create({
-    data: {
-      email: "seller1@oilmart.in",
-      name: "Ravi Oils",
-      password: sellerPassword,
-      role: Role.SELLER,
-    },
-  });
-
-  const seller2 = await prisma.user.create({
-    data: {
-      email: "seller2@oilmart.in",
-      name: "Annapurna Traders",
-      password: sellerPassword,
-      role: Role.SELLER,
     },
   });
 
@@ -83,16 +64,13 @@ async function main() {
     { name: "Bulk Soybean Oil 15L", price: 1700, stock: 60, category: Category.INDUSTRIAL },
   ];
 
-  // 🔥 Assign sellers
   const createdProducts = [];
 
   for (let i = 0; i < products.length; i++) {
-    const seller = i % 2 === 0 ? seller1 : seller2;
-
     const product = await prisma.product.create({
       data: {
         ...products[i],
-        sellerId: seller.id,
+        createdByAdminId: admin.id,
       },
     });
 
@@ -148,10 +126,8 @@ async function main() {
   console.log("✅ Sample orders created");
   console.log("");
   console.log("Test credentials:");
-  console.log("  admin@oilmart.in   / Admin@123");
-  console.log("  seller1@oilmart.in / Seller@123");
-  console.log("  seller2@oilmart.in / Seller@123");
-  console.log("  user@oilmart.in    / User@1234");
+  console.log("  admin@oilmart.in / Admin@123");
+  console.log("  user@oilmart.in  / User@1234");
 }
 
 main()

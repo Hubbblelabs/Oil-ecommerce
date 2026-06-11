@@ -45,7 +45,16 @@ export const UpdateOrderStatusSchema = z.object({
 });
 
 export const UpdateUserSchema = z.object({
-  role: z.enum(["ADMIN", "SELLER", "USER"]).optional(),
+  role: z.enum(["ADMIN", "USER"]).optional(),
   isActive: z.boolean().optional(),
+});
+
+export const ForgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const ResetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 

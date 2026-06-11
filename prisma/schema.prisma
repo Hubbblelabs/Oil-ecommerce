@@ -13,7 +13,6 @@ datasource db {
 
 enum Role {
   ADMIN
-  SELLER
   USER
 }
 
@@ -42,9 +41,23 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orders   Order[]
-  products Product[]
-  reviews  Review[]
+  orders              Order[]
+  productsCreated     Product[]
+  reviews             Review[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Product {
@@ -55,18 +68,18 @@ model Product {
   image       String?
   description String?  @db.Text
   category    Category
-  sellerId    String
+  createdByAdminId String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  seller     User        @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  createdByAdmin User        @relation(fields: [createdByAdminId], references: [id], onDelete: Restrict)
   orderItems OrderItem[]
   reviews    Review[]
 
   @@index([isActive, createdAt(sort: Desc)])
   @@index([isActive, category, createdAt(sort: Desc)])
-  @@index([sellerId, isActive, createdAt(sort: Desc)])
+  @@index([createdByAdminId, isActive, createdAt(sort: Desc)])
   @@index([name])
 }
 

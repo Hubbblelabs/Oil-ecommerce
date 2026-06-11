@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { orderService } from '@/server/services/order.service';
 import { CreateOrderSchema } from '@/server/validations';
 import { requireAuth } from '@/server/auth';
+import { sendMailInBackground, orderConfirmationEmail } from '@/lib/mail';
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,6 +41,10 @@ export async function POST(request: NextRequest) {
     }
 
     const order = await orderService.createOrder(user.id, result.data);
+
+    const { subject, html } = orderConfirmationEmail(order.id, order.totalAmount);
+    sendMailInBackground({ to: user.email, subject, html });
+
     return NextResponse.json(order, { status: 201 });
   } catch (error: any) {
     if (error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

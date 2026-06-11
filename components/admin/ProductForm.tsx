@@ -202,6 +202,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
                   className="rounded-xl flex-1"
                 />
                 
+                {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME && (
                 <CldUploadWidget
                   uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "oil_ecommerce"}
                   onSuccess={(result) => {
@@ -229,6 +230,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
                     );
                   }}
                 </CldUploadWidget>
+                )}
               </div>
             </div>
           </div>

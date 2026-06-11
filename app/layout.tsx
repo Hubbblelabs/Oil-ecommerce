@@ -1,14 +1,23 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Lora, Geist_Mono } from "next/font/google";
+import { Fraunces, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { CartProvider } from "@/components/providers/CartProvider";
 
-const lora = Lora({
-  weight: ["400", "500", "600", "700"],
+// Display serif for headlines — optical sizing gives it an editorial voice
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-sans", // using font-sans variable so it applies globally automatically
+  variable: "--font-heading",
+  display: "swap",
+  axes: ["opsz", "SOFT", "WONK"],
+  style: ["normal", "italic"],
+});
+
+// Clean humanist sans for body and UI
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -42,7 +51,8 @@ export default function RootLayout({
       lang="en"
       className={cn(
         "h-full antialiased",
-        lora.variable,
+        fraunces.variable,
+        manrope.variable,
         geistMono.variable,
       )}
     >
