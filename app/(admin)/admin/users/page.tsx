@@ -46,7 +46,6 @@ export default function AdminUsersPage() {
 
   const ROLE_COLORS: Record<string, string> = {
     ADMIN: "bg-violet-100 text-violet-800",
-    SELLER: "bg-amber-100 text-amber-800",
     USER: "bg-blue-100 text-blue-800",
   };
 
@@ -105,15 +104,15 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
-                      {user.role !== "SELLER" && (
+                      {user.role !== "ADMIN" && (
                         <Button
                           size="sm"
                           variant="outline"
                           className="h-7 text-xs"
                           disabled={isPending}
-                          onClick={() => handleUpdate(user.id, { role: "SELLER" })}
+                          onClick={() => handleUpdate(user.id, { role: "ADMIN" })}
                         >
-                          Make Seller
+                          Make Admin
                         </Button>
                       )}
                       {user.role !== "USER" && (

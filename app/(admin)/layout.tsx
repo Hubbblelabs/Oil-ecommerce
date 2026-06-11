@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 
 import { FEATURES } from "@/lib/features";
-import { FEATURES } from "@/lib/features";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
@@ -30,7 +29,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/discounts", label: "Discount Codes", icon: Tag },
     { href: "/features", label: "Feature Flags", icon: Settings },
   ];
-  if (!user || user.role !== "ADMIN") redirect("/login");
 
   return (
     <div className="flex h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden">

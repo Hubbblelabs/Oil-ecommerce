@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/server/validations";
 import { createSession } from "@/server/auth";
+import { sendMailInBackground, welcomeEmail } from "@/lib/mail";
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +35,9 @@ export async function POST(request: NextRequest) {
     });
 
     await createSession({ id: user.id, email: user.email, role: user.role });
+
+    const { subject, html } = welcomeEmail(user.name);
+    sendMailInBackground({ to: user.email, subject, html });
 
     return NextResponse.json(
       { id: user.id, email: user.email, name: user.name, role: user.role },

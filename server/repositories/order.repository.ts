@@ -51,16 +51,13 @@ function toOrderSummary(raw: any): OrderSummary {
 
 export const orderRepository = {
   async findMany(
-    options: PaginationOptions & { userId?: string; sellerId?: string }
+    options: PaginationOptions & { userId?: string }
   ): Promise<PaginatedResult<OrderSummary>> {
-    const { page, limit, userId, sellerId } = options;
+    const { page, limit, userId } = options;
     const skip = (page - 1) * limit;
 
     const where: Prisma.OrderWhereInput = {
       ...(userId ? { userId } : {}),
-      ...(sellerId
-        ? { items: { some: { product: { sellerId } } } }
-        : {}),
     };
 
     const [rawOrders, total] = await Promise.all([

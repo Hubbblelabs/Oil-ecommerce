@@ -1,82 +1,97 @@
 "use client";
 import { motion } from "framer-motion";
-import { Leaf, ShieldCheck, Heart, CheckCircle2, Truck, Award } from "lucide-react";
+import { Leaf, ShieldCheck, Heart, Truck, Award } from "lucide-react";
 
-const TOP_FEATURES = [
+const FEATURES = [
   {
+    index: "01",
     icon: Leaf,
-    title: "Traditional Chekku Pressed",
-    body: "Our wooden chekku (cold press) operates at low temperatures, preserving every drop of natural goodness in the seed.",
+    title: "Traditional chekku pressed",
+    body: "Our wooden chekku turns slowly at low temperature, preserving every drop of natural goodness locked inside the seed.",
   },
   {
+    index: "02",
     icon: ShieldCheck,
-    title: "Zero Chemicals",
-    body: "No hexane, no bleaching, no deodorising. What goes in is seeds. What comes out is pure oil.",
+    title: "Zero chemicals",
+    body: "No hexane, no bleaching, no deodorising. What goes in is seeds. What comes out is pure oil — nothing else.",
   },
   {
+    index: "03",
     icon: Heart,
-    title: "Rich Nutrients Retained",
-    body: "Full Vitamin E, antioxidants, phytosterols and healthy fats — exactly as nature intended.",
+    title: "Nutrients fully retained",
+    body: "Full Vitamin E, antioxidants, phytosterols and healthy fats — exactly as nature intended them to reach your plate.",
   },
 ];
 
-const BOTTOM_HIGHLIGHTS = [
+const HIGHLIGHTS = [
   { title: "Healthy & Delicious", icon: Heart },
   { title: "Safe & Reliable", icon: ShieldCheck },
   { title: "Fast Delivery", icon: Truck },
   { title: "Premium Quality", icon: Award },
 ];
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export function WhyChooseUsSection() {
   return (
-    <section className="py-24 bg-white dark:bg-black relative overflow-hidden">
+    <section className="relative overflow-hidden bg-paper-deep py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight mb-4">
-            Why families trust <span className="text-primary">our oil</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Experience the pure taste of tradition with our authentic wood-pressed oils.
+        <div className="mb-16 max-w-2xl">
+          <p className="eyebrow mb-4 flex items-center gap-3">
+            <span className="font-display italic text-muted-foreground">02</span>
+            <span className="inline-block h-px w-10 bg-primary" />
+            Why Us
           </p>
+          <h2 className="text-display-hero text-4xl text-foreground sm:text-5xl">
+            Why families trust
+            <br />
+            <em className="text-display-italic text-primary">our oil</em>
+          </h2>
         </div>
 
-        {/* Top 3 Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {TOP_FEATURES.map(({ icon: Icon, title, body }, i) => (
+        {/* Feature rows */}
+        <div className="border-t border-border">
+          {FEATURES.map(({ index, icon: Icon, title, body }, i) => (
             <motion.div
               key={title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group bg-card hover:bg-primary/5 border border-border/60 hover:border-primary/30 rounded-3xl p-8 transition-all duration-300 shadow-sm hover:shadow-md"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.1, duration: 0.6, ease: EASE }}
+              className="group grid grid-cols-12 items-start gap-4 border-b border-border py-9 transition-colors duration-300 hover:bg-card/60 sm:gap-8"
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-110 transition-transform">
-                <Icon className="h-7 w-7 text-primary" />
+              <span className="label-xs col-span-2 pt-2 sm:col-span-1">{index}</span>
+              <div className="col-span-10 sm:col-span-4 lg:col-span-4 flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="font-display text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+                  {title}
+                </h3>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">{title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{body}</p>
+              <p className="col-span-10 col-start-3 text-sm leading-relaxed text-muted-foreground sm:col-span-7 sm:col-start-6 sm:text-base">
+                {body}
+              </p>
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom Highlights Row */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+        {/* Highlights strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-4 md:gap-8 items-center bg-zinc-50 dark:bg-zinc-900/50 py-8 px-6 rounded-3xl border border-border/50"
+          transition={{ duration: 0.6 }}
+          className="mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-5"
         >
-          {BOTTOM_HIGHLIGHTS.map(({ title, icon: Icon }) => (
-            <div key={title} className="flex items-center gap-2">
-              <Icon className="h-5 w-5 text-primary" />
-              <span className="font-semibold text-foreground">{title}</span>
+          {HIGHLIGHTS.map(({ title, icon: Icon }) => (
+            <div key={title} className="flex items-center gap-2.5">
+              <Icon className="h-4 w-4 text-primary" />
+              <span className="label-xs text-foreground/70">{title}</span>
             </div>
           ))}
         </motion.div>
-        
       </div>
     </section>
   );

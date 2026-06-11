@@ -55,7 +55,7 @@ export default function FeaturesReportPage() {
       id: "adminUsers",
       label: "Admin User Directory",
       env: "NEXT_PUBLIC_ENABLE_ADMIN_USERS",
-      description: "Controls the user registry view. Enables admin role escalations (e.g. promoting accounts to SELLER or USER) and absolute active status toggling.",
+      description: "Controls the user registry view. Enables admin role escalations (e.g. promoting accounts to ADMIN or USER) and absolute active status toggling.",
       role: "Admin Security",
       isEnabled: FEATURES.adminUsers,
     },

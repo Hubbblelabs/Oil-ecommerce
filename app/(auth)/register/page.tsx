@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,32 +53,38 @@ export default function RegisterPage() {
 
   return (
     <FadeIn className="w-full max-w-[420px] mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Create an account</h1>
+      <div className="mb-10">
+        <p className="eyebrow mb-4 flex items-center gap-3">
+          <span className="inline-block h-px w-10 bg-primary" />
+          Account
+        </p>
+        <h1 className="text-display-hero mb-3 text-4xl text-foreground">
+          Join the <em className="text-display-italic text-primary">family</em>
+        </h1>
         <p className="text-muted-foreground text-sm">
           Join Shri Sameya Village to track orders and save your favorites.
         </p>
       </div>
 
-      {/* Tabs Design */}
-      <div className="flex p-1 bg-muted/50 rounded-xl mb-8 border border-border/50">
-        <Link href="/login" className="flex-1 text-muted-foreground hover:text-foreground rounded-lg py-2 text-sm font-medium text-center transition-all">
+      {/* Sign in / Register toggle */}
+      <div className="mb-8 flex rounded-full border border-border bg-muted/40 p-1">
+        <Link href="/login" className="flex-1 rounded-full py-2.5 text-center text-sm font-medium text-muted-foreground transition-all hover:text-foreground">
           Sign In
         </Link>
-        <Link href="/register" className="flex-1 bg-background text-foreground shadow-sm rounded-lg py-2 text-sm font-semibold text-center transition-all">
+        <Link href="/register" className="flex-1 rounded-full bg-card py-2.5 text-center text-sm font-semibold text-foreground shadow-premium transition-all">
           Register
         </Link>
       </div>
 
       {error && (
-        <div className="mb-6 rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm font-medium text-destructive" role="alert">
+        <div className="mb-6 rounded-2xl border border-destructive/25 bg-destructive/10 p-4 text-sm font-medium text-destructive" role="alert">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-semibold">Full name</Label>
+          <Label htmlFor="name" className="label-xs text-foreground">Full name</Label>
           <Input
             id="name"
             type="text"
@@ -89,12 +95,12 @@ export default function RegisterPage() {
             required
             minLength={2}
             disabled={isPending}
-            className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 transition-all"
+            className="input-premium h-12 rounded-xl px-4"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-semibold">Email</Label>
+          <Label htmlFor="email" className="label-xs text-foreground">Email</Label>
           <Input
             id="email"
             type="email"
@@ -104,12 +110,12 @@ export default function RegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={isPending}
-            className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 transition-all"
+            className="input-premium h-12 rounded-xl px-4"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
+          <Label htmlFor="password" className="label-xs text-foreground">Password</Label>
           <div className="relative">
             <Input
               id="password"
@@ -121,7 +127,7 @@ export default function RegisterPage() {
               required
               minLength={8}
               disabled={isPending}
-              className="h-12 bg-muted/30 border-transparent focus:border-amber-500/50 focus:bg-background focus:ring-4 focus:ring-amber-500/10 rounded-xl px-4 pr-12 transition-all"
+              className="input-premium h-12 rounded-xl px-4 pr-12"
             />
             <button
               type="button"
@@ -137,10 +143,17 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 gradient-amber text-white border-0 btn-shine rounded-xl font-semibold text-base shadow-amber-glow hover:shadow-amber-glow-lg transition-all"
+          className="btn-shine group h-13 w-full rounded-full bg-secondary py-4 text-sm font-bold text-secondary-foreground transition-transform duration-300 hover:scale-[1.02] hover:bg-secondary active:scale-[0.99]"
           disabled={isPending}
         >
-          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up for Shri Sameya Village"}
+          {isPending ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <>
+              Create your account
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </>
+          )}
         </Button>
         
         <p className="text-center text-xs text-muted-foreground pt-4">

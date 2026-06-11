@@ -9,7 +9,7 @@ export async function PATCH(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await requireRole([Role.ADMIN]);
+    await requireRole([Role.ADMIN]);
     const { id } = await ctx.params;
     const body = await request.json();
     const parsed = UpdateProductSchema.safeParse(body);
@@ -18,7 +18,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid data", details: parsed.error.flatten() }, { status: 400 });
     }
 
-    const product = await productService.updateProduct(id, admin.id, true, parsed.data);
+    const product = await productService.updateProduct(id, parsed.data);
     return NextResponse.json(product);
   } catch (error: any) {
     if (error.message === "UNAUTHORIZED") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,9 +32,9 @@ export async function DELETE(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await requireRole([Role.ADMIN]);
+    await requireRole([Role.ADMIN]);
     const { id } = await ctx.params;
-    await productService.deleteProduct(id, admin.id, true);
+    await productService.deleteProduct(id);
     return NextResponse.json({ ok: true });
   } catch (error: any) {
     if (error.message === "UNAUTHORIZED") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

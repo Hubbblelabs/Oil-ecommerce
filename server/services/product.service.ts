@@ -8,14 +8,9 @@ import { Category } from "@prisma/client";
 
 const DEFAULT_PAGE_LIMIT = 12;
 
-export class ProductAccessError extends Error {
-  constructor() {
-    super("You do not have permission to modify this product.");
-    this.name = "ProductAccessError";
-  }
-}
-
 export const productService = {
+  // ── Public operations ─────────────────────────────────────────────────────
+
   async getProducts(
     page = 1,
     limit = DEFAULT_PAGE_LIMIT,
@@ -34,69 +29,7 @@ export const productService = {
     return productRepository.findById(id);
   },
 
-  // ── Seller operations ───────────────────────────────────────────────────
-
-  async getSellerProducts(
-    sellerId: string,
-    page = 1,
-    limit = DEFAULT_PAGE_LIMIT
-  ): Promise<PaginatedResult<ProductDetail>> {
-    return productRepository.findBySeller(sellerId, {
-      page: Math.max(1, page),
-      limit: Math.min(limit, 100),
-    });
-  },
-
-  async createProduct(
-    sellerId: string,
-    data: {
-      name: string;
-      price: number;
-      stock: number;
-      image?: string;
-      description?: string;
-      category: Category;
-    }
-  ): Promise<ProductDetail> {
-    return productRepository.create({ ...data, sellerId });
-  },
-
-  async updateProduct(
-    id: string,
-    sellerId: string,
-    isAdmin: boolean,
-    data: Partial<{
-      name: string;
-      price: number;
-      stock: number;
-      image: string | null;
-      description: string | null;
-      category: Category;
-      isActive: boolean;
-    }>
-  ): Promise<ProductDetail> {
-    const product = await productRepository.findByIdAny(id);
-    if (!product) throw new Error("Product not found.");
-    if (!isAdmin && product.sellerId !== sellerId) throw new ProductAccessError();
-    return productRepository.update(id, data);
-  },
-
-  async deleteProduct(
-    id: string,
-    sellerId: string,
-    isAdmin: boolean
-  ): Promise<ProductDetail> {
-    const product = await productRepository.findByIdAny(id);
-    if (!product) throw new Error("Product not found.");
-    if (!isAdmin && product.sellerId !== sellerId) throw new ProductAccessError();
-    return productRepository.softDelete(id);
-  },
-
-  async getLowStockAlerts(sellerId: string) {
-    return productRepository.getLowStock(sellerId);
-  },
-
-  // ── Admin operations ────────────────────────────────────────────────────
+  // ── Admin operations (caller must enforce ADMIN role) ────────────────────
 
   async getAllProducts(
     page = 1,
@@ -110,5 +43,45 @@ export const productService = {
       search,
     });
   },
-};
 
+  async createProduct(
+    adminId: string,
+    data: {
+      name: string;
+      price: number;
+      stock: number;
+      image?: string;
+      description?: string;
+      category: Category;
+    }
+  ): Promise<ProductDetail> {
+    return productRepository.create({ ...data, createdByAdminId: adminId });
+  },
+
+  async updateProduct(
+    id: string,
+    data: Partial<{
+      name: string;
+      price: number;
+      stock: number;
+      image: string | null;
+      description: string | null;
+      category: Category;
+      isActive: boolean;
+    }>
+  ): Promise<ProductDetail> {
+    const product = await productRepository.findByIdAny(id);
+    if (!product) throw new Error("Product not found.");
+    return productRepository.update(id, data);
+  },
+
+  async deleteProduct(id: string): Promise<ProductDetail> {
+    const product = await productRepository.findByIdAny(id);
+    if (!product) throw new Error("Product not found.");
+    return productRepository.softDelete(id);
+  },
+
+  async getLowStockAlerts() {
+    return productRepository.getLowStock();
+  },
+};

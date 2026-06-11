@@ -1,76 +1,80 @@
-import { Droplets, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+
+const POINTS = [
+  "Zero artificial additives or preservatives",
+  "Access to exclusive rare collections",
+  "Track orders & easy reordering",
+];
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-background selection:bg-amber-500/30">
-      {/* Left Column: Brand Visuals (Desktop Only) */}
-      <div className="hidden lg:flex lg:w-[45%] relative bg-zinc-950 flex-col justify-between overflow-hidden p-12">
-        <div className="absolute inset-0 opacity-40 mix-blend-overlay">
-           <div className="absolute inset-0 gradient-amber" />
-           <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/noise-lines.png')] opacity-20 hidden"></div>
-        </div>
+    <div className="flex min-h-screen bg-background">
+      {/* Left — editorial brand panel */}
+      <div className="grain relative hidden lg:flex lg:w-[45%] flex-col justify-between overflow-hidden bg-secondary p-12 text-secondary-foreground">
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute -right-24 top-1/4 h-96 w-96 rounded-full bg-primary/15 blur-[130px]" />
 
-        <div className="relative z-10 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-amber-700 text-white shadow-[0_0_15px_rgba(180,83,9,0.4)] group-hover:scale-105 transition-transform border border-amber-600/50">
-              <Droplets className="h-5 w-5 fill-amber-100/50 text-amber-100" />
-            </div>
-            <div className="flex flex-col justify-center">
-              <span className="font-serif text-2xl font-bold tracking-tight text-white leading-none">
-                Shri Sameya Village
-              </span>
-              <span className="text-xs font-semibold tracking-[0.2em] text-amber-500/80 uppercase mt-1">
-                Wood Pressed Oils
-              </span>
-            </div>
+        <div className="relative z-10">
+          <Link href="/" className="group inline-flex flex-col leading-none">
+            <span className="font-display text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary">
+              Shri Sameya
+            </span>
+            <span className="label-tiny mt-1 text-primary">Village · Wood Pressed</span>
           </Link>
         </div>
 
-        <div className="relative z-10 max-w-md mt-auto mb-10">
-          <p className="inline-block py-1 px-3 mb-6 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
-            Premium Wellness
+        <div className="relative z-10 mb-8 max-w-md">
+          <p className="eyebrow mb-6 flex items-center gap-3">
+            <span className="inline-block h-px w-10 bg-primary" />
+            Est. 1985
           </p>
-          <h2 className="text-4xl font-extrabold text-white leading-tight mb-6">
-            Unlock the power of <span className="text-gradient-amber">pure nature.</span>
+          <h2 className="text-display-hero mb-7 text-5xl xl:text-6xl">
+            The pure taste
+            <br />
+            of <em className="text-display-italic text-primary">tradition.</em>
           </h2>
-          <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-            Join thousands of culinary enthusiasts and health-conscious individuals who trust Shri Sameya Village for 100% pure, wood-pressed premium oils.
+          <p className="mb-10 text-base leading-relaxed opacity-60">
+            Join thousands of families who trust Shri Sameya Village for 100% pure,
+            wood-pressed oils — straight from the chekku to your kitchen.
           </p>
-          
-          <div className="space-y-4">
-             <div className="flex items-center gap-3 text-zinc-300">
-                <CheckCircle2 className="h-5 w-5 text-amber-500" />
-                <span>Zero artificial additives or preservatives</span>
-             </div>
-             <div className="flex items-center gap-3 text-zinc-300">
-                <CheckCircle2 className="h-5 w-5 text-amber-500" />
-                <span>Access to exclusive rare collections</span>
-             </div>
-             <div className="flex items-center gap-3 text-zinc-300">
-                <CheckCircle2 className="h-5 w-5 text-amber-500" />
-                <span>Track orders & easy reordering</span>
-             </div>
-          </div>
+
+          <ul className="space-y-4">
+            {POINTS.map((point) => (
+              <li key={point} className="flex items-center gap-3 text-sm font-medium opacity-85">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <p className="label-tiny relative z-10 opacity-40">
+          © 2026 Shri Sameya Village Wood Pressed Oils
+        </p>
       </div>
 
-      {/* Right Column: Auth Content */}
-      <div className="flex w-full lg:w-[55%] flex-col justify-center px-6 py-12 sm:px-12 lg:px-24 xl:px-32 relative">
-        <div className="lg:hidden flex justify-center mb-10">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-amber-700 text-white shadow-[0_0_15px_rgba(180,83,9,0.4)] border border-amber-600/50">
-              <Droplets className="h-5 w-5 fill-amber-100/50 text-amber-100" />
-            </div>
-            <div className="flex flex-col justify-center">
-              <span className="font-serif text-xl font-bold tracking-tight text-foreground leading-none">
-                Shri Sameya Village
-              </span>
-            </div>
+      {/* Right — form column */}
+      <div className="relative flex w-full flex-col justify-center px-6 py-12 sm:px-12 lg:w-[55%] lg:px-24 xl:px-32">
+        {/* Back to shop */}
+        <Link
+          href="/"
+          className="group absolute left-6 top-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:left-12 lg:left-24"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+          Back to shop
+        </Link>
+
+        {/* Mobile brand */}
+        <div className="mb-10 flex justify-center lg:hidden">
+          <Link href="/" className="flex flex-col items-center leading-none">
+            <span className="font-display text-2xl font-semibold tracking-tight text-foreground">
+              Shri Sameya
+            </span>
+            <span className="label-tiny mt-1 text-primary">Village · Wood Pressed</span>
           </Link>
         </div>
-        
+
         {children}
       </div>
     </div>

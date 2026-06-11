@@ -1,123 +1,113 @@
 "use client";
 import { motion } from "framer-motion";
-import { Phone, MapPin, MessageCircle, ArrowRight, Clock } from "lucide-react";
+import { Phone, MapPin, MessageCircle, Clock, ArrowUpRight } from "lucide-react";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function WhatsAppCTASection() {
-  const whatsappUrl = "https://wa.me/917305212759?text=Hi%2C%20I%27m%20interested%20in%20ordering%20Shri%20Sameya%20Village%20wood%20pressed%20oils.";
+  const whatsappUrl =
+    "https://wa.me/917305212759?text=Hi%2C%20I%27m%20interested%20in%20ordering%20Shri%20Sameya%20Village%20wood%20pressed%20oils.";
 
   return (
-    <section className="py-20 bg-white dark:bg-zinc-900 overflow-hidden">
+    <section className="bg-background pb-24 pt-4 sm:pb-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative bg-gradient-to-br from-[#3B2416] via-[#4a2e1c] to-[#2a180e] rounded-3xl overflow-hidden"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="grain relative overflow-hidden rounded-[2.5rem] bg-secondary text-secondary-foreground"
         >
-          {/* Decorative blobs */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#D97706]/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D97706]/10 rounded-full blur-[80px] pointer-events-none" />
+          {/* Ambient glows */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full bg-primary/20 blur-[120px]" />
+          <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-primary/10 blur-[90px]" />
 
-          {/* Decorative pattern */}
-          <div className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
+          <div className="relative z-10 grid grid-cols-1 gap-14 px-8 py-16 sm:px-12 sm:py-20 lg:grid-cols-2 lg:gap-12">
+            {/* Left — CTA */}
+            <div>
+              <p className="eyebrow mb-6 flex items-center gap-3 text-[#25D366]">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#25D366]" />
+                </span>
+                We&apos;re online now
+              </p>
 
-          <div className="relative z-10 px-8 py-16 sm:px-12 sm:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <h2 className="text-display-hero mb-6 text-4xl sm:text-5xl">
+                Ready to switch to
+                <br />
+                <em className="text-display-italic text-primary">healthier cooking?</em>
+              </h2>
 
-              {/* Left: CTA Text */}
-              <div>
-                <div className="inline-flex items-center gap-2 bg-[#25D366]/20 border border-[#25D366]/30 rounded-full px-4 py-1.5 mb-6">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                  <span className="text-[#25D366] text-xs font-bold tracking-widest uppercase">We&apos;re Online Now</span>
-                </div>
+              <p className="mb-10 max-w-md text-sm leading-relaxed opacity-65 sm:text-base">
+                Order directly from us on WhatsApp. Get the freshest batch, custom
+                quantities, and answers to all your questions — all in one chat.
+              </p>
 
-                <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-                  Ready to Switch to
-                  <span className="block text-[#D97706]">Healthier Cooking?</span>
-                </h2>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-shine group inline-flex items-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-white transition-transform duration-300 hover:scale-[1.03] active:scale-[0.98]"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat on WhatsApp
+                </a>
+                <a
+                  href="tel:+917305212759"
+                  className="inline-flex items-center gap-3 rounded-full border border-secondary-foreground/25 px-8 py-4 text-sm font-semibold transition-colors hover:border-secondary-foreground/60"
+                >
+                  <Phone className="h-4 w-4" />
+                  Call us now
+                </a>
+              </div>
+            </div>
 
-                <p className="text-white/65 text-base leading-relaxed mb-8 max-w-lg">
-                  Order directly from us on WhatsApp. Get the freshest batch, custom quantities,
-                  and answers to all your questions — all in one chat.
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-wrap gap-4">
-                  <motion.a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1fb85a] text-white font-bold px-7 py-3.5 rounded-xl text-base transition-all shadow-[0_8px_24px_rgba(37,211,102,0.35)] hover:shadow-[0_8px_36px_rgba(37,211,102,0.5)]"
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                    Chat on WhatsApp
-                  </motion.a>
-
-                  <motion.a
+            {/* Right — contact details, editorial rows */}
+            <div className="flex flex-col divide-y divide-secondary-foreground/10 border-y border-secondary-foreground/10 lg:self-center">
+              <div className="flex items-center gap-5 py-6">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-secondary-foreground/20 text-primary">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="label-tiny opacity-50">Phone / WhatsApp</p>
+                  <a
                     href="tel:+917305212759"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl text-base border border-white/20 transition-all backdrop-blur-sm"
+                    className="font-display text-xl font-semibold tracking-tight transition-colors hover:text-primary"
                   >
-                    <Phone className="h-5 w-5" />
-                    Call Us Now
-                  </motion.a>
+                    +91 73052 12759
+                  </a>
                 </div>
               </div>
 
-              {/* Right: Info cards */}
-              <div className="flex flex-col gap-4">
-                {/* Phone */}
-                <div className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#D97706]/20 border border-[#D97706]/30">
-                    <Phone className="h-6 w-6 text-[#D97706]" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-0.5">Phone / WhatsApp</p>
-                    <a href="tel:+917305212759" className="text-white text-xl font-bold hover:text-[#D97706] transition-colors">
-                      +91 73052 12759
-                    </a>
-                  </div>
+              <a
+                href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-5 py-6"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-secondary-foreground/20 text-primary transition-colors group-hover:border-primary">
+                  <MapPin className="h-5 w-5" />
+                </span>
+                <div className="flex-1">
+                  <p className="label-tiny opacity-50">Location</p>
+                  <p className="text-sm font-semibold leading-snug">
+                    Coimbatore, Ramanathapuram
+                    <span className="block font-normal opacity-60">Trichy Road, Tamil Nadu</span>
+                  </p>
                 </div>
+                <ArrowUpRight className="h-4 w-4 opacity-40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary group-hover:opacity-100" />
+              </a>
 
-                {/* Location */}
-                <a
-                  href="https://www.google.com/maps/place/Shri+Sameya+Village+Wood+Cold+Pressed+oil+Mill/@10.9977733,77.0148808,196m/data=!3m1!1e3!4m6!3m5!1s0x3ba8578b603c1543:0x643e8cbfc32ce7ab!8m2!3d10.9980135!4d77.0149197!16s%2Fg%2F11nhh9vc0q!5m1!1e4?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm hover:bg-white/15 hover:border-white/20 transition-all group"
-                >
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#D97706]/20 border border-[#D97706]/30 group-hover:bg-[#D97706]/30 transition-colors">
-                    <MapPin className="h-6 w-6 text-[#D97706]" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-0.5">Location</p>
-                    <p className="text-white font-semibold text-sm leading-snug">
-                      Coimbatore, Ramanathapuram<br />
-                      <span className="text-white/60 font-normal">Trichy Road, Tamil Nadu</span>
-                    </p>
-                    <p className="text-[#D97706] text-[10px] font-bold uppercase tracking-wider mt-1 group-hover:underline">Open Map →</p>
-                  </div>
-                </a>
-
-                {/* Hours */}
-                <div className="flex items-center gap-5 bg-white/8 border border-white/12 rounded-2xl p-5 backdrop-blur-sm">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#D97706]/20 border border-[#D97706]/30">
-                    <Clock className="h-6 w-6 text-[#D97706]" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-0.5">Order Timings</p>
-                    <p className="text-white font-semibold text-sm">Mon–Sat: 8:00 AM – 7:00 PM</p>
-                    <p className="text-white/50 text-xs mt-0.5">Sunday: 9:00 AM – 3:00 PM</p>
-                  </div>
+              <div className="flex items-center gap-5 py-6">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-secondary-foreground/20 text-primary">
+                  <Clock className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="label-tiny opacity-50">Order timings</p>
+                  <p className="text-sm font-semibold">Mon–Sat: 8:00 AM – 7:00 PM</p>
+                  <p className="text-xs opacity-50">Sunday: 9:00 AM – 3:00 PM</p>
                 </div>
               </div>
             </div>

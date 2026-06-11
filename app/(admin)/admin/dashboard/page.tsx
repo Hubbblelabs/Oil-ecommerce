@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { adminService } from "@/server/services/admin.service";
+import { productService } from "@/server/services/product.service";
 import { OrderStatusBadge } from "@/components/shop/OrderStatusBadge";
-import { Users, Package, ShoppingCart, TrendingUp, Activity, ArrowUpRight, ShieldAlert } from "lucide-react";
+import { Users, Package, ShoppingCart, TrendingUp, Activity, ArrowUpRight, AlertTriangle } from "lucide-react";
 import { getCurrentUser } from "@/server/auth";
 import { redirect } from "next/navigation";
 
@@ -8,7 +10,10 @@ export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
   if (!user || user.role !== "ADMIN") redirect("/login");
 
-  const stats = await adminService.getStats();
+  const [stats, lowStockProducts] = await Promise.all([
+    adminService.getStats(),
+    productService.getLowStockAlerts(),
+  ]);
 
   const cards = [
     {
@@ -21,8 +26,8 @@ export default async function AdminDashboardPage() {
       borderColor: "border-blue-200 dark:border-blue-800"
     },
     {
-      label: "Seller Accounts",
-      value: stats.totalSellers,
+      label: "Admin Accounts",
+      value: stats.totalAdmins,
       icon: Users,
       trend: "+4%",
       color: "text-indigo-600 dark:text-indigo-400",
@@ -142,6 +147,58 @@ export default async function AdminDashboardPage() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Low Stock Alerts */}
+      <div className="rounded-3xl border border-border bg-white dark:bg-zinc-900 shadow-sm">
+        <div className="px-8 py-6 border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
+            <h2 className="text-lg font-extrabold uppercase tracking-tight text-foreground">Low Stock Alerts</h2>
+          </div>
+          <Link
+            href="/admin/products"
+            className="text-xs font-bold uppercase tracking-wider text-foreground hover:text-amber-600 flex items-center gap-1 transition-colors"
+          >
+            Manage Catalog <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+        {lowStockProducts.length === 0 ? (
+          <div className="p-8 text-center text-muted-foreground text-sm font-bold">
+            All products are sufficiently stocked.
+          </div>
+        ) : (
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-border/50">
+              {lowStockProducts.map((product) => (
+                <tr key={product.id} className="group hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                  <td className="px-8 py-4 font-bold text-foreground">{product.name}</td>
+                  <td className="px-8 py-4 text-right">
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-extrabold ${
+                        product.stock === 0
+                          ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                          : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                      }`}
+                    >
+                      {product.stock === 0 ? "Out of stock" : `${product.stock} left`}
+                    </span>
+                  </td>
+                  <td className="px-8 py-4 text-right">
+                    <Link
+                      href={`/admin/products/${product.id}/edit`}
+                      className="text-xs font-bold uppercase tracking-wider text-amber-600 hover:underline"
+                    >
+                      Restock
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

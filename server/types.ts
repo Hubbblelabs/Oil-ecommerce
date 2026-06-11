@@ -17,8 +17,8 @@ export interface ProductSummary {
   stock: number;
   image: string | null;
   category: Category;
-  sellerId: string;
-  sellerName?: string | null;
+  createdByAdminId: string;
+  createdByAdminName?: string | null;
 }
 
 export interface ProductDetail extends ProductSummary {
@@ -73,17 +73,9 @@ export interface PaginatedResult<T> {
 
 export interface AdminStats {
   totalUsers: number;
-  totalSellers: number;
+  totalAdmins: number;
   totalProducts: number;
   totalOrders: number;
   totalRevenue: number;
   recentOrders: OrderSummary[];
-}
-
-export interface SellerStats {
-  totalRevenue: number;
-  totalProducts: number;
-  pendingOrders: number;
-  topProducts: Array<{ name: string; totalSold: number; revenue: number }>;
-  lowStockProducts: Array<{ id: string; name: string; stock: number }>;
 }

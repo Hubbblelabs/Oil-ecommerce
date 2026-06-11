@@ -10,7 +10,7 @@ interface Product {
   price: string;
   stock: number;
   category: string;
-  sellerId: string;
+  createdByAdminId: string;
   isActive: boolean;
 }
 

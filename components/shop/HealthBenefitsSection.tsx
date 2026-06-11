@@ -11,13 +11,10 @@ const OILS = [
     name: "Groundnut Oil",
     tamil: "Kadalai Ennai",
     image: "/site_assets/hero_groundnut_oil.png",
-    categoryImage: "/site_assets/category_groundnut.png",
-    color: "#D97706",
-    colorLight: "rgba(217,119,6,0.08)",
-    colorBorder: "rgba(217,119,6,0.25)",
+    color: "#E08A2E",
     tagline: "Heart-healthy powerhouse for everyday Indian cooking",
     description:
-      "Rich in MUFA and natural Vitamin E, our cold-pressed groundnut oil brings out the authentic flavour in every Indian dish. Cold pressed at low temperatures to retain every nutrient nature intended.",
+      "Rich in MUFA and natural Vitamin E, our cold-pressed groundnut oil brings out the authentic flavour in every Indian dish. Pressed at low temperatures to retain every nutrient nature intended.",
     nutrients: [
       { name: "Vitamin E", amount: "~11mg/100g" },
       { name: "MUFA", amount: "~46%" },
@@ -38,13 +35,10 @@ const OILS = [
     name: "Sesame Oil",
     tamil: "Nallennai / Gingelly",
     image: "/site_assets/hero_gingelly_oil.png",
-    categoryImage: "/site_assets/category_sesame.png",
-    color: "#b45309",
-    colorLight: "rgba(180,83,9,0.08)",
-    colorBorder: "rgba(180,83,9,0.25)",
+    color: "#C97B3D",
     tagline: "Ancient remedy with powerful heat-stable antioxidants",
     description:
-      "Sesamol — a unique, heat-stable antioxidant found only in sesame — makes this oil a powerhouse of anti-inflammatory compounds. Traditional Tamil households have trusted this for generations.",
+      "Sesamol — a unique, heat-stable antioxidant found only in sesame — makes this oil a powerhouse of anti-inflammatory compounds. Traditional Tamil households have trusted it for generations.",
     nutrients: [
       { name: "Sesamol", amount: "High" },
       { name: "Vitamin E", amount: "~1.4mg/100g" },
@@ -65,11 +59,8 @@ const OILS = [
     name: "Coconut Oil",
     tamil: "Thengai Ennai",
     image: "/site_assets/hero_coconut_oil.png",
-    categoryImage: "/site_assets/category_coconut.png",
-    color: "#16a34a",
-    colorLight: "rgba(22,163,74,0.08)",
-    colorBorder: "rgba(22,163,74,0.25)",
-    tagline: "MCT-rich immunity booster from Kerala's finest coconuts",
+    color: "#7FB069",
+    tagline: "MCT-rich immunity booster from the finest coconuts",
     description:
       "Lauric acid in coconut oil converts to monolaurin — a powerful anti-microbial agent. Our wood-pressed extraction retains full MCT content for quick, clean energy and immune support.",
     nutrients: [
@@ -92,13 +83,10 @@ const OILS = [
     name: "Sunflower Oil",
     tamil: "Suryakanthi Ennai",
     image: "/site_assets/hero_sunflower_oil.png",
-    categoryImage: "/site_assets/category_groundnut.png",
-    color: "#ca8a04",
-    colorLight: "rgba(202,138,4,0.08)",
-    colorBorder: "rgba(202,138,4,0.25)",
+    color: "#E5B94E",
     tagline: "Exceptionally high Vitamin E for cell protection",
     description:
-      "With the highest Vitamin E content of all cooking oils (~41mg/100g), sunflower oil provides superior cell protection. Light, neutral taste makes it perfect for all cuisines without overpowering flavours.",
+      "With the highest Vitamin E content of all cooking oils (~41mg/100g), sunflower oil provides superior cell protection. A light, neutral taste makes it perfect for all cuisines.",
     nutrients: [
       { name: "Vitamin E", amount: "~41mg/100g" },
       { name: "PUFA (ω-6)", amount: "~65%" },
@@ -116,6 +104,8 @@ const OILS = [
   },
 ];
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export function HealthBenefitsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const oil = OILS[activeIdx];
@@ -124,178 +114,149 @@ export function HealthBenefitsSection() {
   const next = () => setActiveIdx((i) => (i + 1) % OILS.length);
 
   return (
-    <section className="py-0 bg-[#1a0e04] dark:bg-zinc-950 relative overflow-hidden">
-      {/* Subtle background glow */}
+    <section className="grain relative overflow-hidden bg-secondary py-24 text-secondary-foreground sm:py-28">
+      {/* Ambient glow that follows the active oil */}
       <div
-        className="absolute inset-0 opacity-10 pointer-events-none transition-all duration-700"
-        style={{ background: `radial-gradient(ellipse at 70% 50%, ${oil.color} 0%, transparent 60%)` }}
+        className="pointer-events-none absolute inset-0 opacity-[0.08] transition-all duration-700"
+        style={{ background: `radial-gradient(ellipse at 75% 45%, ${oil.color} 0%, transparent 55%)` }}
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header row */}
+        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="eyebrow mb-4 flex items-center gap-3">
+              <span className="font-display italic opacity-50">03</span>
+              <span className="inline-block h-px w-10 bg-primary" />
+              Know Your Oil
+            </p>
+            <h2 className="text-display-hero text-4xl sm:text-5xl">
+              The goodness of{" "}
+              <em className="text-display-italic" style={{ color: oil.color }}>
+                {oil.name.split(" ")[0].toLowerCase()}
+              </em>
+            </h2>
+          </div>
 
-          {/* LEFT: Dynamic Text */}
+          {/* Index + arrows */}
+          <div className="flex items-center gap-5">
+            <span className="label-xs opacity-60">
+              {String(activeIdx + 1).padStart(2, "0")} / {String(OILS.length).padStart(2, "0")}
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={prev}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-secondary-foreground/20 transition-colors hover:border-secondary-foreground/60"
+                aria-label="Previous oil"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-secondary-foreground/20 transition-colors hover:border-secondary-foreground/60"
+                aria-label="Next oil"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
+          {/* LEFT — copy */}
           <AnimatePresence mode="wait">
             <motion.div
               key={oil.id}
-              initial={{ opacity: 0, x: -24 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 24 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.45, ease: EASE }}
             >
-              {/* Counter */}
-              <div className="flex items-center gap-3 mb-8">
-                <span className="text-zinc-500 text-sm font-bold tracking-widest uppercase">Oil Types</span>
-                <span className="text-sm font-black" style={{ color: oil.color }}>
-                  {activeIdx + 1} / {OILS.length}
-                </span>
-                <div className="flex gap-1.5 ml-2">
-                  {OILS.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveIdx(i)}
-                      className="h-1 rounded-full transition-all duration-300"
-                      style={{
-                        width: i === activeIdx ? "24px" : "8px",
-                        background: i === activeIdx ? oil.color : "rgba(255,255,255,0.2)",
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Headline */}
-              <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] mb-4">
-                Together, let's
-                <br />
-                discover the{" "}
-                <span style={{ color: oil.color }}>pure</span>
-                <br />
-                goodness of{" "}
-                <span className="italic" style={{ color: oil.color }}>
-                  {oil.name.split(" ")[0]}!
-                </span>
-              </h2>
-
-              {/* Dynamic tagline */}
-              <p className="text-[#ca8a04] text-sm font-bold uppercase tracking-widest mb-4">
+              <p className="eyebrow mb-3" style={{ color: oil.color }}>
                 {oil.tamil}
               </p>
-
-              {/* Dynamic description */}
-              <p className="text-zinc-400 text-base leading-relaxed mb-8 max-w-lg">
+              <p className="mb-3 font-display text-2xl font-medium tracking-tight">{oil.tagline}</p>
+              <p className="mb-8 max-w-lg text-sm leading-relaxed opacity-70 sm:text-base">
                 {oil.description}
               </p>
 
-              {/* Nutrient pills */}
-              <div className="flex flex-wrap gap-2 mb-8">
+              {/* Nutrients — tabular editorial list */}
+              <dl className="mb-8 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-2xl border border-secondary-foreground/15 bg-secondary-foreground/15">
                 {oil.nutrients.map(({ name, amount }) => (
-                  <div
-                    key={name}
-                    className="flex items-center gap-2 rounded-full px-3 py-1.5 border text-sm font-semibold"
-                    style={{ borderColor: oil.colorBorder, background: oil.colorLight, color: oil.color }}
-                  >
-                    <span className="text-zinc-300 text-xs">{name}</span>
-                    <span className="font-black text-xs" style={{ color: oil.color }}>{amount}</span>
+                  <div key={name} className="bg-secondary px-5 py-4">
+                    <dt className="label-tiny opacity-60">{name}</dt>
+                    <dd className="mt-1 font-display text-lg font-semibold" style={{ color: oil.color }}>
+                      {amount}
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
 
               {/* Benefits */}
-              <div className="space-y-2 mb-10">
+              <ul className="mb-10 space-y-2.5">
                 {oil.benefits.map((b, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-black shrink-0"
-                      style={{ background: oil.color }}
-                    >
-                      {i + 1}
-                    </div>
-                    <p className="text-zinc-300 text-sm font-medium">{b}</p>
-                  </div>
+                  <li key={b} className="flex items-start gap-3 text-sm font-medium opacity-85">
+                    <span className="label-tiny mt-0.5 shrink-0" style={{ color: oil.color }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {b}
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              {/* CTA + Arrows */}
-              <div className="flex items-center gap-4">
-                <Link
-                  href={oil.href}
-                  className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-2xl text-white transition-all shadow-lg hover:shadow-xl"
-                  style={{ background: oil.color }}
-                >
-                  Shop {oil.name.split(" ")[0]} <ArrowRight className="h-4 w-4" />
-                </Link>
-                <div className="flex gap-2">
-                  <button
-                    onClick={prev}
-                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-white/50 transition-colors"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={next}
-                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-white/50 transition-colors"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
+              <Link
+                href={oil.href}
+                className="btn-shine group inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-sm font-bold text-white transition-transform duration-300 hover:scale-[1.03]"
+                style={{ background: oil.color }}
+              >
+                Shop {oil.name.split(" ")[0]}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
             </motion.div>
           </AnimatePresence>
 
-          {/* RIGHT: Image Carousel — clicking changes left content */}
+          {/* RIGHT — imagery */}
           <div className="relative">
-            {/* Main image */}
-            <div className="relative rounded-3xl overflow-hidden aspect-[3/4] max-w-sm mx-auto shadow-2xl">
+            <div className="grain relative mx-auto aspect-[3/4] max-w-sm overflow-hidden rounded-[2rem] border border-secondary-foreground/15">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={oil.id + "-img"}
-                  initial={{ opacity: 0, scale: 1.05 }}
+                  initial={{ opacity: 0, scale: 1.06 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.55, ease: EASE }}
                   className="absolute inset-0"
                 >
-                  <Image
-                    src={oil.image}
-                    alt={oil.name}
-                    fill
-                    className="object-cover"
-                    sizes="400px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <span
-                      className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
-                      style={{ background: oil.color + "20", color: oil.color, border: `1px solid ${oil.colorBorder}` }}
-                    >
-                      {oil.cookingUse.split(",")[0]}
-                    </span>
-                  </div>
+                  <Image src={oil.image} alt={oil.name} fill className="object-cover" sizes="420px" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                  <span
+                    className="label-tiny absolute bottom-5 left-5 rounded-full border px-4 py-2 backdrop-blur-md"
+                    style={{ borderColor: `${oil.color}50`, background: `${oil.color}22`, color: oil.color }}
+                  >
+                    {oil.cookingUse.split(",")[0]}
+                  </span>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Thumbnail row */}
-            <div className="flex gap-3 justify-center mt-4">
+            {/* Thumbnail selector */}
+            <div className="mt-5 flex justify-center gap-3">
               {OILS.map((o, i) => (
                 <button
                   key={o.id}
                   onClick={() => setActiveIdx(i)}
-                  className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 transition-all duration-200"
+                  className="relative h-14 w-14 overflow-hidden rounded-2xl border-2 transition-all duration-300"
                   style={{
                     borderColor: i === activeIdx ? o.color : "transparent",
-                    opacity: i === activeIdx ? 1 : 0.5,
-                    transform: i === activeIdx ? "scale(1.1)" : "scale(1)",
+                    opacity: i === activeIdx ? 1 : 0.45,
+                    transform: i === activeIdx ? "scale(1.08)" : "scale(1)",
                   }}
+                  aria-label={`Show ${o.name}`}
                 >
-                  <Image src={o.image} alt={o.name} fill className="object-cover" sizes="56px" />
+                  <Image src={o.image} alt="" fill className="object-cover" sizes="56px" />
                 </button>
               ))}
             </div>
-
-            {/* "Summer events" style counter badge */}
-           
           </div>
         </div>
       </div>

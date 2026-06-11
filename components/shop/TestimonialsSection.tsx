@@ -1,48 +1,46 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 
 const TESTIMONIALS = [
   {
     name: "Priya Sundaram",
     location: "Chennai",
-    avatar: "P",
     rating: 5,
-    text: "Switched to Shri Sameya groundnut oil six months ago and we can never go back. The aroma while cooking is incredible — exactly like my grandmother used to make. My whole family has noticed the difference in health.",
+    text: "Switched to Shri Sameya groundnut oil six months ago and we can never go back. The aroma while cooking is incredible — exactly like my grandmother used to make.",
     product: "Groundnut Oil · 1L",
   },
   {
     name: "Rajan & Family",
     location: "Coimbatore",
-    avatar: "R",
     rating: 5,
-    text: "The gingelly oil from Shri Sameya is extraordinary. I use it for temple cooking and the taste and fragrance are unmatched. Pure, authentic, and delivered fresh. Will never order from anywhere else.",
+    text: "The gingelly oil from Shri Sameya is extraordinary. I use it for temple cooking and the taste and fragrance are unmatched. Pure, authentic, and delivered fresh.",
     product: "Gingelly Oil · 1L",
   },
   {
     name: "Meena Krishnamurthy",
     location: "Bangalore",
-    avatar: "M",
     rating: 5,
-    text: "As someone who cares deeply about what goes into our food, I researched many brands. Shri Sameya stands out — zero adulteration, real cold pressing, and it genuinely tastes different from supermarket oils.",
+    text: "As someone who cares deeply about what goes into our food, I researched many brands. Shri Sameya stands out — zero adulteration, real cold pressing, and it genuinely tastes different.",
     product: "Coconut Oil · 1L",
   },
   {
     name: "Suresh Iyer",
     location: "Mumbai",
-    avatar: "S",
     rating: 5,
-    text: "Ordering the 5L bulk pack for my restaurant was the best decision. My customers immediately noticed the improvement in taste. The oils perform beautifully at high heat too. Highly recommended!",
+    text: "Ordering the 5L bulk pack for my restaurant was the best decision. My customers immediately noticed the improvement in taste. The oils perform beautifully at high heat too.",
     product: "Groundnut Oil · 5L",
   },
 ];
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 function Stars({ count = 5 }: { count?: number }) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-1">
       {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-[#D97706] text-[#D97706]" />
+        <Star key={i} className="h-4 w-4 fill-primary text-primary" />
       ))}
     </div>
   );
@@ -56,92 +54,108 @@ export function TestimonialsSection() {
   const t = TESTIMONIALS[current];
 
   return (
-    <section className="py-20 bg-[#FAF8F2] dark:bg-zinc-950">
+    <section className="bg-paper-deep py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <p className="text-[#D97706] text-sm font-bold uppercase tracking-widest mb-3">Reviews</p>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#3B2416] dark:text-white">
-            What Our Families Say
-          </h2>
-          {/* Aggregate rating */}
-          <div className="flex items-center justify-center gap-3 mt-5">
-            <div className="flex gap-0.5">
-              {[1,2,3,4,5].map(i => (
-                <Star key={i} className={`h-5 w-5 ${i <= 4 ? "fill-[#D97706] text-[#D97706]" : "fill-[#D97706]/40 text-[#D97706]/40"}`} />
-              ))}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* LEFT — header + controls */}
+          <div className="lg:col-span-4 flex flex-col">
+            <p className="eyebrow mb-4 flex items-center gap-3">
+              <span className="font-display italic text-muted-foreground">05</span>
+              <span className="inline-block h-px w-10 bg-primary" />
+              Reviews
+            </p>
+            <h2 className="text-display-hero text-4xl text-foreground sm:text-5xl">
+              Words from
+              <br />
+              <em className="text-display-italic text-primary">our families</em>
+            </h2>
+
+            <div className="mt-7 flex items-center gap-3">
+              <Stars count={5} />
+              <span className="font-display text-2xl font-semibold text-foreground">4.8</span>
+              <span className="label-tiny">3,800+ orders</span>
             </div>
-            <span className="text-2xl font-bold text-[#3B2416] dark:text-white">4.8</span>
-            <span className="text-muted-foreground text-sm">from 3,800+ orders</span>
+
+            <div className="mt-auto hidden items-center gap-3 pt-10 lg:flex">
+              <button
+                onClick={prev}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:border-primary hover:text-primary"
+                aria-label="Previous review"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card transition-colors hover:border-primary hover:text-primary"
+                aria-label="Next review"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <span className="label-xs ml-3">
+                {String(current + 1).padStart(2, "0")} / {String(TESTIMONIALS.length).padStart(2, "0")}
+              </span>
+            </div>
           </div>
-        </div>
 
-        {/* Testimonial slider */}
-        <div className="relative max-w-3xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white dark:bg-zinc-900 rounded-3xl p-8 sm:p-10 border border-[#E9D8A6]/60 dark:border-zinc-800 shadow-[0_8px_40px_rgba(59,36,22,0.08)] relative"
-            >
-              {/* Quote icon */}
-              <Quote className="absolute top-6 right-8 h-12 w-12 text-[#D97706]/10" />
+          {/* RIGHT — big editorial quote */}
+          <div className="lg:col-span-8">
+            <AnimatePresence mode="wait">
+              <motion.figure
+                key={current}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.45, ease: EASE }}
+                className="flex h-full flex-col border-l border-border pl-8 sm:pl-12"
+              >
+                <blockquote className="font-display text-2xl font-medium leading-snug tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+                  &ldquo;{t.text}&rdquo;
+                </blockquote>
 
-              <Stars count={t.rating} />
-
-              <p className="text-[#3B2416] dark:text-white text-lg leading-relaxed mt-5 mb-7 font-medium">
-                &ldquo;{t.text}&rdquo;
-              </p>
-
-              <div className="flex items-center gap-4">
-                {/* Avatar */}
-                <div className="h-12 w-12 rounded-full bg-[#D97706] flex items-center justify-center text-white font-bold text-base shrink-0">
-                  {t.avatar}
-                </div>
-                <div>
-                  <p className="font-bold text-[#3B2416] dark:text-white text-sm">{t.name}</p>
-                  <p className="text-muted-foreground text-xs">{t.location}</p>
-                </div>
-                <div className="ml-auto">
-                  <span className="bg-[#D97706]/10 text-[#D97706] text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wide">
+                <figcaption className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-display text-lg italic text-primary-foreground">
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-foreground">{t.name}</p>
+                    <p className="label-tiny mt-0.5">{t.location}</p>
+                  </div>
+                  <span className="label-tiny ml-auto rounded-full border border-border bg-card px-4 py-2 text-foreground/70">
                     {t.product}
                   </span>
-                </div>
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
+
+            {/* Mobile controls */}
+            <div className="mt-8 flex items-center gap-3 lg:hidden">
+              <button
+                onClick={prev}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card transition-colors hover:border-primary hover:text-primary"
+                aria-label="Previous review"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card transition-colors hover:border-primary hover:text-primary"
+                aria-label="Next review"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <div className="ml-2 flex gap-1.5">
+                {TESTIMONIALS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === current ? "w-6 bg-primary" : "w-1.5 bg-border"
+                    }`}
+                    aria-label={`Review ${i + 1}`}
+                  />
+                ))}
               </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Nav buttons */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <button
-              onClick={prev}
-              className="h-10 w-10 rounded-full border border-[#E9D8A6] dark:border-zinc-700 flex items-center justify-center hover:bg-[#D97706] hover:border-[#D97706] hover:text-white transition-all"
-              aria-label="Previous review"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-
-            <div className="flex gap-2">
-              {TESTIMONIALS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`h-2 rounded-full transition-all ${i === current ? "w-6 bg-[#D97706]" : "w-2 bg-[#E9D8A6] dark:bg-zinc-700"}`}
-                  aria-label={`Review ${i + 1}`}
-                />
-              ))}
             </div>
-
-            <button
-              onClick={next}
-              className="h-10 w-10 rounded-full border border-[#E9D8A6] dark:border-zinc-700 flex items-center justify-center hover:bg-[#D97706] hover:border-[#D97706] hover:text-white transition-all"
-              aria-label="Next review"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
           </div>
         </div>
       </div>

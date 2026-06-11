@@ -1,12 +1,13 @@
 import { db } from "@/lib/db";
 import { userRepository } from "@/server/repositories/user.repository";
 import { orderRepository } from "@/server/repositories/order.repository";
+import { orderService } from "@/server/services/order.service";
 import { Prisma, Role } from "@prisma/client";
 import type { AdminStats, PaginatedResult, UserSummary, OrderSummary } from "@/server/types";
 
 export const adminService = {
   async getStats(): Promise<AdminStats> {
-    const { totalUsers, totalSellers } = await userRepository.countByRole();
+    const { totalUsers, totalAdmins } = await userRepository.countByRole();
     const totalProducts = await db.product.count({ where: { isActive: true } });
 
     const [totalOrders, revenueResult] = await db.$transaction([
@@ -24,7 +25,7 @@ export const adminService = {
 
     return {
       totalUsers,
-      totalSellers,
+      totalAdmins,
       totalProducts,
       totalOrders,
       totalRevenue,
@@ -52,6 +53,6 @@ export const adminService = {
   },
 
   async updateOrderStatus(id: string, status: string) {
-    return orderRepository.updateStatus(id, status);
+    return orderService.updateStatus(id, status);
   },
 };

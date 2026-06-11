@@ -48,11 +48,10 @@ export const userRepository = {
   },
 
   async countByRole() {
-    const [totalUsers, totalSellers, totalAdmins] = await db.$transaction([
+    const [totalUsers, totalAdmins] = await db.$transaction([
       db.user.count({ where: { role: "USER" } }),
-      db.user.count({ where: { role: "SELLER" } }),
       db.user.count({ where: { role: "ADMIN" } }),
     ]);
-    return { totalUsers, totalSellers, totalAdmins };
+    return { totalUsers, totalAdmins };
   },
 };
