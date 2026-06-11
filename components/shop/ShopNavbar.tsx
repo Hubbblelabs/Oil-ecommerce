@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import {
@@ -19,11 +19,11 @@ const NAV_LINKS = [
 ];
 
 const MOBILE_CATEGORIES = [
-  { label: "Groundnut Oil", href: "/?category=COOKING" },
-  { label: "Coconut Oil", href: "/?category=PREMIUM" },
-  { label: "Gingelly Oil", href: "/?category=COOKING" },
-  { label: "Sunflower Oil", href: "/?category=ORGANIC" },
-  { label: "Bulk / Industrial", href: "/?category=INDUSTRIAL" },
+  { label: "Groundnut Oil", href: "/products?category=COOKING" },
+  { label: "Coconut Oil", href: "/products?category=PREMIUM" },
+  { label: "Gingelly Oil", href: "/products?category=COOKING" },
+  { label: "Sunflower Oil", href: "/products?category=ORGANIC" },
+  { label: "Bulk / Industrial", href: "/products?category=INDUSTRIAL" },
 ];
 
 interface CurrentUser {
@@ -38,7 +38,7 @@ function Wordmark() {
       <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
         Shri Sameya
       </span>
-      <span className="label-tiny text-primary mt-0.5">Village · Wood Pressed</span>
+      <span className="label-tiny text-primary mt-0.5">Village Â· Wood Pressed</span>
     </Link>
   );
 }

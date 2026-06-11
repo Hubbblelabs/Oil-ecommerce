@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,7 +12,7 @@ export function MobileBottomNav() {
 
   const navItems = [
     { label: "Home", icon: Home, href: "/" },
-    { label: "Categories", icon: Grid, href: "/?category=COOKING" },
+    { label: "Categories", icon: Grid, href: "/products?category=COOKING" },
     { label: "Cart", icon: ShoppingCart, href: "/cart", badge: itemCount },
     { label: "Orders", icon: Clock, href: "/orders" },
     { label: "Account", icon: User, href: "/login" },

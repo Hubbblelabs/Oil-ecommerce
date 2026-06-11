@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -15,8 +15,8 @@ const OILS = [
     accentText: "text-[#D97706]",
     image: "/site_assets/product_groundnut_1l.png",
     bestFor: ["Deep Frying", "Daily Cooking", "Indian Curries"],
-    highlight: "High smoke point — perfect for high-heat Indian cooking.",
-    href: "/?category=COOKING",
+    highlight: "High smoke point â€” perfect for high-heat Indian cooking.",
+    href: "/products?category=COOKING",
   },
   {
     name: "Sesame Oil",
@@ -28,8 +28,8 @@ const OILS = [
     accentText: "text-orange-700 dark:text-orange-400",
     image: "/site_assets/hero_gingelly_oil.png",
     bestFor: ["Traditional Cooking", "Antioxidant Rich", "Tempering"],
-    highlight: "Powerhouse of sesamol — the antioxidant that never breaks down.",
-    href: "/?category=COOKING",
+    highlight: "Powerhouse of sesamol â€” the antioxidant that never breaks down.",
+    href: "/products?category=COOKING",
   },
   {
     name: "Coconut Oil",
@@ -41,8 +41,8 @@ const OILS = [
     accentText: "text-green-700 dark:text-green-400",
     image: "/site_assets/product_coconut_1l.png",
     bestFor: ["Light Cooking", "Energy Boost", "Hair & Skin Care"],
-    highlight: "MCT-rich formula — fuels energy and supports immunity.",
-    href: "/?category=PREMIUM",
+    highlight: "MCT-rich formula â€” fuels energy and supports immunity.",
+    href: "/products?category=PREMIUM",
   },
   {
     name: "Sunflower Oil",
@@ -54,8 +54,8 @@ const OILS = [
     accentText: "text-yellow-700 dark:text-yellow-400",
     image: "/site_assets/hero_sunflower_oil.png",
     bestFor: ["Daily Cooking", "High Vitamin E", "Light Frying"],
-    highlight: "Rich in Vitamin E — a daily essential for every kitchen.",
-    href: "/?category=ORGANIC",
+    highlight: "Rich in Vitamin E â€” a daily essential for every kitchen.",
+    href: "/products?category=ORGANIC",
   },
 ];
 

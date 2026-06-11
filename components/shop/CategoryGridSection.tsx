@@ -1,16 +1,16 @@
-"use client";
+﻿"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 const CATEGORIES = [
-  { name: "Groundnut", image: "/site_assets/category_groundnut.png", href: "/?category=COOKING", note: "Heart healthy" },
-  { name: "Coconut", image: "/site_assets/category_coconut.png", href: "/?category=PREMIUM", note: "Energy & immunity" },
-  { name: "Gingelly", image: "/site_assets/category_sesame.png", href: "/?category=COOKING", note: "Rich antioxidants" },
-  { name: "Sunflower", image: "/site_assets/hero_sunflower_oil.png", href: "/?category=ORGANIC", note: "High vitamin E" },
-  { name: "Combo Packs", image: "/site_assets/product_combo.png", href: "/?category=INDUSTRIAL", note: "Save more" },
-  { name: "Bulk Orders", image: "/site_assets/product_groundnut_5l.png", href: "/?category=INDUSTRIAL", note: "For restaurants" },
+  { name: "Groundnut", image: "/site_assets/category_groundnut.png", href: "/products?category=COOKING", note: "Heart healthy" },
+  { name: "Coconut", image: "/site_assets/category_coconut.png", href: "/products?category=PREMIUM", note: "Energy & immunity" },
+  { name: "Gingelly", image: "/site_assets/category_sesame.png", href: "/products?category=COOKING", note: "Rich antioxidants" },
+  { name: "Sunflower", image: "/site_assets/hero_sunflower_oil.png", href: "/products?category=ORGANIC", note: "High vitamin E" },
+  { name: "Combo Packs", image: "/site_assets/product_combo.png", href: "/products?category=INDUSTRIAL", note: "Save more" },
+  { name: "Bulk Orders", image: "/site_assets/product_groundnut_5l.png", href: "/products?category=INDUSTRIAL", note: "For restaurants" },
 ];
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];

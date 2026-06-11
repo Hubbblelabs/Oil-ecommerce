@@ -1,4 +1,4 @@
-import { ShopNavbar } from "@/components/shop/ShopNavbar";
+﻿import { ShopNavbar } from "@/components/shop/ShopNavbar";
 import { MobileBottomNav } from "@/components/shop/MobileBottomNav";
 import { WhatsAppFAB } from "@/components/shop/WhatsAppFAB";
 import Link from "next/link";
@@ -8,9 +8,9 @@ const MARQUEE_ITEMS = [
   "Traditional Chekku Pressed",
   "Zero Chemicals",
   "FSSAI Certified",
-  "Free Delivery Above ₹499",
+  "Free Delivery Above â‚¹499",
   "Farm to Kitchen",
-  "Cold Pressed · No Heat",
+  "Cold Pressed Â· No Heat",
 ];
 
 const FOOTER_COLUMNS = [
@@ -18,10 +18,10 @@ const FOOTER_COLUMNS = [
     heading: "Shop",
     links: [
       { label: "All Products", href: "/products" },
-      { label: "Groundnut Oil", href: "/?category=COOKING" },
-      { label: "Coconut Oil", href: "/?category=PREMIUM" },
-      { label: "Gingelly Oil", href: "/?category=COOKING" },
-      { label: "Bulk Orders", href: "/?category=INDUSTRIAL" },
+      { label: "Groundnut Oil", href: "/products?category=COOKING" },
+      { label: "Coconut Oil", href: "/products?category=PREMIUM" },
+      { label: "Gingelly Oil", href: "/products?category=COOKING" },
+      { label: "Bulk Orders", href: "/products?category=INDUSTRIAL" },
     ],
   },
   {
@@ -79,7 +79,7 @@ export default function ShopLayout({
 
       <TrustMarquee />
 
-      {/* ── Editorial footer ── */}
+      {/* â”€â”€ Editorial footer â”€â”€ */}
       <footer className="bg-secondary text-secondary-foreground grain">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
           {/* Top: oversized brand statement */}
@@ -92,7 +92,7 @@ export default function ShopLayout({
                 <em className="text-display-italic text-primary">tradition.</em>
               </h2>
               <p className="max-w-sm text-sm leading-relaxed text-secondary-foreground/60">
-                Premium wood pressed oils from sustainable Tamil Nadu farms —
+                Premium wood pressed oils from sustainable Tamil Nadu farms â€”
                 pure, natural, and traceable from seed to bottle.
               </p>
             </div>
@@ -155,7 +155,7 @@ export default function ShopLayout({
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
             <p className="label-tiny text-secondary-foreground/40">
-              © 2026 Shri Sameya Village Wood Pressed Oils
+              Â© 2026 Shri Sameya Village Wood Pressed Oils
             </p>
             <div className="flex flex-wrap justify-center gap-6">
               <Link href="/privacy" className="label-tiny text-secondary-foreground/40 hover:text-secondary-foreground transition-colors">

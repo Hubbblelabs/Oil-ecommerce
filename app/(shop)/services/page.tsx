@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { productService } from "@/server/services/product.service";
 import { orderService } from "@/server/services/order.service";
@@ -21,7 +21,7 @@ import {
 export const metadata: Metadata = {
   title: "Our Services | Shri Sameya Village Oils",
   description:
-    "Explore all services — product listing, order management, user management, bulk orders, discount management, and more.",
+    "Explore all services â€” product listing, order management, user management, bulk orders, discount management, and more.",
 };
 
 const SERVICES = [
@@ -32,7 +32,7 @@ const SERVICES = [
     border: "rgba(217,119,6,0.2)",
     title: "Product Listing",
     description:
-      "Browse our full range of cold-pressed, wood-pressed oils — groundnut, coconut, sesame, sunflower, and more. Filter by category, price, and availability.",
+      "Browse our full range of cold-pressed, wood-pressed oils â€” groundnut, coconut, sesame, sunflower, and more. Filter by category, price, and availability.",
     features: ["Filter by category & price", "Search by name", "Bulk & retail sizes", "Stock availability"],
     href: "/products",
     cta: "Browse Products",
@@ -44,7 +44,7 @@ const SERVICES = [
     border: "rgba(22,163,74,0.2)",
     title: "Order Management",
     description:
-      "Track your orders in real-time. From PENDING → PAID → SHIPPED → DELIVERED. Full order history with item details and total breakdown.",
+      "Track your orders in real-time. From PENDING â†’ PAID â†’ SHIPPED â†’ DELIVERED. Full order history with item details and total breakdown.",
     features: ["Real-time order tracking", "Full order history", "PDF invoice download", "Status notifications"],
     href: "/orders",
     cta: "My Orders",
@@ -70,7 +70,7 @@ const SERVICES = [
     description:
       "Restaurant, hotel, and retail partners get special pricing on bulk orders (5L, 15L, tanker quantities). Contact us for custom pricing.",
     features: ["Restaurant & hotel pricing", "15L+ bulk packs", "Custom packaging", "Consistent supply chain"],
-    href: "/?category=INDUSTRIAL",
+    href: "/products?category=INDUSTRIAL",
     cta: "View Bulk Products",
   },
   {
@@ -92,8 +92,8 @@ const SERVICES = [
     border: "rgba(13,148,136,0.2)",
     title: "Pan-India Delivery",
     description:
-      "We deliver across India from our mill in Coimbatore, Tamil Nadu. Free shipping on orders above ₹499. Fast dispatch within 24 hours.",
-    features: ["Free delivery above ₹499", "24-hour dispatch", "Pan-India coverage", "Tracked shipments"],
+      "We deliver across India from our mill in Coimbatore, Tamil Nadu. Free shipping on orders above â‚¹499. Fast dispatch within 24 hours.",
+    features: ["Free delivery above â‚¹499", "24-hour dispatch", "Pan-India coverage", "Tracked shipments"],
     href: "/contact",
     cta: "Contact Us",
   },
@@ -104,7 +104,7 @@ const HIGHLIGHTS = [
   { icon: Shield, label: "100% Secure", sub: "SSL + Razorpay payments" },
   { icon: Star, label: "Pure Quality", sub: "FSSAI certified cold press" },
   { icon: BarChart3, label: "Live Tracking", sub: "Real-time order status" },
-  { icon: Truck, label: "Free Shipping", sub: "On orders above ₹499" },
+  { icon: Truck, label: "Free Shipping", sub: "On orders above â‚¹499" },
 ];
 
 async function getStats() {
@@ -148,7 +148,7 @@ export default async function ServicesPage() {
             All Our <span className="text-[#D97706]">Services</span>
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto mb-10">
-            From browsing authentic oils to managing bulk B2B orders — everything you need, built for a seamless experience.
+            From browsing authentic oils to managing bulk B2B orders â€” everything you need, built for a seamless experience.
           </p>
 
           {/* Stats */}
@@ -203,7 +203,7 @@ export default async function ServicesPage() {
             Everything Under One Roof
           </h2>
           <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-            A complete oil e-commerce ecosystem — from farm to your kitchen.
+            A complete oil e-commerce ecosystem â€” from farm to your kitchen.
           </p>
         </div>
 

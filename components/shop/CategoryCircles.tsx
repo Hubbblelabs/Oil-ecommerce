@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const QUICK_CATEGORIES = [
-  { label: "Groundnut", image: "/site_assets/category_groundnut.png", icon: Leaf, color: "bg-amber-100 text-amber-700", route: "/?category=COOKING" },
-  { label: "Coconut", image: "/site_assets/category_coconut.png", icon: Leaf, color: "bg-zinc-100 text-zinc-700", route: "/?category=PREMIUM" },
-  { label: "Gingelly", image: "/site_assets/category_sesame.png", icon: Flame, color: "bg-orange-100 text-orange-700", route: "/?category=COOKING" },
-  { label: "Sunflower", icon: Star, color: "bg-yellow-100 text-yellow-700", route: "/?category=ORGANIC" },
-  { label: "Mustard", icon: Leaf, color: "bg-yellow-200 text-yellow-800", route: "/?category=COOKING" },
-  { label: "Combo Packs", image: "/site_assets/product_combo.png", icon: Package, color: "bg-blue-100 text-blue-700", route: "/?category=INDUSTRIAL" },
+  { label: "Groundnut", image: "/site_assets/category_groundnut.png", icon: Leaf, color: "bg-amber-100 text-amber-700", route: "/products?category=COOKING" },
+  { label: "Coconut", image: "/site_assets/category_coconut.png", icon: Leaf, color: "bg-zinc-100 text-zinc-700", route: "/products?category=PREMIUM" },
+  { label: "Gingelly", image: "/site_assets/category_sesame.png", icon: Flame, color: "bg-orange-100 text-orange-700", route: "/products?category=COOKING" },
+  { label: "Sunflower", icon: Star, color: "bg-yellow-100 text-yellow-700", route: "/products?category=ORGANIC" },
+  { label: "Mustard", icon: Leaf, color: "bg-yellow-200 text-yellow-800", route: "/products?category=COOKING" },
+  { label: "Combo Packs", image: "/site_assets/product_combo.png", icon: Package, color: "bg-blue-100 text-blue-700", route: "/products?category=INDUSTRIAL" },
 ];
 
 export function CategoryCircles() {
